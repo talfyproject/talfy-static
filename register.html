@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register – Talfy</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fff;
+      color: #0d1b2a;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 2rem;
+      border-bottom: 1px solid #e5e5e5;
+    }
+    .logo {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #134e3a;
+      text-transform: lowercase;
+      text-decoration: none;
+    }
+    .nav a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: #0d1b2a;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+    .main {
+      max-width: 500px;
+      margin: 3rem auto;
+      padding: 2rem;
+      background-color: #b6fcb1;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .main h1 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: #134e3a;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    label {
+      font-weight: 500;
+    }
+    input, select {
+      padding: 0.6rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    button {
+      padding: 0.8rem;
+      background-color: #134e3a;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .footer {
+      position: relative;
+      margin-top: 3rem;
+      padding: 1.2rem 2rem;
+      border-top: 1px solid #e5e5e5;
+      font-size: 0.85rem;
+      color: #0d1b2a;
+    }
+    .footer-center {
+      text-align: center;
+      font-weight: 400;
+    }
+    .footer-right {
+      position: absolute;
+      bottom: 1.2rem;
+      right: 2rem;
+    }
+    .footer-right a {
+      text-decoration: none;
+      color: #134e3a;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <a href="/index.html" class="logo">talfy</a>
+    <nav class="nav">
+      <a href="/about.html">About us</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/login.html">Login</a>
+      <a href="/register.html">Register</a>
+    </nav>
+  </header>
+
+  <main class="main">
+    <h1>Create your account</h1>
+    <form>
+      <label for="role">I am a:</label>
+      <select id="role" name="role">
+        <option value="candidate">Candidate</option>
+        <option value="company">Company</option>
+      </select>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" required />
+
+      <label for="confirm-email">Confirm Email:</label>
+      <input type="email" id="confirm-email" required />
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" required />
+
+      <label for="confirm-password">Confirm Password:</label>
+      <input type="password" id="confirm-password" required />
+
+      <button type="submit">Register</button>
+    </form>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-center">&copy; 2025 Talfy</div>
+    <div class="footer-right"><a href="/privacy.html">Privacy</a></div>
+  </footer>
+</body>
+</html>

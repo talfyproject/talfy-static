@@ -69,7 +69,7 @@
   <script>
     async function updateCounters() {
       try {
-        const res = await fetch('https://talfy-backend.onrender.com/api/stats');
+        const res = await fetch('https://talfy-backend.onrender.com/api/counts');
         const data = await res.json();
         document.getElementById('cv-counter').innerText = data.candidates;
         document.getElementById('company-counter').innerText = data.companies;

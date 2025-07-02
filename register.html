@@ -40,24 +40,30 @@
     }
     .main {
       max-width: 400px;
-      margin: 3rem auto;
+      margin: 4rem auto;
       text-align: center;
     }
     h1 {
       font-size: 2rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
     }
     form {
       display: flex;
       flex-direction: column;
-      gap: 1.2rem;
+      gap: 1rem;
     }
     input[type="email"],
     input[type="password"] {
       padding: 0.75rem;
+      font-size: 1rem;
       border: 1px solid #ccc;
       border-radius: 6px;
-      font-size: 1rem;
+    }
+    .radio-group {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1rem;
     }
     button {
       padding: 0.75rem;
@@ -66,16 +72,7 @@
       border: none;
       border-radius: 6px;
       font-size: 1rem;
-      font-weight: bold;
       cursor: pointer;
-    }
-    .user-type {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-    }
-    .user-type label {
-      font-weight: 500;
     }
   </style>
 </head>
@@ -94,9 +91,9 @@
   </header>
 
   <main class="main">
-    <h1>Create Your Account</h1>
+    <h1>Create your account</h1>
     <form id="register-form">
-      <div class="user-type">
+      <div class="radio-group">
         <label><input type="radio" name="user_type" value="candidate" checked /> Candidate</label>
         <label><input type="radio" name="user_type" value="company" /> Company</label>
       </div>
@@ -117,31 +114,42 @@
       e.preventDefault();
 
       const userType = document.querySelector('input[name="user_type"]:checked').value;
-      const email = document.getElementById("email").value;
+      const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
       const confirmPassword = document.getElementById("confirm-password").value;
+
+      if (!email || !password || !confirmPassword) {
+        alert("Please fill in all fields.");
+        return;
+      }
 
       if (password !== confirmPassword) {
         alert("Passwords do not match.");
         return;
       }
 
-      const response = await fetch("/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_type: userType, email, password })
-      });
+      try {
+        const response = await fetch("/api/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ user_type: userType, email, password })
+        });
 
-      const result = await response.json();
+        const result = await response.json();
+        console.log("Server response:", result);
 
-      if (result.success) {
-        if (userType === "candidate") {
-          window.location.href = "/complete-profile-candidate.html";
+        if (result.success) {
+          if (userType === "candidate") {
+            window.location.href = "/complete-profile-candidate.html";
+          } else {
+            window.location.href = "/complete-profile-company.html";
+          }
         } else {
-          window.location.href = "/complete-profile-company.html";
+          alert("Registration failed: " + (result.error || "Unknown error"));
         }
-      } else {
-        alert("Registration failed: " + (result.error || "Unknown error"));
+      } catch (err) {
+        console.error("Registration error:", err);
+        alert("An error occurred during registration.");
       }
     });
   </script>

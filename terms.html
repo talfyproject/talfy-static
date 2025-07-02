@@ -1,75 +1,100 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Terms and Conditions</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms and Conditions</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fff;
+      color: #0d1b2a;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 2rem;
+      border-bottom: 1px solid #e5e5e5;
+    }
+    .logo {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #134e3a;
+      text-transform: lowercase;
+      margin: 0;
+      text-decoration: none;
+    }
+    .nav a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: #0d1b2a;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+    .main {
+      min-height: 60vh;
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 0 8vw;
+      background: #fff;
+      text-align: center;
+    }
+    .main h1 {
+      font-weight: 700;
+      font-size: 2.2rem;
+      margin-bottom: 2rem;
+    }
+    .footer {
+      position: relative;
+      margin-top: 3rem;
+      padding: 1.2rem 2rem;
+      border-top: 1px solid #e5e5e5;
+      font-size: 0.85rem;
+      color: #0d1b2a;
+    }
+    .footer-center {
+      text-align: center;
+      font-weight: 400;
+    }
+    .footer-right {
+      position: absolute;
+      bottom: 1.2rem;
+      right: 2rem;
+    }
+    .footer-right a {
+      text-decoration: none;
+      color: #134e3a;
+      font-weight: 500;
+    }
+  </style>
 </head>
 <body>
-    <header class="site-header">
-        <div class="logo">talfy</div>
-        <nav class="site-nav">
-            <a href="index.html">Home</a>
-            <a href="about.html">About</a>
-            <a href="talfy-for-talent.html">For Talent</a>
-            <a href="talfy-for-company.html">For Company</a>
-            <a href="contact.html">Contact</a>
-            <a href="privacy.html">Privacy</a>
-            <a href="terms.html" class="active">Terms</a>
-        </nav>
-    </header>
+  <header class="header">
+    <a href="/index.html" class="logo">talfy</a>
+    <nav class="nav">
+      <a href="/talfy-for-talent.html">Talfy for Talent</a>
+      <a href="/talfy-for-company.html">Talfy for Company</a>
+      <a href="/about.html">About us</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/pricing.html">Pricing</a>
+      <a href="/login.html">Login</a>
+      <a href="/register.html">Register</a>
+    </nav>
+  </header>
 
-    <main class="main-content" style="background-color: white; padding: 40px;">
-        <h1 style="text-align: center;">Terms and Conditions of Use</h1>
 
-        <p><strong>Last updated:</strong> July 2, 2025</p>
 
-        <h2>1. Acceptance of Terms</h2>
-        <p>By accessing or using the Talfy platform, you agree to be bound by these Terms and Conditions. If you do not agree, you may not use the services.</p>
 
-        <h2>2. Description of the Service</h2>
-        <p>Talfy provides a platform that connects companies with finance professionals. Candidate profiles are anonymous, and companies can browse, filter, and download CVs through subscription plans.</p>
+ <footer class="footer">
+  <div class="footer-center">&copy; 2025 Talfy. All rights reserved.</div>
+  <div class="footer-right">
+    <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a>
+  </div>
+</footer>
 
-        <h2>3. User Registration and Accounts</h2>
-        <ul>
-            <li>Users must provide accurate and complete information.</li>
-            <li>Companies must verify their VAT number during registration.</li>
-            <li>Each account is personal and non-transferable.</li>
-            <li>Talfy may suspend or terminate accounts that violate these terms.</li>
-        </ul>
-
-        <h2>4. Subscription Plans and Payments</h2>
-        <p>Companies must subscribe to access candidate data. Available plans include Basic, Pro, and Enterprise. Payments are processed securely via third-party providers. All fees are non-refundable unless otherwise specified.</p>
-
-        <h2>5. Acceptable Use</h2>
-        <ul>
-            <li>No scraping, data harvesting, or automated access is permitted.</li>
-            <li>Users must not misuse the platform or upload harmful content.</li>
-            <li>Each download is tracked and associated with the account.</li>
-        </ul>
-
-        <h2>6. Intellectual Property</h2>
-        <p>All site content, design, code, and branding are the property of Talfy or its licensors. Users may not copy, reproduce, or redistribute any part of the platform without written consent.</p>
-
-        <h2>7. Disclaimers and Limitation of Liability</h2>
-        <p>The service is provided "as is" without warranties of any kind. Talfy does not guarantee candidate hiring outcomes. Talfy is not liable for indirect or consequential damages.</p>
-
-        <h2>8. Suspension and Termination</h2>
-        <p>Talfy reserves the right to suspend or terminate user access at any time in case of violation of these terms, suspected fraud, or legal compliance requirements.</p>
-
-        <h2>9. Modifications to the Terms</h2>
-        <p>We may update these terms at any time. Continued use of the platform after updates constitutes acceptance. Users will be notified of significant changes.</p>
-
-        <h2>10. Governing Law and Jurisdiction</h2>
-        <p>These terms are governed by the laws of Italy. Any dispute shall be submitted to the exclusive jurisdiction of the courts of Milan, Italy.</p>
-
-        <h2>11. Contact</h2>
-        <p>For questions regarding these terms, contact us at: legal@talfy.com</p>
-    </main>
-
-    <footer class="site-footer">
-        <p>© 2025 Talfy · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></p>
-    </footer>
+    
 </body>
 </html>

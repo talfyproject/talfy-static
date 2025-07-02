@@ -3,8 +3,98 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Register - Talfy</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register – Talfy</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fff;
+      color: #0d1b2a;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 2rem;
+      border-bottom: 1px solid #e5e5e5;
+    }
+    .logo {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #134e3a;
+      text-transform: lowercase;
+      margin: 0;
+      text-decoration: none;
+    }
+    .nav a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: #0d1b2a;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+    .main {
+      min-height: 60vh;
+      max-width: 400px;
+      margin: 3rem auto;
+      padding: 0 2rem;
+      background: #fff;
+      text-align: center;
+    }
+    .main h1 {
+      font-weight: 700;
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    input, select {
+      margin-bottom: 1.2rem;
+      padding: 0.8rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      padding: 0.8rem;
+      background-color: #134e3a;
+      color: white;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0b3a2a;
+    }
+    .footer {
+      position: relative;
+      margin-top: 3rem;
+      padding: 1.2rem 2rem;
+      border-top: 1px solid #e5e5e5;
+      font-size: 0.85rem;
+      color: #0d1b2a;
+    }
+    .footer-center {
+      text-align: center;
+      font-weight: 400;
+    }
+    .footer-right {
+      position: absolute;
+      bottom: 1.2rem;
+      right: 2rem;
+    }
+    .footer-right a {
+      text-decoration: none;
+      color: #134e3a;
+      font-weight: 500;
+    }
+  </style>
   <script>
     function toggleJobTitle() {
       const candidateRadio = document.getElementById('role-candidate');
@@ -42,43 +132,37 @@
     }
   </script>
 </head>
-<body style="margin: 0; background-color: #003300; font-family: Arial, sans-serif;">
-
-  <header class="header" style="background-color: #003300; padding: 20px; text-align: center;">
-    <div class="logo" style="color: white; font-size: 2em; font-weight: bold;">talfy</div>
-    <nav class="site-nav" style="margin-top: 10px;">
-      <a href="index.html" style="color: white; margin: 0 10px;">Home</a>
-      <a href="about.html" style="color: white; margin: 0 10px;">About</a>
-      <a href="talfy-for-talent.html" style="color: white; margin: 0 10px;">For Talent</a>
-      <a href="talfy-for-company.html" style="color: white; margin: 0 10px;">For Company</a>
-      <a href="contact.html" style="color: white; margin: 0 10px;">Contact</a>
+<body>
+  <header class="header">
+    <a href="/index.html" class="logo">talfy</a>
+    <nav class="nav">
+      <a href="/talfy-for-talent.html">Talfy for Talent</a>
+      <a href="/talfy-for-company.html">Talfy for Company</a>
+      <a href="/about.html">About us</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/pricing.html">Pricing</a>
+      <a href="/login.html">Login</a>
+      <a href="/register.html">Register</a>
     </nav>
   </header>
 
-  <main style="background-color: #003300; color: white; min-height: 80vh; display: flex; align-items: center; justify-content: center;">
-    <form action="/register" method="POST" onsubmit="return validatePassword()" style="background-color: white; color: black; padding: 40px; border-radius: 10px; max-width: 400px; width: 100%;">
-      <h1 style="text-align: center; margin-bottom: 20px;">Register</h1>
+  <main class="main">
+    <h1>Register</h1>
+    <form action="/register" method="POST" onsubmit="return validatePassword()">
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="password" id="password" name="password" placeholder="Password" oninput="validatePassword()" required />
+      <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm Password" oninput="validatePassword()" required />
+      <p id="password-warning" style="font-size: 0.9em; margin-top: -1rem; margin-bottom: 1rem;"></p>
 
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" required style="width: 100%; padding: 10px; margin-bottom: 15px;" />
-
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" oninput="validatePassword()" required style="width: 100%; padding: 10px; margin-bottom: 15px;" />
-
-      <label for="confirm-password">Confirm Password</label>
-      <input type="password" id="confirm-password" name="confirm_password" oninput="validatePassword()" required style="width: 100%; padding: 10px; margin-bottom: 15px;" />
-
-      <p id="password-warning" style="font-size: 0.9em; margin-bottom: 10px;"></p>
-
-      <label>User type</label>
-      <div style="margin-bottom: 15px;">
-        <label><input type="radio" name="role" id="role-candidate" value="candidate" onclick="toggleJobTitle()" required /> Candidate</label>
-        <label style="margin-left: 20px;"><input type="radio" name="role" id="role-company" value="company" onclick="toggleJobTitle()" required /> Company</label>
+      <label style="text-align: left;">User type:</label>
+      <div style="margin-bottom: 1rem; text-align: left;">
+        <label><input type="radio" name="role" id="role-candidate" value="candidate" onclick="toggleJobTitle()" required /> Candidate</label><br />
+        <label><input type="radio" name="role" id="role-company" value="company" onclick="toggleJobTitle()" required /> Company</label>
       </div>
 
-      <div id="job-title-group" style="display: none; margin-bottom: 15px;">
-        <label for="job-title">Job title</label>
-        <select id="job-title" name="job_title" style="width: 100%; padding: 10px;">
+      <div id="job-title-group" style="display: none;">
+        <label for="job-title" style="text-align: left; display: block;">Job title</label>
+        <select id="job-title" name="job_title">
           <option value="">-- Select a title --</option>
           <option>Finance Manager</option>
           <option>Administrative Manager</option>
@@ -94,14 +178,15 @@
         </select>
       </div>
 
-      <button type="submit" style="width: 100%; padding: 10px; background-color: #006400; color: white; border: none; border-radius: 5px;">Register</button>
+      <button type="submit">Register</button>
     </form>
   </main>
 
-  <footer class="footer" style="background-color: #003300; color: white; text-align: center; padding: 20px;">
+  <footer class="footer">
     <div class="footer-center">&copy; 2025 Talfy. All rights reserved.</div>
-    <div class="footer-right"><a href="/privacy.html" style="color: white;">Privacy</a> · <a href="/terms.html" style="color: white;">Terms</a></div>
+    <div class="footer-right">
+      <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a>
+    </div>
   </footer>
-
 </body>
 </html>

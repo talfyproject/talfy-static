@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pricing – Talfy</title>
   <style>
     body {
@@ -12,23 +12,19 @@
       background-color: #fff;
       color: #0d1b2a;
     }
-    .header, .footer {
-      padding: 1.2rem 2rem;
-      border-bottom: 1px solid #e5e5e5;
+    .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-    }
-    .footer {
-      border-top: 1px solid #e5e5e5;
-      border-bottom: none;
-      font-size: 0.85rem;
+      padding: 1.2rem 2rem;
+      border-bottom: 1px solid #e5e5e5;
     }
     .logo {
       font-size: 3rem;
       font-weight: 700;
       color: #134e3a;
       text-transform: lowercase;
+      margin: 0;
       text-decoration: none;
     }
     .nav a {
@@ -39,7 +35,7 @@
       font-weight: 500;
     }
     .main {
-      max-width: 900px;
+      max-width: 1000px;
       margin: 3rem auto;
       padding: 0 8vw;
       text-align: center;
@@ -50,43 +46,48 @@
     }
     .plans {
       display: flex;
-      justify-content: space-between;
       flex-wrap: wrap;
       gap: 2rem;
-      margin-bottom: 2rem;
+      justify-content: center;
     }
     .plan {
-      flex: 1 1 28%;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      padding: 1.5rem;
-      background: #f9f9f9;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      background-color: #d2ffcc;
+      border-radius: 8px;
+      padding: 2rem;
+      width: 300px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
     .plan h2 {
       color: #134e3a;
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       margin-bottom: 0.5rem;
     }
-    .price {
-      font-size: 1.2rem;
+    .plan .price {
+      font-size: 1.4rem;
+      font-weight: bold;
       margin-bottom: 1rem;
     }
-    .description {
+    .plan p {
       font-size: 0.95rem;
       line-height: 1.5;
+      margin-bottom: 1rem;
     }
-    .highlight {
-      margin-top: 2rem;
-      background-color: #d2ffcc;
-      padding: 1rem;
-      border-radius: 8px;
-      font-weight: 500;
+    .footer {
+      position: relative;
+      margin-top: 3rem;
+      padding: 1.2rem 2rem;
+      border-top: 1px solid #e5e5e5;
+      font-size: 0.85rem;
       color: #0d1b2a;
     }
     .footer-center {
       text-align: center;
       font-weight: 400;
+    }
+    .footer-right {
+      position: absolute;
+      bottom: 1.2rem;
+      right: 2rem;
     }
     .footer-right a {
       text-decoration: none;
@@ -96,6 +97,7 @@
   </style>
 </head>
 <body>
+
   <header class="header">
     <a href="/index.html" class="logo">talfy</a>
     <nav class="nav">
@@ -110,29 +112,42 @@
   </header>
 
   <main class="main">
-    <h1>Pricing Plans</h1>
+    <h1>Choose your plan</h1>
+
     <div class="plans">
       <div class="plan">
         <h2>Base</h2>
-        <div class="price">€29,99/month</div>
-        <div class="description">Access up to 10 candidate contacts per month. Perfect for startups and small HR teams.</div>
+        <div class="price">€39,99 / month</div>
+        <p>✔ Access up to 10 finance profiles</p>
+        <p>✔ View full candidate details</p>
+        <p>✔ Download CV (if available)</p>
+        <p><em>Ideal for startups and small companies</em></p>
       </div>
+
       <div class="plan">
         <h2>Pro</h2>
-        <div class="price">€49,99/month</div>
-        <div class="description">Includes smart filters and access to advanced candidate insights. Great for growing teams.</div>
+        <div class="price">€59,99 / month</div>
+        <p>✔ Access up to 25 finance profiles</p>
+        <p>✔ View full candidate details</p>
+        <p>✔ Download CV (if available)</p>
+        <p><em>Designed for medium-sized companies</em></p>
       </div>
+
       <div class="plan">
         <h2>Enterprise</h2>
-        <div class="price">€79,00/month</div>
-        <div class="description">Unlimited access, multiple users, custom reporting, and premium visibility tools.</div>
+        <div class="price">€89,99 / month</div>
+        <p>✔ Access up to 50 finance profiles</p>
+        <p>✔ View full candidate details</p>
+        <p>✔ Download CV (if available)</p>
+        <p>✔ Multi-user access included</p>
+        <p><em>Perfect for large companies and headhunting firms</em></p>
       </div>
     </div>
 
-    <div class="highlight">
-      50% OFF on annual plans (also available in monthly installments)<br />
-      Premium benefits: candidate previews, frozen downloads, saved profiles, custom reports and more!
-    </div>
+    <p style="margin-top:2.5rem;font-size:0.95rem;">
+      👉 All plans include access to anonymous, verified profiles with advanced filters.<br>
+      💸 Save 50% with annual billing – also available in monthly installments!
+    </p>
   </main>
 
   <footer class="footer">

@@ -2,129 +2,102 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Complete Your Profile – Talfy</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #ffffff;
-      color: #0d1b2a;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 2rem;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      background-color: #f9f9f9;
-    }
-    h1 {
-      text-align: center;
-      color: #134e3a;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-    label {
-      font-weight: 600;
-    }
-    input, select, textarea {
-      padding: 0.6rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      width: 100%;
-    }
-    button {
-      padding: 0.75rem;
-      font-size: 1rem;
-      background-color: #134e3a;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .note {
-      font-size: 0.9rem;
-      color: #555;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Complete Candidate Profile - Talfy</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>Complete Your Candidate Profile</h1>
-    <form id="candidate-profile-form" enctype="multipart/form-data">
-      <label for="avatar">Upload Photo or Use Default Avatar</label>
-      <input type="file" id="avatar" name="avatar" accept="image/*" />
+  <header>
+    <h1>Complete your profile</h1>
+  </header>
 
-      <label for="job">Job Title</label>
-      <input type="text" id="job" name="job" placeholder="e.g. Controller, CFO" />
+  <main>
+    <form id="candidate-profile-form">
+      <label>Full Name:
+        <input type="text" name="full_name" required />
+      </label>
 
-      <label for="experience">Experience Level</label>
-      <select id="experience" name="experience">
-        <option value="">-- Select --</option>
-        <option value="junior">Junior (less than 3 years)</option>
-        <option value="middle">Middle (4–8 years)</option>
-        <option value="senior">Senior (more than 8 years)</option>
-      </select>
+      <label>Job Title:
+        <select name="job_title" required>
+          <option value="">Select a job title</option>
+          <option>Finance Manager</option>
+          <option>Administrative Manager</option>
+          <option>Junior Controller</option>
+          <option>Payable Accountant</option>
+          <option>Receivable Accountant</option>
+          <option>General Accountant</option>
+          <option>Credit Manager</option>
+          <option>Risk Manager</option>
+          <option>Auditor</option>
+          <option>Junior Auditor</option>
+          <option>Treasury Specialist</option>
+        </select>
+      </label>
 
-      <label for="salary">Salary Range</label>
-      <select id="salary" name="salary">
-        <option value="">-- Select --</option>
-        <option value="<25000">Less than €25.000</option>
-        <option value="25001-35000">€25.001 – €35.000</option>
-        <option value="35001-45000">€35.001 – €45.000</option>
-        <option value="45001-55000">€45.001 – €55.000</option>
-        <option value=">55001">More than €55.001</option>
-      </select>
+      <label>Years of Experience:
+        <input type="number" name="experience_years" min="0" required />
+      </label>
 
-      <label for="tools">Known Tools</label>
-      <input type="text" id="tools" name="tools" placeholder="e.g. Excel, SAP, Power BI" />
+      <label>Salary Range (€):
+        <input type="text" name="salary_range" placeholder="e.g. 35,000 - 45,000" />
+      </label>
 
-      <label for="language">English Level</label>
-      <select id="language" name="language">
-        <option value="">-- Select --</option>
-        <option value="A1">A1</option>
-        <option value="A2">A2</option>
-        <option value="B1">B1</option>
-        <option value="B2">B2</option>
-        <option value="C1">C1</option>
-        <option value="native">Native</option>
-      </select>
+      <label>Industry:
+        <input type="text" name="industry" required />
+      </label>
 
-      <label for="relocation">Willing to Travel</label>
-      <select id="relocation" name="relocation">
-        <option value="">-- Select --</option>
-        <option value="yes">Yes</option>
-        <option value="no">No</option>
-      </select>
+      <label>English Level:
+        <select name="english_level" required>
+          <option value="">Select level</option>
+          <option>A1</option>
+          <option>A2</option>
+          <option>B1</option>
+          <option>B2</option>
+          <option>C1</option>
+          <option>Native</option>
+        </select>
+      </label>
 
-      <label for="disability">Belongs to Protected Categories?</label>
-      <select id="disability" name="disability">
-        <option value="">-- Select --</option>
-        <option value="yes">Yes</option>
-        <option value="no">No</option>
-      </select>
+      <label>Tools Known:
+        <textarea name="tools" placeholder="SAP, Excel, Oracle..."></textarea>
+      </label>
 
-      <label for="cv">Upload CV</label>
-      <input type="file" id="cv" name="cv" accept=".pdf,.doc,.docx" />
+      <label>Education Level:
+        <select name="education_level" required>
+          <option value="">Select degree</option>
+          <option>High School Diploma</option>
+          <option>Bachelor's Degree</option>
+          <option>Master's Degree</option>
+          <option>Other</option>
+        </select>
+      </label>
 
-      <div class="note">
-        Fill in only the fields you feel comfortable sharing. Leave blank the ones you prefer not to disclose.
-      </div>
+      <label>Education Area:
+        <input type="text" name="education_area" placeholder="Finance, Engineering, Linguistics..." />
+      </label>
 
       <button type="submit">Submit Profile</button>
     </form>
-  </div>
+  </main>
 
   <script>
-    document.getElementById("candidate-profile-form").addEventListener("submit", function (e) {
+    document.getElementById("candidate-profile-form").addEventListener("submit", async function (e) {
       e.preventDefault();
-      alert("Profile submitted (backend will be connected soon).");
+      const form = e.target;
+      const data = Object.fromEntries(new FormData(form).entries());
+
+      const response = await fetch("/api/candidate-profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        alert("Profile submitted successfully!");
+        form.reset();
+      } else {
+        alert("Error submitting profile.");
+      }
     });
   </script>
 </body>

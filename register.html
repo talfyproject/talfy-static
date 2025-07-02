@@ -23,7 +23,8 @@
       display: block;
       margin-bottom: 1rem;
     }
-    input, select {
+    input[type="email"],
+    input[type="password"] {
       width: 100%;
       padding: 0.5rem;
       margin-top: 0.25rem;
@@ -32,6 +33,14 @@
       display: block;
       color: #333;
       margin-top: 0.5rem;
+    }
+    .role-choice {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+    .role-choice label {
+      margin: 0;
     }
     button {
       padding: 0.5rem 1rem;
@@ -60,37 +69,15 @@
       </small>
     </label>
 
-    <label>Job Title:
-      <select name="job_title" required>
-        <option value="">Select your job title</option>
-        <option>Finance Manager</option>
-        <option>Administrative Manager</option>
-        <option>Payable Accountant</option>
-        <option>Receivable Accountant</option>
-        <option>General Accountant</option>
-        <option>Junior Accountant</option>
-        <option>Accountant Specialist</option>
-        <option>Controller</option>
-        <option>Junior Controller</option>
-        <option>Controller Specialist</option>
-        <option>Auditor</option>
-        <option>Junior Auditor</option>
-        <option>Auditor Specialist</option>
-        <option>Treasury Manager</option>
-        <option>Treasury Specialist</option>
-        <option>Credit Manager</option>
-        <option>Risk Manager</option>
-        <option>Risk Performance Officer</option>
-        <option>Investment Analyst</option>
-        <option>Analista Crediti</option>
-        <option>Gestore Corporate</option>
-      </select>
-    </label>
-
-    <label>
-      <input type="checkbox" name="is_company" />
-      I am registering as a company
-    </label>
+    <label>Who are you?</label>
+    <div class="role-choice">
+      <label>
+        <input type="radio" name="user_type" value="talent" checked /> Talent
+      </label>
+      <label>
+        <input type="radio" name="user_type" value="company" /> Company
+      </label>
+    </div>
 
     <button type="submit">Register</button>
   </form>
@@ -101,15 +88,16 @@
       const form = e.target;
       const data = Object.fromEntries(new FormData(form).entries());
 
-      // ✅ Validate password
+      // Validate password
       const passwordValid = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/.test(data.password);
       if (!passwordValid) {
         alert("Password does not meet the required criteria.");
         return;
       }
 
-      // Normalize checkbox (true/false)
-      data.is_company = form.is_company.checked;
+      // Convert user type to boolean is_company
+      data.is_company = data.user_type === "company";
+      delete data.user_type;
 
       const response = await fetch("/api/register", {
         method: "POST",
@@ -120,9 +108,9 @@
       const result = await response.json();
       if (response.ok) {
         alert("Registration successful!");
-        localStorage.setItem("user_id", result.user_id); // store user ID
+        localStorage.setItem("user_id", result.user_id);
         form.reset();
-        window.location.href = "/complete-profile"; // go to profile page
+        window.location.href = "/complete-profile"; // Reindirizza al completamento profilo
       } else {
         alert("Registration failed.");
         console.error(result);

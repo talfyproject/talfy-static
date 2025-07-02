@@ -35,42 +35,49 @@
       font-weight: 500;
     }
     .main {
-      max-width: 1000px;
+      max-width: 900px;
       margin: 3rem auto;
-      padding: 0 8vw;
+      padding: 0 2rem;
       text-align: center;
     }
-    h1 {
+    .main h1 {
       font-size: 2.2rem;
       margin-bottom: 2rem;
     }
     .plans {
       display: flex;
       flex-wrap: wrap;
-      gap: 2rem;
       justify-content: center;
+      gap: 2rem;
     }
-    .plan {
-      background-color: #d2ffcc;
-      border-radius: 8px;
-      padding: 2rem;
-      width: 300px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    .plan-box {
+      flex: 0 0 250px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 2rem 1.5rem;
+      text-align: left;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      transition: transform 0.2s;
+      text-decoration: none;
+      color: inherit;
     }
-    .plan h2 {
+    .plan-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .plan-box h2 {
       color: #134e3a;
-      font-size: 1.6rem;
       margin-bottom: 0.5rem;
     }
-    .plan .price {
-      font-size: 1.4rem;
-      font-weight: bold;
-      margin-bottom: 1rem;
-    }
-    .plan p {
+    .plan-box p {
       font-size: 0.95rem;
-      line-height: 1.5;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    .price {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin: 1rem 0;
+      color: #0d1b2a;
     }
     .footer {
       position: relative;
@@ -97,7 +104,6 @@
   </style>
 </head>
 <body>
-
   <header class="header">
     <a href="/index.html" class="logo">talfy</a>
     <nav class="nav">
@@ -112,42 +118,39 @@
   </header>
 
   <main class="main">
-    <h1>Choose your plan</h1>
-
+    <h1>Pricing Plans</h1>
     <div class="plans">
-      <div class="plan">
-        <h2>Base</h2>
-        <div class="price">€39,99 / month</div>
-        <p>✔ Access up to 10 finance profiles</p>
-        <p>✔ View full candidate details</p>
-        <p>✔ Download CV (if available)</p>
-        <p><em>Ideal for startups and small companies</em></p>
-      </div>
+      <a href="/plan-base.html" class="plan-box">
+        <h2>Base – €39,99/month</h2>
+        <p>For startups and small businesses</p>
+        <p class="price">Up to 10 profiles</p>
+        <ul>
+          <li>Full profile access</li>
+          <li>CV download (if available)</li>
+        </ul>
+      </a>
 
-      <div class="plan">
-        <h2>Pro</h2>
-        <div class="price">€59,99 / month</div>
-        <p>✔ Access up to 25 finance profiles</p>
-        <p>✔ View full candidate details</p>
-        <p>✔ Download CV (if available)</p>
-        <p><em>Designed for medium-sized companies</em></p>
-      </div>
+      <a href="/plan-pro.html" class="plan-box">
+        <h2>Pro – €59,99/month</h2>
+        <p>For medium-sized companies</p>
+        <p class="price">Up to 25 profiles</p>
+        <ul>
+          <li>Full profile access</li>
+          <li>CV download (if available)</li>
+        </ul>
+      </a>
 
-      <div class="plan">
-        <h2>Enterprise</h2>
-        <div class="price">€89,99 / month</div>
-        <p>✔ Access up to 50 finance profiles</p>
-        <p>✔ View full candidate details</p>
-        <p>✔ Download CV (if available)</p>
-        <p>✔ Multi-user access included</p>
-        <p><em>Perfect for large companies and headhunting firms</em></p>
-      </div>
+      <a href="/plan-enterprise.html" class="plan-box">
+        <h2>Enterprise – €89,99/month</h2>
+        <p>For large companies and headhunters</p>
+        <p class="price">Up to 50 profiles</p>
+        <ul>
+          <li>Full profile access</li>
+          <li>CV download (if available)</li>
+          <li>Multi-user access</li>
+        </ul>
+      </a>
     </div>
-
-    <p style="margin-top:2.5rem;font-size:0.95rem;">
-      👉 All plans include access to anonymous, verified profiles with advanced filters.<br>
-      💸 Save 50% with annual billing – also available in monthly installments!
-    </p>
   </main>
 
   <footer class="footer">

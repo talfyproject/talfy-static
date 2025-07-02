@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pricing - Talfy</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { background-color: #d2ffcc; font-family: sans-serif; padding: 2rem; }
+    .plans { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
+    .plan { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 0 10px rgba(0,0,0,0.1); width: 300px; }
+    .plan h2 { margin-top: 0; }
+    .price { font-size: 1.5rem; font-weight: bold; }
+    .discount { color: green; font-weight: bold; margin-top: 0.5rem; }
+    button { margin-top: 1rem; padding: 0.5rem 1rem; background: darkgreen; color: white; border: none; border-radius: 6px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Our Plans</h1>
+  </header>
+  <main class="plans">
+    <div class="plan">
+      <h2>Base</h2>
+      <p class="price">€29.99 / month</p>
+      <p>Up to 10 CV/contact downloads.</p>
+      <p class="discount">50% off yearly plan!</p>
+      <button>Subscribe</button>
+    </div>
+
+    <div class="plan">
+      <h2>Pro</h2>
+      <p class="price">€49.99 / month</p>
+      <p>Advanced filters & early access.</p>
+      <p class="discount">50% off yearly plan!</p>
+      <button>Subscribe</button>
+    </div>
+
+    <div class="plan">
+      <h2>Enterprise</h2>
+      <p class="price">€79.00 / month</p>
+      <p>Unlimited access, multi-user & reports.</p>
+      <p class="discount">50% off yearly plan!</p>
+      <button>Subscribe</button>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,61 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Register - Talfy</title>
   <link rel="stylesheet" href="style.css"/>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #d2ffcc;
+      padding: 2rem;
+    }
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-bottom: 1rem;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.25rem;
+    }
+    small {
+      display: block;
+      color: #333;
+      margin-top: 0.5rem;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      background-color: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <h1>Register</h1>
-  </header>
 
-  <main>
-    <form id="register-form">
-      <label>Email:
-        <input type="email" name="email" required />
-      </label>
+  <h1 style="text-align: center;">Register on Talfy</h1>
 
-      <label>Password:
-        <input type="password" name="password" id="password" required />
-        <small>Password must be at least 8 characters, contain 1 uppercase letter, 1 number, and 1 symbol.</small>
-      </label>
+  <form id="register-form">
+    <label>Email:
+      <input type="email" name="email" required />
+    </label>
 
-      <label>Job Title:
-        <select name="job_title" required>
-          <option value="">Select your job title</option>
-          <option>Finance Manager</option>
-          <option>Controller</option>
-          <option>Payable Accountant</option>
-          <option>Receivable Accountant</option>
-          <option>General Accountant</option>
-          <option>Junior Controller</option>
-          <option>Auditor</option>
-          <option>Junior Auditor</option>
-          <option>Credit Manager</option>
-        </select>
-      </label>
+    <label>Password:
+      <input type="password" name="password" id="password" required />
+      <small>
+        Password must be at least 8 characters, contain 1 uppercase letter, 1 number, and 1 symbol.
+      </small>
+    </label>
 
-      <label>
-        <input type="checkbox" name="is_company" /> I am a company
-      </label>
+    <label>Job Title:
+      <select name="job_title" required>
+        <option value="">Select your job title</option>
+        <option>Finance Manager</option>
+        <option>Administrative Manager</option>
+        <option>Payable Accountant</option>
+        <option>Receivable Accountant</option>
+        <option>General Accountant</option>
+        <option>Junior Accountant</option>
+        <option>Accountant Specialist</option>
+        <option>Controller</option>
+        <option>Junior Controller</option>
+        <option>Controller Specialist</option>
+        <option>Auditor</option>
+        <option>Junior Auditor</option>
+        <option>Auditor Specialist</option>
+        <option>Treasury Manager</option>
+        <option>Treasury Specialist</option>
+        <option>Credit Manager</option>
+        <option>Risk Manager</option>
+        <option>Risk Performance Officer</option>
+        <option>Investment Analyst</option>
+        <option>Analista Crediti</option>
+        <option>Gestore Corporate</option>
+      </select>
+    </label>
 
-      <button type="submit">Register</button>
-    </form>
-  </main>
+    <label>
+      <input type="checkbox" name="is_company" />
+      I am registering as a company
+    </label>
+
+    <button type="submit">Register</button>
+  </form>
 
   <script>
-    const form = document.getElementById("register-form");
-    form.addEventListener("submit", async function (e) {
+    document.getElementById("register-form").addEventListener("submit", async function (e) {
       e.preventDefault();
+      const form = e.target;
       const data = Object.fromEntries(new FormData(form).entries());
 
-      const valid = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/.test(data.password);
-      if (!valid) {
-        alert("Password does not meet requirements.");
+      // ✅ Validate password
+      const passwordValid = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/.test(data.password);
+      if (!passwordValid) {
+        alert("Password does not meet the required criteria.");
         return;
       }
+
+      // Normalize checkbox (true/false)
+      data.is_company = form.is_company.checked;
 
       const response = await fetch("/api/register", {
         method: "POST",
@@ -63,13 +117,18 @@
         body: JSON.stringify(data),
       });
 
+      const result = await response.json();
       if (response.ok) {
         alert("Registration successful!");
+        localStorage.setItem("user_id", result.user_id); // store user ID
         form.reset();
+        window.location.href = "/complete-profile"; // go to profile page
       } else {
         alert("Registration failed.");
+        console.error(result);
       }
     });
   </script>
+
 </body>
 </html>

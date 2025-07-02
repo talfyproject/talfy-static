@@ -74,6 +74,17 @@
       font-size: 1rem;
       cursor: pointer;
     }
+    .password-requirements {
+      text-align: left;
+      font-size: 0.85rem;
+      margin-top: -0.5rem;
+      color: #444;
+    }
+    .password-requirements span {
+      display: block;
+    }
+    .valid { color: green; }
+    .invalid { color: red; }
   </style>
 </head>
 <body>
@@ -99,6 +110,12 @@
       </div>
       <input type="email" id="email" placeholder="Email" required />
       <input type="password" id="password" placeholder="Password" required />
+      <div class="password-requirements" id="password-requirements">
+        <span id="req-length" class="invalid">• At least 8 characters</span>
+        <span id="req-uppercase" class="invalid">• At least one uppercase letter</span>
+        <span id="req-number" class="invalid">• At least one number</span>
+        <span id="req-symbol" class="invalid">• At least one symbol</span>
+      </div>
       <input type="password" id="confirm-password" placeholder="Confirm Password" required />
       <button type="submit">Register</button>
     </form>
@@ -110,6 +127,17 @@
   </footer>
 
   <script>
+    const passwordInput = document.getElementById("password");
+
+    passwordInput.addEventListener("input", function () {
+      const value = passwordInput.value;
+
+      document.getElementById("req-length").className = value.length >= 8 ? "valid" : "invalid";
+      document.getElementById("req-uppercase").className = /[A-Z]/.test(value) ? "valid" : "invalid";
+      document.getElementById("req-number").className = /[0-9]/.test(value) ? "valid" : "invalid";
+      document.getElementById("req-symbol").className = /[^A-Za-z0-9]/.test(value) ? "valid" : "invalid";
+    });
+
     document.getElementById("register-form").addEventListener("submit", async function (e) {
       e.preventDefault();
 
@@ -125,6 +153,16 @@
 
       if (password !== confirmPassword) {
         alert("Passwords do not match.");
+        return;
+      }
+
+      const strongPassword = password.length >= 8 &&
+        /[A-Z]/.test(password) &&
+        /[0-9]/.test(password) &&
+        /[^A-Za-z0-9]/.test(password);
+
+      if (!strongPassword) {
+        alert("Password does not meet requirements.");
         return;
       }
 
@@ -146,11 +184,9 @@
         }
 
         if (response.ok && result.success) {
-          if (userType === "candidate") {
-            window.location.href = "/complete-profile-candidate.html";
-          } else {
-            window.location.href = "/complete-profile-company.html";
-          }
+          window.location.href = userType === "candidate"
+            ? "/complete-profile-candidate.html"
+            : "/complete-profile-company.html";
         } else {
           alert("Registration failed: " + (result.error || "Unknown error"));
         }

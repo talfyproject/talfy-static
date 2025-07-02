@@ -62,6 +62,9 @@
       width: 300px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .plan-box h2 {
       margin-top: 0;
@@ -75,6 +78,7 @@
     .plan-box p {
       margin-bottom: 1.5rem;
       font-size: 0.95rem;
+      min-height: 100px;
     }
     .plan-box a {
       display: inline-block;
@@ -117,24 +121,29 @@
     <h1>Pro Plan</h1>
     <div class="plan-container">
       <div class="plan-box">
-        <h2>Monthly</h2>
-        <div class="price">€59,99/month</div>
-        <p>
-          Includes up to <strong>25 profile downloads/month</strong>.<br>
-          Profiles stay in your company archive forever.
-        </p>
-        <a href="#">Start Monthly Plan</a>
+        <div>
+          <h2>Monthly</h2>
+          <div class="price">€59,99/month</div>
+          <p>
+            Includes up to <strong>25 profile downloads/month</strong>.<br>
+            Profiles stay in your company archive forever.
+          </p>
+        </div>
+        <a href="https://buy.stripe.com/test_fZubJ3dpj2CSeFy43cbwk03">Start Monthly Plan</a>
       </div>
 
       <div class="plan-box">
         <span class="discount-badge">-50%</span>
-        <h2>Annual</h2>
-        <div class="price">€359,90/year</div>
-        <p>
-          Includes up to <strong>25 profile downloads/month</strong>.<br>
-          Profiles stay in your company archive forever.
-        </p>
-        <a href="#">Start Annual Plan</a>
+        <div>
+          <h2>Annual</h2>
+          <div class="price">€29,99/month</div>
+          <p>
+            Billed annually as <strong>€359,90/year</strong>.<br>
+            Includes up to <strong>25 profile downloads/month</strong>.<br>
+            Profiles stay in your company archive forever.
+          </p>
+        </div>
+        <a href="https://buy.stripe.com/test_00weVfetn1yO54YczIbwk04">Start Annual Plan</a>
       </div>
     </div>
   </main>

@@ -2,121 +2,150 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Register - Talfy</title>
-  <link rel="stylesheet" href="style.css"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register – Talfy</title>
   <style>
     body {
-      font-family: sans-serif;
-      background-color: #d2ffcc;
-      padding: 2rem;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fff;
+      color: #0d1b2a;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 2rem;
+      border-bottom: 1px solid #e5e5e5;
+    }
+    .logo {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #134e3a;
+      text-transform: lowercase;
+      margin: 0;
+      text-decoration: none;
+    }
+    .nav a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: #0d1b2a;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+    .main {
+      min-height: 60vh;
+      max-width: 450px;
+      margin: 3rem auto;
+      padding: 0 2rem;
+      text-align: center;
+    }
+    .main h1 {
+      font-weight: 700;
+      font-size: 2rem;
+      margin-bottom: 2rem;
     }
     form {
-      max-width: 400px;
-      margin: 0 auto;
-      background: white;
+      display: flex;
+      flex-direction: column;
+      background-color: #d2ffcc;
       padding: 2rem;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     }
     label {
-      display: block;
-      margin-bottom: 1rem;
+      margin-bottom: 0.3rem;
+      text-align: left;
+      font-weight: 500;
     }
-    input[type="email"],
-    input[type="password"] {
-      width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.25rem;
-    }
-    small {
-      display: block;
-      color: #333;
-      margin-top: 0.5rem;
-    }
-    .role-choice {
-      display: flex;
-      gap: 1rem;
-      margin-top: 0.5rem;
-    }
-    .role-choice label {
-      margin: 0;
+    select, input {
+      margin-bottom: 1.2rem;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
     }
     button {
-      padding: 0.5rem 1rem;
-      background-color: #2e7d32;
+      padding: 0.8rem;
+      background-color: #134e3a;
       color: white;
+      font-size: 1rem;
+      font-weight: bold;
       border: none;
-      border-radius: 5px;
+      border-radius: 6px;
       cursor: pointer;
-      margin-top: 1rem;
+    }
+    button:hover {
+      background-color: #0b3a2a;
+    }
+    .footer {
+      position: relative;
+      margin-top: 3rem;
+      padding: 1.2rem 2rem;
+      border-top: 1px solid #e5e5e5;
+      font-size: 0.85rem;
+      color: #0d1b2a;
+    }
+    .footer-center {
+      text-align: center;
+      font-weight: 400;
+    }
+    .footer-right {
+      position: absolute;
+      bottom: 1.2rem;
+      right: 2rem;
+    }
+    .footer-right a {
+      text-decoration: none;
+      color: #134e3a;
+      font-weight: 500;
     }
   </style>
 </head>
 <body>
+  <header class="header">
+    <a href="/index.html" class="logo">talfy</a>
+    <nav class="nav">
+      <a href="/talfy-for-talent.html">Talfy for Talent</a>
+      <a href="/talfy-for-company.html">Talfy for Company</a>
+      <a href="/about.html">About us</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/pricing.html">Pricing</a>
+      <a href="/login.html">Login</a>
+      <a href="/register.html">Register</a>
+    </nav>
+  </header>
 
-  <h1 style="text-align: center;">Register on Talfy</h1>
+  <main class="main">
+    <h1>Create your account</h1>
+    <form action="/register" method="POST">
+      <label for="user-type">I am a...</label>
+      <select id="user-type" name="user_type" required>
+        <option value="">Select...</option>
+        <option value="candidate">Talent</option>
+        <option value="company">Company</option>
+      </select>
 
-  <form id="register-form">
-    <label>Email:
-      <input type="email" name="email" required />
-    </label>
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="you@example.com" required />
 
-    <label>Password:
-      <input type="password" name="password" id="password" required />
-      <small>
-        Password must be at least 8 characters, contain 1 uppercase letter, 1 number, and 1 symbol.
-      </small>
-    </label>
+      <label for="confirm-email">Confirm Email</label>
+      <input type="email" id="confirm-email" name="confirm_email" placeholder="Repeat your email" required />
 
-    <label>Who are you?</label>
-    <div class="role-choice">
-      <label>
-        <input type="radio" name="user_type" value="talent" checked /> Talent
-      </label>
-      <label>
-        <input type="radio" name="user_type" value="company" /> Company
-      </label>
-    </div>
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="At least 8 characters" required />
 
-    <button type="submit">Register</button>
-  </form>
+      <label for="confirm-password">Confirm Password</label>
+      <input type="password" id="confirm-password" name="confirm_password" placeholder="Repeat your password" required />
 
-  <script>
-    document.getElementById("register-form").addEventListener("submit", async function (e) {
-      e.preventDefault();
-      const form = e.target;
-      const data = Object.fromEntries(new FormData(form).entries());
+      <button type="submit">Register</button>
+    </form>
+  </main>
 
-      // Validate password
-      const passwordValid = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/.test(data.password);
-      if (!passwordValid) {
-        alert("Password does not meet the required criteria.");
-        return;
-      }
-
-      // Convert user type to boolean is_company
-      data.is_company = data.user_type === "company";
-      delete data.user_type;
-
-      const response = await fetch("/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      const result = await response.json();
-      if (response.ok) {
-        alert("Registration successful!");
-        localStorage.setItem("user_id", result.user_id);
-        form.reset();
-        window.location.href = "/complete-profile"; // Reindirizza al completamento profilo
-      } else {
-        alert("Registration failed.");
-        console.error(result);
-      }
-    });
-  </script>
-
+  <footer class="footer">
+    <div class="footer-center">&copy; 2025 Talfy. All rights reserved.</div>
+    <div class="footer-right"><a href="/privacy.html">Privacy</a></div>
+  </footer>
 </body>
 </html>

@@ -74,15 +74,6 @@
       font-size: 1rem;
       cursor: pointer;
     }
-    .message {
-      font-size: 0.9rem;
-      color: red;
-      margin-top: 0.5rem;
-      min-height: 1.2rem;
-    }
-    .success {
-      color: green;
-    }
   </style>
 </head>
 <body>
@@ -109,8 +100,7 @@
       <input type="email" id="email" placeholder="Email" required />
       <input type="password" id="password" placeholder="Password" required />
       <input type="password" id="confirm-password" placeholder="Confirm Password" required />
-      <button type="submit" id="submit-btn">Register</button>
-      <div id="message" class="message"></div>
+      <button type="submit">Register</button>
     </form>
   </main>
 
@@ -127,22 +117,14 @@
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
       const confirmPassword = document.getElementById("confirm-password").value;
-      const messageEl = document.getElementById("message");
-      const button = document.getElementById("submit-btn");
-
-      messageEl.textContent = "";
-      messageEl.classList.remove("success");
-      button.disabled = true;
 
       if (!email || !password || !confirmPassword) {
-        messageEl.textContent = "Please fill in all fields.";
-        button.disabled = false;
+        alert("Please fill in all fields.");
         return;
       }
 
       if (password !== confirmPassword) {
-        messageEl.textContent = "Passwords do not match.";
-        button.disabled = false;
+        alert("Passwords do not match.");
         return;
       }
 
@@ -153,26 +135,28 @@
           body: JSON.stringify({ user_type: userType, email, password })
         });
 
-        const result = await response.json();
+        let result = {};
+        const text = await response.text();
 
-        if (result.success) {
-          messageEl.textContent = "Registration successful!";
-          messageEl.classList.add("success");
-          setTimeout(() => {
-            if (userType === "candidate") {
-              window.location.href = "/complete-profile-candidate.html";
-            } else {
-              window.location.href = "/complete-profile-company.html";
-            }
-          }, 1000);
+        try {
+          result = JSON.parse(text);
+        } catch (err) {
+          console.warn("Non-JSON response from server:", text);
+          throw new Error("Unexpected server response.");
+        }
+
+        if (response.ok && result.success) {
+          if (userType === "candidate") {
+            window.location.href = "/complete-profile-candidate.html";
+          } else {
+            window.location.href = "/complete-profile-company.html";
+          }
         } else {
-          messageEl.textContent = result.error || "Registration failed.";
+          alert("Registration failed: " + (result.error || "Unknown error"));
         }
       } catch (err) {
-        messageEl.textContent = "An unexpected error occurred.";
-        console.error(err);
-      } finally {
-        button.disabled = false;
+        console.error("Registration error:", err);
+        alert("An unexpected error occurred.");
       }
     });
   </script>

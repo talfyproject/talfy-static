@@ -39,31 +39,34 @@
       max-width: 900px;
       margin: 3rem auto;
       padding: 0 8vw;
-      background: #fff;
-      text-align: center;
     }
     .main h1 {
+      text-align: center;
       font-weight: 700;
       font-size: 2.2rem;
       margin-bottom: 2rem;
     }
-    .contact-columns {
+    .contact-container {
       display: flex;
+      flex-wrap: nowrap;
       justify-content: space-between;
-      text-align: left;
-      gap: 3rem;
+      gap: 2rem;
     }
-    .column {
-      flex: 1;
-      font-size: 1rem;
+    .contact-column {
+      flex: 0 0 48%;
+      font-size: 0.95rem;
       line-height: 1.6;
     }
-    .column a {
+    .contact-column h2 {
+      color: #134e3a;
+      margin-bottom: 0.5rem;
+    }
+    .contact-column a {
       color: #134e3a;
       font-weight: 500;
       text-decoration: none;
     }
-    .column a:hover {
+    .contact-column a:hover {
       text-decoration: underline;
     }
     .footer {
@@ -98,6 +101,7 @@
       <a href="/talfy-for-company.html">Talfy for Company</a>
       <a href="/about.html">About us</a>
       <a href="/contact.html">Contact</a>
+      <a href="/pricing.html">Pricing</a>
       <a href="/login.html">Login</a>
       <a href="/register.html">Register</a>
     </nav>
@@ -105,18 +109,17 @@
 
   <main class="main">
     <h1>Contact</h1>
-    <div class="contact-columns">
-      <div class="column">
-        <strong>General enquiries</strong><br />
-        <a href="mailto:info@talfy.eu">info@talfy.eu</a><br />
-        <a href="mailto:sales@talfy.eu">sales@talfy.eu</a>
+    <div class="contact-container">
+      <div class="contact-column">
+        <h2>General enquiries</h2>
+        <p><a href="mailto:info@talfy.eu">info@talfy.eu</a><br><a href="mailto:sales@talfy.eu">sales@talfy.eu</a></p>
       </div>
-      <div class="column">
-        <strong>Registered office</strong><br />
-        talfy ltd – VAT ID XXXXXXXXX<br />
-        Via Fontanile 23<br />
-        Cologno Monzese (MI)<br />
-        20093 – Italy
+      <div class="contact-column">
+        <h2>Registered office</h2>
+        <p>talfy ltd – VAT ID XXXXXXXXX<br>
+        Via Fontanile 23<br>
+        Cologno Monzese (MI)<br>
+        20093 – Italy</p>
       </div>
     </div>
   </main>
@@ -127,3 +130,13 @@
   </footer>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+

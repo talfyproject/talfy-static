@@ -4,138 +4,37 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Register – Talfy</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #fff;
-      color: #0d1b2a;
-    }
-    header, footer {
-      padding: 1.2rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #e5e5e5;
-    }
-    footer {
-      border-top: 1px solid #e5e5e5;
-      font-size: 0.85rem;
-      justify-content: center;
-    }
-    .main {
-      max-width: 400px;
-      margin: 4rem auto;
-    }
-    h1 {
-      text-align: center;
-      font-size: 2rem;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      padding: 1rem;
-    }
-    input[type="email"],
-    input[type="password"] {
-      padding: 0.75rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    .radio-group {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-    }
-    button {
-      padding: 0.75rem;
-      background-color: #134e3a;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-    .info {
-      font-size: 0.8rem;
-      color: #666;
-    }
-    .error {
-      color: red;
-      font-size: 0.85rem;
-      text-align: center;
-    }
-    .password-hint {
-      font-size: 0.75rem;
-      color: #777;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <a href="/index.html" class="logo">talfy</a>
+    <h1>Create your account</h1>
   </header>
 
-  <main class="main">
-    <h1>Create your account</h1>
+  <main>
     <form id="register-form">
-      <div class="radio-group">
-        <label><input type="radio" name="user_type" value="candidate" checked /> Candidate</label>
-        <label><input type="radio" name="user_type" value="company" /> Company</label>
-      </div>
+      <label><input type="radio" name="user_type" value="candidate" checked /> Candidate</label>
+      <label><input type="radio" name="user_type" value="company" /> Company</label>
 
       <input type="email" id="email" placeholder="Email" required />
       <input type="password" id="password" placeholder="Password" required />
-      <div class="password-hint">
-        Minimum 8 characters, 1 uppercase, 1 number, 1 symbol
-      </div>
       <input type="password" id="confirm-password" placeholder="Confirm Password" required />
-      <div id="error-msg" class="error"></div>
       <button type="submit">Register</button>
     </form>
   </main>
 
-  <footer>
-    <div>&copy; 2025 Talfy – All rights reserved | <a href="/privacy.html">Privacy</a></div>
-  </footer>
-
   <script>
-    const form = document.getElementById("register-form");
-    const errorMsg = document.getElementById("error-msg");
-
-    function isValidPassword(pw) {
-      return /[A-Z]/.test(pw) &&
-             /[a-z]/.test(pw) &&
-             /[0-9]/.test(pw) &&
-             /[^A-Za-z0-9]/.test(pw) &&
-             pw.length >= 8;
-    }
-
-    form.addEventListener("submit", async (e) => {
+    document.getElementById("register-form").addEventListener("submit", async function (e) {
       e.preventDefault();
-      errorMsg.textContent = "";
 
       const userType = document.querySelector('input[name="user_type"]:checked').value;
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
       const confirmPassword = document.getElementById("confirm-password").value;
-      const isCompany = userType === "company";
-
-      if (!email || !password || !confirmPassword) {
-        errorMsg.textContent = "Please fill all fields.";
-        return;
-      }
-
-      if (!isValidPassword(password)) {
-        errorMsg.textContent = "Password does not meet requirements.";
-        return;
-      }
+      const is_company = userType === "company";
 
       if (password !== confirmPassword) {
-        errorMsg.textContent = "Passwords do not match.";
+        alert("Passwords do not match.");
         return;
       }
 
@@ -143,22 +42,26 @@
         const response = await fetch("/api/register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password, is_company: isCompany })
+          body: JSON.stringify({ email, password, is_company })
         });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          alert("Registration failed: " + errorText);
+          return;
+        }
 
         const result = await response.json();
 
-        if (response.ok && result.success) {
-          localStorage.setItem("user_id", result.id);
-          window.location.href = isCompany
-            ? "/complete-profile-company.html"
-            : "/complete-profile-candidate.html";
+        if (result.success) {
+          localStorage.setItem("user_id", result.id || "");  // Save ID if present
+          window.location.href = is_company ? "/complete-profile-company.html" : "/complete-profile-candidate.html";
         } else {
-          errorMsg.textContent = result.message || "Registration failed.";
+          alert("Registration failed: " + (result.message || "Unknown error"));
         }
-      } catch (error) {
-        console.error("Error:", error);
-        errorMsg.textContent = "Unexpected server error. Please try again.";
+      } catch (err) {
+        console.error("Unexpected error:", err);
+        alert("Unexpected server error. Please try again.");
       }
     });
   </script>

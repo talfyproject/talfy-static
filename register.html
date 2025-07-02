@@ -6,51 +6,37 @@
   <title>Register – Talfy</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #fff;
+      background: #fff;
       color: #0d1b2a;
     }
-    .header, .footer {
+    header, footer {
       padding: 1.2rem 2rem;
-      border-bottom: 1px solid #e5e5e5;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border-bottom: 1px solid #e5e5e5;
     }
-    .footer {
+    footer {
       border-top: 1px solid #e5e5e5;
-      border-bottom: none;
       font-size: 0.85rem;
-    }
-    .logo {
-      font-size: 3rem;
-      font-weight: 700;
-      color: #134e3a;
-      text-transform: lowercase;
-      text-decoration: none;
-    }
-    .nav a {
-      margin-left: 1.5rem;
-      text-decoration: none;
-      color: #0d1b2a;
-      font-size: 0.95rem;
-      font-weight: 500;
+      justify-content: center;
     }
     .main {
       max-width: 400px;
       margin: 4rem auto;
-      text-align: center;
     }
     h1 {
+      text-align: center;
       font-size: 2rem;
-      margin-bottom: 1rem;
     }
     form {
       display: flex;
       flex-direction: column;
       gap: 1rem;
+      padding: 1rem;
     }
     input[type="email"],
     input[type="password"] {
@@ -63,15 +49,6 @@
       display: flex;
       justify-content: center;
       gap: 2rem;
-      margin-bottom: 1rem;
-    }
-    .hint {
-      font-size: 0.8rem;
-      color: gray;
-      text-align: left;
-    }
-    .hint.invalid {
-      color: red;
     }
     button {
       padding: 0.75rem;
@@ -82,20 +59,24 @@
       font-size: 1rem;
       cursor: pointer;
     }
+    .info {
+      font-size: 0.8rem;
+      color: #666;
+    }
+    .error {
+      color: red;
+      font-size: 0.85rem;
+      text-align: center;
+    }
+    .password-hint {
+      font-size: 0.75rem;
+      color: #777;
+    }
   </style>
 </head>
 <body>
-  <header class="header">
+  <header>
     <a href="/index.html" class="logo">talfy</a>
-    <nav class="nav">
-      <a href="/about.html">About us</a>
-      <a href="/talfy-for-talent.html">Talfy for Talent</a>
-      <a href="/talfy-for-company.html">Talfy for Company</a>
-      <a href="/pricing.html">Pricing</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/login.html">Login</a>
-      <a href="/register.html">Register</a>
-    </nav>
   </header>
 
   <main class="main">
@@ -108,60 +89,53 @@
 
       <input type="email" id="email" placeholder="Email" required />
       <input type="password" id="password" placeholder="Password" required />
-      <input type="password" id="confirm-password" placeholder="Confirm Password" required />
-
-      <div id="password-hint" class="hint">
-        Password must contain at least 8 characters, one uppercase, one number and one symbol.
+      <div class="password-hint">
+        Minimum 8 characters, 1 uppercase, 1 number, 1 symbol
       </div>
-
+      <input type="password" id="confirm-password" placeholder="Confirm Password" required />
+      <div id="error-msg" class="error"></div>
       <button type="submit">Register</button>
     </form>
   </main>
 
-  <footer class="footer">
-    <div>&copy; 2025 Talfy – All rights reserved</div>
-    <div><a href="/privacy.html">Privacy</a></div>
+  <footer>
+    <div>&copy; 2025 Talfy – All rights reserved | <a href="/privacy.html">Privacy</a></div>
   </footer>
 
   <script>
-    function isPasswordStrong(password) {
-      return /[A-Z]/.test(password) &&
-             /[0-9]/.test(password) &&
-             /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password) &&
-             password.length >= 8;
+    const form = document.getElementById("register-form");
+    const errorMsg = document.getElementById("error-msg");
+
+    function isValidPassword(pw) {
+      return /[A-Z]/.test(pw) &&
+             /[a-z]/.test(pw) &&
+             /[0-9]/.test(pw) &&
+             /[^A-Za-z0-9]/.test(pw) &&
+             pw.length >= 8;
     }
 
-    const hint = document.getElementById("password-hint");
-    const passwordInput = document.getElementById("password");
-
-    passwordInput.addEventListener("input", () => {
-      if (isPasswordStrong(passwordInput.value)) {
-        hint.classList.remove("invalid");
-      } else {
-        hint.classList.add("invalid");
-      }
-    });
-
-    document.getElementById("register-form").addEventListener("submit", async function (e) {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
+      errorMsg.textContent = "";
 
       const userType = document.querySelector('input[name="user_type"]:checked').value;
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
       const confirmPassword = document.getElementById("confirm-password").value;
+      const isCompany = userType === "company";
 
       if (!email || !password || !confirmPassword) {
-        alert("Please fill in all fields.");
+        errorMsg.textContent = "Please fill all fields.";
+        return;
+      }
+
+      if (!isValidPassword(password)) {
+        errorMsg.textContent = "Password does not meet requirements.";
         return;
       }
 
       if (password !== confirmPassword) {
-        alert("Passwords do not match.");
-        return;
-      }
-
-      if (!isPasswordStrong(password)) {
-        alert("Password does not meet the required strength.");
+        errorMsg.textContent = "Passwords do not match.";
         return;
       }
 
@@ -169,23 +143,22 @@
         const response = await fetch("/api/register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ user_type: userType, email, password })
+          body: JSON.stringify({ email, password, is_company: isCompany })
         });
 
         const result = await response.json();
-        if (result.success) {
+
+        if (response.ok && result.success) {
           localStorage.setItem("user_id", result.id);
-          if (userType === "candidate") {
-            window.location.href = "/complete-profile-candidate.html";
-          } else {
-            window.location.href = "/complete-profile-company.html";
-          }
+          window.location.href = isCompany
+            ? "/complete-profile-company.html"
+            : "/complete-profile-candidate.html";
         } else {
-          alert("Registration failed: " + (result.error || "Unknown error"));
+          errorMsg.textContent = result.message || "Registration failed.";
         }
-      } catch (err) {
-        console.error(err);
-        alert("Unexpected server error. Please try again.");
+      } catch (error) {
+        console.error("Error:", error);
+        errorMsg.textContent = "Unexpected server error. Please try again.";
       }
     });
   </script>

@@ -1,96 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>Register - Talfy</title>
-    <link rel="stylesheet" href="style.css" />
-    <script>
-        function toggleJobTitle() {
-            const candidateRadio = document.getElementById('role-candidate');
-            const jobTitleField = document.getElementById('job-title-group');
-            jobTitleField.style.display = candidateRadio.checked ? 'block' : 'none';
-        }
+  <meta charset="UTF-8" />
+  <title>Register - Talfy</title>
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    function toggleJobTitle() {
+      const candidateRadio = document.getElementById('role-candidate');
+      const jobTitleField = document.getElementById('job-title-group');
+      jobTitleField.style.display = candidateRadio.checked ? 'block' : 'none';
+    }
 
-        function validatePassword() {
-            const password = document.getElementById("password").value;
-            const confirm = document.getElementById("confirm-password").value;
-            const warning = document.getElementById("password-warning");
+    function validatePassword() {
+      const password = document.getElementById("password").value;
+      const confirm = document.getElementById("confirm-password").value;
+      const warning = document.getElementById("password-warning");
 
-            const rules = [
-                /[A-Z]/.test(password),
-                /[0-9]/.test(password),
-                /[!@#$%^&*(),.?":{}|<>]/.test(password),
-                password.length >= 8
-            ];
+      const rules = [
+        /[A-Z]/.test(password),
+        /[0-9]/.test(password),
+        /[!@#$%^&*(),.?":{}|<>]/.test(password),
+        password.length >= 8
+      ];
 
-            if (!rules.every(r => r)) {
-                warning.style.color = "red";
-                warning.textContent = "Password must be at least 8 characters, include 1 uppercase letter, 1 number, and 1 symbol.";
-                return false;
-            }
+      if (!rules.every(r => r)) {
+        warning.style.color = "red";
+        warning.textContent = "Password must be at least 8 characters, include 1 uppercase letter, 1 number, and 1 symbol.";
+        return false;
+      }
 
-            if (password !== confirm) {
-                warning.style.color = "red";
-                warning.textContent = "Passwords do not match.";
-                return false;
-            }
+      if (password !== confirm) {
+        warning.style.color = "red";
+        warning.textContent = "Passwords do not match.";
+        return false;
+      }
 
-            warning.style.color = "green";
-            warning.textContent = "Password is valid.";
-            return true;
-        }
-    </script>
+      warning.style.color = "green";
+      warning.textContent = "Password is valid.";
+      return true;
+    }
+  </script>
 </head>
-<body>
-    <header class="header">
-        <div class="logo">talfy</div>
-    </header>
+<body style="margin: 0; background-color: #003300; font-family: Arial, sans-serif;">
 
-    <main class="main-content" style="background-color: white; padding: 40px;">
-        <h1 style="text-align: center;">Create your account</h1>
-        <form action="/register" method="POST" onsubmit="return validatePassword()" style="max-width: 400px; margin: auto;">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required />
+  <header class="header" style="background-color: #003300; padding: 20px; text-align: center;">
+    <div class="logo" style="color: white; font-size: 2em; font-weight: bold;">talfy</div>
+    <nav class="site-nav" style="margin-top: 10px;">
+      <a href="index.html" style="color: white; margin: 0 10px;">Home</a>
+      <a href="about.html" style="color: white; margin: 0 10px;">About</a>
+      <a href="talfy-for-talent.html" style="color: white; margin: 0 10px;">For Talent</a>
+      <a href="talfy-for-company.html" style="color: white; margin: 0 10px;">For Company</a>
+      <a href="contact.html" style="color: white; margin: 0 10px;">Contact</a>
+    </nav>
+  </header>
 
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" oninput="validatePassword()" required />
+  <main style="background-color: #003300; color: white; min-height: 80vh; display: flex; align-items: center; justify-content: center;">
+    <form action="/register" method="POST" onsubmit="return validatePassword()" style="background-color: white; color: black; padding: 40px; border-radius: 10px; max-width: 400px; width: 100%;">
+      <h1 style="text-align: center;">Create your account</h1>
 
-            <label for="confirm-password">Confirm Password</label>
-            <input type="password" id="confirm-password" name="confirm_password" oninput="validatePassword()" required />
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required style="width: 100%; padding: 10px; margin-bottom: 15px;" />
 
-            <p id="password-warning" style="font-size: 0.9em; margin-bottom: 10px;"></p>
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" oninput="validatePassword()" required style="width: 100%; padding: 10px; margin-bottom: 15px;" />
 
-            <label>User type</label>
-            <div style="margin-bottom: 10px;">
-                <label><input type="radio" name="role" id="role-candidate" value="candidate" onclick="toggleJobTitle()" required /> Candidate</label>
-                <label><input type="radio" name="role" id="role-company" value="company" onclick="toggleJobTitle()" required /> Company</label>
-            </div>
+      <label for="confirm-password">Confirm Password</label>
+      <input type="password" id="confirm-password" name="confirm_password" oninput="validatePassword()" required style="width: 100%; padding: 10px; margin-bottom: 15px;" />
 
-            <div id="job-title-group" style="display: none;">
-                <label for="job-title">Job title</label>
-                <select id="job-title" name="job_title">
-                    <option value="">-- Select a title --</option>
-                    <option>Finance Manager</option>
-                    <option>Administrative Manager</option>
-                    <option>Payable Accountant</option>
-                    <option>Receivable Accountant</option>
-                    <option>General Accountant</option>
-                    <option>Junior Controller</option>
-                    <option>Specialist Controller</option>
-                    <option>Credit Manager</option>
-                    <option>Risk Manager</option>
-                    <option>Investment Analyst</option>
-                    <option>Corporate Manager</option>
-                </select>
-            </div>
+      <p id="password-warning" style="font-size: 0.9em; margin-bottom: 10px;"></p>
 
-            <button type="submit" class="btn-primary">Register</button>
-        </form>
-    </main>
+      <label>User type</label>
+      <div style="margin-bottom: 15px;">
+        <label><input type="radio" name="role" id="role-candidate" value="candidate" onclick="toggleJobTitle()" required /> Candidate</label>
+        <label style="margin-left: 20px;"><input type="radio" name="role" id="role-company" value="company" onclick="toggleJobTitle()" required /> Company</label>
+      </div>
 
-    <footer class="footer">
-        <div class="footer-center">&copy; 2025 Talfy. All rights reserved.</div>
-        <div class="footer-right"><a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a></div>
-    </footer>
+      <div id="job-title-group" style="display: none; margin-bottom: 15px;">
+        <label for="job-title">Job title</label>
+        <select id="job-title" name="job_title" style="width: 100%; padding: 10px;">
+          <option value="">-- Select a title --</option>
+          <option>Finance Manager</option>
+          <option>Administrative Manager</option>
+          <option>Payable Accountant</option>
+          <option>Receivable Accountant</option>
+          <option>General Accountant</option>
+          <option>Junior Controller</option>
+          <option>Specialist Controller</option>
+          <option>Credit Manager</option>
+          <option>Risk Manager</option>
+          <option>Investment Analyst</option>
+          <option>Corporate Manager</option>
+        </select>
+      </div>
+
+      <button type="submit" style="width: 100%; padding: 10px; background-color: #006400; color: white; border: none; border-radius: 5px;">Register</button>
+    </form>
+  </main>
+
+  <footer class="footer" style="background-color: #003300; color: white; text-align: center; padding: 20px;">
+    <div class="footer-center">&copy; 2025 Talfy. All rights reserved.</div>
+    <div class="footer-right"><a href="/privacy.html" style="color: white;">Privacy</a> · <a href="/terms.html" style="color: white;">Terms</a></div>
+  </footer>
+
 </body>
 </html>

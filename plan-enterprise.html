@@ -6,36 +6,98 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Plan – Enterprise | Talfy</title>
   <style>
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #fff; color: #0d1b2a; }
-    .header, .footer { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 2rem; border-bottom: 1px solid #e5e5e5; }
-    .footer { border-top: 1px solid #e5e5e5; border-bottom: none; }
-    .logo { font-size: 3rem; font-weight: 700; color: #134e3a; text-transform: lowercase; margin: 0; text-decoration: none; }
-    .nav a { margin-left: 1.5rem; text-decoration: none; color: #0d1b2a; font-size: 0.95rem; font-weight: 500; }
-    .main { max-width: 900px; margin: 3rem auto; padding: 0 8vw; text-align: center; }
-    .main h1 { font-size: 2.2rem; margin-bottom: 1rem; }
-    .main p { font-size: 1rem; margin-bottom: 2.5rem; }
-    .payment-options { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; }
-    .box {
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fff;
+      color: #0d1b2a;
+    }
+    .header, .footer {
+      padding: 1.2rem 2rem;
+      border-bottom: 1px solid #e5e5e5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer {
+      border-top: 1px solid #e5e5e5;
+      border-bottom: none;
+      font-size: 0.85rem;
+    }
+    .logo {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #134e3a;
+      text-transform: lowercase;
+      text-decoration: none;
+    }
+    .nav a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: #0d1b2a;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+    .main {
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 0 8vw;
+      text-align: center;
+    }
+    .main h1 {
+      font-size: 2.2rem;
+      margin-bottom: 2rem;
+    }
+    .plan-container {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .plan-box {
       background-color: #134e3a;
-      color: white;
+      color: #fff;
       padding: 2rem;
       border-radius: 10px;
-      width: 260px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      width: 300px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      position: relative;
     }
-    .box h3 { font-size: 1.2rem; margin-bottom: 1rem; }
-    .box p { margin: 0.5rem 0 1.5rem; }
-    .box a {
+    .plan-box h2 {
+      margin-top: 0;
+      font-size: 1.5rem;
+    }
+    .plan-box .price {
+      font-size: 2rem;
+      font-weight: bold;
+      margin: 1rem 0;
+    }
+    .plan-box p {
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+    .plan-box a {
       display: inline-block;
-      background-color: white;
+      background-color: #fff;
       color: #134e3a;
-      padding: 0.6rem 1.2rem;
+      padding: 0.75rem 1.5rem;
       border-radius: 6px;
       font-weight: bold;
       text-decoration: none;
     }
-    .footer-center { text-align: center; font-size: 0.85rem; font-weight: 400; }
-    .footer-right a { text-decoration: none; color: #134e3a; font-weight: 500; }
+    .discount-badge {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background-color: gold;
+      color: #0d1b2a;
+      font-weight: bold;
+      padding: 4px 8px;
+      font-size: 0.8rem;
+      border-radius: 50px;
+      box-shadow: 0 0 4px rgba(0,0,0,0.2);
+    }
   </style>
 </head>
 <body>
@@ -54,29 +116,35 @@
 
   <main class="main">
     <h1>Enterprise Plan</h1>
-    <p>
-      Designed for large companies and headhunting firms with high-volume hiring.<br>
-      Up to <strong>50 downloadable profiles</strong> and multi-user access.<br>
-      Each download is yours forever, stored in your company’s private archive.
-    </p>
-
-    <div class="payment-options">
-      <div class="box">
-        <h3>Monthly</h3>
-        <p>€89.99 / month</p>
-        <a href="/checkout-enterprise-monthly.html">Choose Plan</a>
+    <div class="plan-container">
+      <div class="plan-box">
+        <h2>Monthly</h2>
+        <div class="price">€89,99/month</div>
+        <p>
+          Includes up to <strong>50 profile downloads/month</strong>.<br>
+          Profiles stay in your company archive forever.<br>
+          Multi-user access included.
+        </p>
+        <a href="#">Start Monthly Plan</a>
       </div>
-      <div class="box">
-        <h3>Annual</h3>
-        <p>€44.99 / month (billed annually)</p>
-        <a href="/checkout-enterprise-annual.html">Choose Plan</a>
+
+      <div class="plan-box">
+        <span class="discount-badge">-50%</span>
+        <h2>Annual</h2>
+        <div class="price">€539,90/year</div>
+        <p>
+          Includes up to <strong>50 profile downloads/month</strong>.<br>
+          Profiles stay in your company archive forever.<br>
+          Multi-user access included.
+        </p>
+        <a href="#">Start Annual Plan</a>
       </div>
     </div>
   </main>
 
   <footer class="footer">
-    <div class="footer-center">&copy; 2025 Talfy – All rights reserved</div>
-    <div class="footer-right"><a href="/privacy.html">Privacy</a></div>
+    <div>&copy; 2025 Talfy – All rights reserved</div>
+    <div><a href="/privacy.html">Privacy</a></div>
   </footer>
 </body>
 </html>

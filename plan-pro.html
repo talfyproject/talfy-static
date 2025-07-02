@@ -5,102 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Plan – Pro | Talfy</title>
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #fff;
-      color: #0d1b2a;
-    }
-    .header, .footer {
-      padding: 1.2rem 2rem;
-      border-bottom: 1px solid #e5e5e5;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .footer {
-      border-top: 1px solid #e5e5e5;
-      border-bottom: none;
-      font-size: 0.85rem;
-    }
-    .logo {
-      font-size: 3rem;
-      font-weight: 700;
-      color: #134e3a;
-      text-transform: lowercase;
-      text-decoration: none;
-    }
-    .nav a {
-      margin-left: 1.5rem;
-      text-decoration: none;
-      color: #0d1b2a;
-      font-size: 0.95rem;
-      font-weight: 500;
-    }
-    .main {
-      max-width: 900px;
-      margin: 3rem auto;
-      padding: 0 8vw;
-      text-align: center;
-    }
-    .main h1 {
-      font-size: 2.2rem;
-      margin-bottom: 2rem;
-    }
-    .plan-container {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      flex-wrap: wrap;
-    }
-    .plan-box {
-      background-color: #134e3a;
-      color: #fff;
-      padding: 2rem;
-      border-radius: 10px;
-      width: 300px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .plan-box h2 {
-      margin-top: 0;
-      font-size: 1.5rem;
-    }
-    .plan-box .price {
-      font-size: 2rem;
-      font-weight: bold;
-      margin: 1rem 0;
-    }
-    .plan-box p {
-      margin-bottom: 1.5rem;
-      font-size: 0.95rem;
-      min-height: 100px;
-    }
-    .plan-box a {
-      display: inline-block;
-      background-color: #fff;
-      color: #134e3a;
-      padding: 0.75rem 1.5rem;
-      border-radius: 6px;
-      font-weight: bold;
-      text-decoration: none;
-    }
-    .discount-badge {
-      position: absolute;
-      top: -10px;
-      right: -10px;
-      background-color: gold;
-      color: #0d1b2a;
-      font-weight: bold;
-      padding: 4px 8px;
-      font-size: 0.8rem;
-      border-radius: 50px;
-      box-shadow: 0 0 4px rgba(0,0,0,0.2);
-    }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #fff; color: #0d1b2a; }
+    .header, .footer { padding: 1.2rem 2rem; border-bottom: 1px solid #e5e5e5; display: flex; justify-content: space-between; align-items: center; }
+    .footer { border-top: 1px solid #e5e5e5; border-bottom: none; font-size: 0.85rem; }
+    .logo { font-size: 3rem; font-weight: 700; color: #134e3a; text-transform: lowercase; text-decoration: none; }
+    .nav a { margin-left: 1.5rem; text-decoration: none; color: #0d1b2a; font-size: 0.95rem; font-weight: 500; }
+    .main { max-width: 900px; margin: 3rem auto; padding: 0 8vw; text-align: center; }
+    .main h1 { font-size: 2.2rem; margin-bottom: 2rem; }
+    .plan-container { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+    .plan-box { background-color: #134e3a; color: #fff; padding: 2rem; border-radius: 10px; width: 300px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); position: relative; }
+    .plan-box h2 { margin-top: 0; font-size: 1.5rem; }
+    .plan-box .price { font-size: 2rem; font-weight: bold; margin: 1rem 0; }
+    .plan-box p { margin-bottom: 1.5rem; font-size: 0.95rem; }
+    .plan-box a { display: inline-block; background-color: #fff; color: #134e3a; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: bold; text-decoration: none; }
+    .discount-badge { position: absolute; top: -10px; right: -10px; background-color: gold; color: #0d1b2a; font-weight: bold; padding: 4px 8px; font-size: 0.8rem; border-radius: 50px; box-shadow: 0 0 4px rgba(0,0,0,0.2); }
   </style>
 </head>
 <body>
@@ -121,29 +39,18 @@
     <h1>Pro Plan</h1>
     <div class="plan-container">
       <div class="plan-box">
-        <div>
-          <h2>Monthly</h2>
-          <div class="price">€59,99/month</div>
-          <p>
-            Includes up to <strong>25 profile downloads/month</strong>.<br>
-            Profiles stay in your company archive forever.
-          </p>
-        </div>
-        <a href="https://buy.stripe.com/test_fZubJ3dpj2CSeFy43cbwk03">Start Monthly Plan</a>
+        <h2>Monthly</h2>
+        <div class="price">€59,99/month</div>
+        <p>Includes up to <strong>25 profile downloads/month</strong>.<br>Profiles stay in your company archive forever.</p>
+        <a href="/register.html">Register to activate</a>
       </div>
 
       <div class="plan-box">
         <span class="discount-badge">-50%</span>
-        <div>
-          <h2>Annual</h2>
-          <div class="price">€29,99/month</div>
-          <p>
-            Billed annually as <strong>€359,90/year</strong>.<br>
-            Includes up to <strong>25 profile downloads/month</strong>.<br>
-            Profiles stay in your company archive forever.
-          </p>
-        </div>
-        <a href="https://buy.stripe.com/test_00weVfetn1yO54YczIbwk04">Start Annual Plan</a>
+        <h2>Annual</h2>
+        <div class="price">€29,99/month</div>
+        <p>Includes up to <strong>25 profile downloads/month</strong>.<br>Profiles stay in your company archive forever.</p>
+        <a href="/register.html">Register to activate</a>
       </div>
     </div>
   </main>

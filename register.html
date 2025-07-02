@@ -39,7 +39,7 @@
       font-weight: 500;
     }
     .main {
-      max-width: 400px;
+      max-width: 450px;
       margin: 4rem auto;
       text-align: center;
     }
@@ -58,6 +58,7 @@
       font-size: 1rem;
       border: 1px solid #ccc;
       border-radius: 6px;
+      width: 100%;
     }
     .radio-group {
       display: flex;
@@ -65,6 +66,20 @@
       gap: 2rem;
       margin-bottom: 1rem;
     }
+    .password-wrapper {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .requirements-box {
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .requirements-box span {
+      display: block;
+    }
+    .valid { color: green; }
+    .invalid { color: red; }
     button {
       padding: 0.75rem;
       background-color: #134e3a;
@@ -74,17 +89,6 @@
       font-size: 1rem;
       cursor: pointer;
     }
-    .password-requirements {
-      text-align: left;
-      font-size: 0.85rem;
-      margin-top: -0.5rem;
-      color: #444;
-    }
-    .password-requirements span {
-      display: block;
-    }
-    .valid { color: green; }
-    .invalid { color: red; }
   </style>
 </head>
 <body>
@@ -109,14 +113,20 @@
         <label><input type="radio" name="user_type" value="company" /> Company</label>
       </div>
       <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="password" placeholder="Password" required />
-      <div class="password-requirements" id="password-requirements">
-        <span id="req-length" class="invalid">• At least 8 characters</span>
-        <span id="req-uppercase" class="invalid">• At least one uppercase letter</span>
-        <span id="req-number" class="invalid">• At least one number</span>
-        <span id="req-symbol" class="invalid">• At least one symbol</span>
+
+      <div class="password-wrapper">
+        <div style="flex: 1">
+          <input type="password" id="password" placeholder="Password" required />
+          <input type="password" id="confirm-password" placeholder="Confirm Password" required />
+        </div>
+        <div class="requirements-box">
+          <span id="req-length" class="invalid">• At least 8 characters</span>
+          <span id="req-uppercase" class="invalid">• At least one uppercase letter</span>
+          <span id="req-number" class="invalid">• At least one number</span>
+          <span id="req-symbol" class="invalid">• At least one symbol</span>
+        </div>
       </div>
-      <input type="password" id="confirm-password" placeholder="Confirm Password" required />
+
       <button type="submit">Register</button>
     </form>
   </main>
@@ -131,7 +141,6 @@
 
     passwordInput.addEventListener("input", function () {
       const value = passwordInput.value;
-
       document.getElementById("req-length").className = value.length >= 8 ? "valid" : "invalid";
       document.getElementById("req-uppercase").className = /[A-Z]/.test(value) ? "valid" : "invalid";
       document.getElementById("req-number").className = /[0-9]/.test(value) ? "valid" : "invalid";
@@ -173,14 +182,15 @@
           body: JSON.stringify({ user_type: userType, email, password })
         });
 
-        let result = {};
         const text = await response.text();
+        let result = {};
 
         try {
           result = JSON.parse(text);
         } catch (err) {
-          console.warn("Non-JSON response from server:", text);
-          throw new Error("Unexpected server response.");
+          console.warn("Non-JSON response:", text);
+          alert("Unexpected response from server.");
+          return;
         }
 
         if (response.ok && result.success) {

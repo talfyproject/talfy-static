@@ -74,6 +74,15 @@
       font-size: 1rem;
       cursor: pointer;
     }
+    .message {
+      font-size: 0.9rem;
+      color: red;
+      margin-top: 0.5rem;
+      min-height: 1.2rem;
+    }
+    .success {
+      color: green;
+    }
   </style>
 </head>
 <body>
@@ -100,7 +109,8 @@
       <input type="email" id="email" placeholder="Email" required />
       <input type="password" id="password" placeholder="Password" required />
       <input type="password" id="confirm-password" placeholder="Confirm Password" required />
-      <button type="submit">Register</button>
+      <button type="submit" id="submit-btn">Register</button>
+      <div id="message" class="message"></div>
     </form>
   </main>
 
@@ -117,14 +127,22 @@
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
       const confirmPassword = document.getElementById("confirm-password").value;
+      const messageEl = document.getElementById("message");
+      const button = document.getElementById("submit-btn");
+
+      messageEl.textContent = "";
+      messageEl.classList.remove("success");
+      button.disabled = true;
 
       if (!email || !password || !confirmPassword) {
-        alert("Please fill in all fields.");
+        messageEl.textContent = "Please fill in all fields.";
+        button.disabled = false;
         return;
       }
 
       if (password !== confirmPassword) {
-        alert("Passwords do not match.");
+        messageEl.textContent = "Passwords do not match.";
+        button.disabled = false;
         return;
       }
 
@@ -136,20 +154,25 @@
         });
 
         const result = await response.json();
-        console.log("Server response:", result);
 
         if (result.success) {
-          if (userType === "candidate") {
-            window.location.href = "/complete-profile-candidate.html";
-          } else {
-            window.location.href = "/complete-profile-company.html";
-          }
+          messageEl.textContent = "Registration successful!";
+          messageEl.classList.add("success");
+          setTimeout(() => {
+            if (userType === "candidate") {
+              window.location.href = "/complete-profile-candidate.html";
+            } else {
+              window.location.href = "/complete-profile-company.html";
+            }
+          }, 1000);
         } else {
-          alert("Registration failed: " + (result.error || "Unknown error"));
+          messageEl.textContent = result.error || "Registration failed.";
         }
       } catch (err) {
-        console.error("Registration error:", err);
-        alert("An error occurred during registration.");
+        messageEl.textContent = "An unexpected error occurred.";
+        console.error(err);
+      } finally {
+        button.disabled = false;
       }
     });
   </script>

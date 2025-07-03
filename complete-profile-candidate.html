@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Complete Candidate Profile – Talfy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Complete Profile – Candidate</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -25,7 +25,6 @@
       font-weight: 700;
       color: #134e3a;
       text-transform: lowercase;
-      margin: 0;
       text-decoration: none;
     }
     .nav {
@@ -65,7 +64,6 @@
       text-decoration: none;
       color: #0d1b2a;
     }
-
     .main {
       max-width: 900px;
       margin: 3rem auto;
@@ -82,66 +80,52 @@
     }
     label {
       margin-top: 1rem;
-      margin-bottom: 0.3rem;
+      font-weight: bold;
     }
     input, select, textarea {
-      padding: 0.6rem;
+      padding: 0.7rem;
       font-size: 1rem;
       border: 1px solid #ccc;
       border-radius: 6px;
+      margin-top: 0.3rem;
     }
-    .avatar-options {
+    .avatar-selection {
       display: flex;
-      gap: 2rem;
-      margin: 1rem 0;
       justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1rem;
     }
-    .avatar-options input[type="radio"] {
-      display: none;
-    }
-    .avatar-options label {
+    .avatar-selection label {
+      text-align: center;
       cursor: pointer;
     }
-    .avatar-options img {
+    .avatar-selection input {
+      display: none;
+    }
+    .avatar-selection img {
       width: 80px;
       height: 80px;
       border-radius: 50%;
-      border: 3px solid transparent;
+      border: 2px solid transparent;
     }
-    .avatar-options input[type="radio"]:checked + label img {
+    .avatar-selection input:checked + img {
       border-color: #134e3a;
     }
-    table.selection {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 0.5rem;
-    }
-    table.selection td {
-      border: 1px solid #ccc;
-      padding: 0.6rem;
-      font-size: 0.9rem;
-      text-align: left;
-    }
-    table.selection input {
-      transform: scale(1.2);
-    }
-    .dob-selects {
+    .birth-selects {
       display: flex;
       gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.5rem;
       margin-top: 0.5rem;
     }
-    .footer {
-      margin-top: 3rem;
-      padding: 1.2rem 2rem;
-      border-top: 1px solid #e5e5e5;
-      font-size: 0.85rem;
-      color: #0d1b2a;
-      text-align: center;
-    }
-    .footer a {
-      color: #134e3a;
-      text-decoration: none;
-      font-weight: 500;
+    .checkbox-grid label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
     button {
       margin-top: 2rem;
@@ -156,6 +140,19 @@
     }
     button:hover {
       background-color: #0b3a2a;
+    }
+    .footer {
+      margin-top: 3rem;
+      padding: 1.2rem 2rem;
+      border-top: 1px solid #e5e5e5;
+      font-size: 0.85rem;
+      color: #0d1b2a;
+      text-align: center;
+    }
+    .footer a {
+      color: #134e3a;
+      text-decoration: none;
+      font-weight: 500;
     }
 
     @media (max-width: 768px) {
@@ -203,82 +200,102 @@
   <main class="main">
     <h1>Complete Your Candidate Profile</h1>
     <form action="/submit-candidate-profile" method="POST" enctype="multipart/form-data">
-      <label>Choose Your Avatar or Upload a Photo</label>
-      <div class="avatar-options">
-        <input type="radio" id="avatar1" name="avatar" value="avatar1.png" checked>
-        <label for="avatar1"><img src="/static/avatar-male.png" alt="Male Avatar" /></label>
-        <input type="radio" id="avatar2" name="avatar" value="avatar2.png">
-        <label for="avatar2"><img src="/static/avatar-female.png" alt="Female Avatar" /></label>
+      
+      <label>Choose Avatar</label>
+      <div class="avatar-selection">
+        <label>
+          <input type="radio" name="avatar" value="male" checked />
+          <img src="/static/avatar-male.png" alt="Male Avatar" />
+        </label>
+        <label>
+          <input type="radio" name="avatar" value="female" />
+          <img src="/static/avatar-female.png" alt="Female Avatar" />
+        </label>
       </div>
+
+      <label>or Upload Photo</label>
       <input type="file" name="photo" accept="image/*" />
 
-      <label for="name">Name</label>
-      <input type="text" id="name" name="name" required>
+      <label for="name">First Name</label>
+      <input type="text" name="name" required />
 
-      <label for="surname">Surname</label>
-      <input type="text" id="surname" name="surname" required>
+      <label for="surname">Last Name</label>
+      <input type="text" name="surname" required />
 
       <label>Date of Birth</label>
-      <div class="dob-selects">
+      <div class="birth-selects">
         <select name="birth_day" required>
           <option value="">Day</option>
-          {% for d in range(1, 32) %}<option>{{ d }}</option>{% endfor %}
+          <!-- Days 1-31 -->
+          {% for d in range(1, 32) %}
+          <option value="{{ d }}">{{ d }}</option>
+          {% endfor %}
         </select>
         <select name="birth_month" required>
           <option value="">Month</option>
-          <option>Jan</option><option>Feb</option><option>Mar</option><option>Apr</option>
-          <option>May</option><option>Jun</option><option>Jul</option><option>Aug</option>
-          <option>Sep</option><option>Oct</option><option>Nov</option><option>Dec</option>
+          {% for m in ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'] %}
+          <option value="{{ m }}">{{ m }}</option>
+          {% endfor %}
         </select>
         <select name="birth_year" required>
           <option value="">Year</option>
-          {% for y in range(1950, 2010) %}<option>{{ y }}</option>{% endfor %}
+          {% for y in range(1950, 2008) %}
+          <option value="{{ y }}">{{ y }}</option>
+          {% endfor %}
         </select>
       </div>
 
       <label>Job Titles</label>
-      <table class="selection">
-        <tr><td><input type="checkbox" name="jobs[]" value="Finance Manager" /> Finance Manager</td><td><input type="checkbox" name="jobs[]" value="Credit Manager" /> Credit Manager</td></tr>
-        <tr><td><input type="checkbox" name="jobs[]" value="Controller" /> Controller</td><td><input type="checkbox" name="jobs[]" value="CFO" /> CFO</td></tr>
-        <tr><td><input type="checkbox" name="jobs[]" value="Accountant" /> Accountant</td><td><input type="checkbox" name="jobs[]" value="Treasury Specialist" /> Treasury Specialist</td></tr>
-      </table>
+      <div class="checkbox-grid">
+        {% for job in ['Controller', 'Junior Controller', 'Accountant', 'General Accountant', 'Receivable Accountant', 'Payable Accountant', 'Administrative Manager', 'Finance Manager', 'Credit Manager', 'Risk Manager', 'Auditor', 'Treasury Analyst', 'CFO', 'Investment Analyst'] %}
+        <label><input type="checkbox" name="job_titles" value="{{ job }}"> {{ job }}</label>
+        {% endfor %}
+      </div>
 
       <label>Industry Sectors</label>
-      <table class="selection">
-        <tr><td><input type="checkbox" name="sectors[]" value="Banking" /> Banking</td><td><input type="checkbox" name="sectors[]" value="Manufacturing" /> Manufacturing</td></tr>
-        <tr><td><input type="checkbox" name="sectors[]" value="Retail" /> Retail</td><td><input type="checkbox" name="sectors[]" value="Consulting" /> Consulting</td></tr>
-      </table>
+      <div class="checkbox-grid">
+        {% for sector in ['Banking', 'Insurance', 'Manufacturing', 'Retail', 'Consulting', 'Healthcare', 'Public Sector', 'Tech', 'Logistics', 'Utilities'] %}
+        <label><input type="checkbox" name="sectors" value="{{ sector }}"> {{ sector }}</label>
+        {% endfor %}
+      </div>
 
-      <label>Tools Known</label>
-      <table class="selection">
-        <tr><td><input type="checkbox" name="tools[]" value="Excel" /> Excel</td><td><input type="checkbox" name="tools[]" value="SAP" /> SAP</td></tr>
-        <tr><td><input type="checkbox" name="tools[]" value="Oracle" /> Oracle</td><td><input type="checkbox" name="tools[]" value="Power BI" /> Power BI</td></tr>
-      </table>
+      <label>Tools / Software</label>
+      <div class="checkbox-grid">
+        {% for tool in ['SAP', 'Oracle', 'Excel', 'Power BI', 'QuickBooks', 'Teamsystem', 'Xero', 'Zoho Books', 'Tableau'] %}
+        <label><input type="checkbox" name="tools" value="{{ tool }}"> {{ tool }}</label>
+        {% endfor %}
+      </div>
 
       <label for="english_level">English Level</label>
-      <select name="english_level" id="english_level" required>
+      <select name="english_level" required>
         <option value="">Select</option>
-        <option>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1</option><option>Native</option>
+        <option>A1</option><option>A2</option><option>B1</option>
+        <option>B2</option><option>C1</option><option>Native</option>
       </select>
 
-      <label for="education">Education Level</label>
-      <select name="education" id="education" required>
+      <label for="education_level">Education Level</label>
+      <select name="education_level" required>
         <option value="">Select</option>
-        <option>High School</option><option>Bachelor's Degree</option><option>Master's Degree</option><option>PhD</option><option>Other</option>
+        <option>High School</option>
+        <option>Bachelor's Degree</option>
+        <option>Master's Degree</option>
+        <option>PhD</option>
+        <option>Other</option>
       </select>
 
-      <label>Education Area</label>
-      <table class="selection">
-        <tr><td><input type="checkbox" name="education_area[]" value="Finance" /> Finance</td><td><input type="checkbox" name="education_area[]" value="Engineering" /> Engineering</td></tr>
-        <tr><td><input type="checkbox" name="education_area[]" value="Economics" /> Economics</td><td><input type="checkbox" name="education_area[]" value="Mathematics" /> Mathematics</td></tr>
-      </table>
+      <label>Area of Study</label>
+      <div class="checkbox-grid">
+        {% for area in ['Economics', 'Engineering', 'Mathematics', 'Law', 'Languages', 'Sciences', 'Business', 'Computer Science'] %}
+        <label><input type="checkbox" name="education_area" value="{{ area }}"> {{ area }}</label>
+        {% endfor %}
+      </div>
 
       <button type="submit">Save Profile</button>
     </form>
   </main>
 
   <footer class="footer">
-    <div>&copy; 2025 Talfy · <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a></div>
+    &copy; 2025 Talfy · <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a>
   </footer>
 
   <script>
@@ -289,3 +306,4 @@
   </script>
 </body>
 </html>
+

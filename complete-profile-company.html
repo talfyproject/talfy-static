@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Complete Profile – Company</title>
   <style>
     body {
@@ -19,14 +19,17 @@
       align-items: center;
       padding: 1.2rem 2rem;
       border-bottom: 1px solid #e5e5e5;
+      position: relative;
     }
     .logo {
       font-size: 3rem;
       font-weight: 700;
       color: #134e3a;
       text-transform: lowercase;
-      margin: 0;
       text-decoration: none;
+    }
+    .nav {
+      display: flex;
     }
     .nav a {
       margin-left: 1.5rem;
@@ -35,8 +38,35 @@
       font-size: 0.95rem;
       font-weight: 500;
     }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+    .hamburger div {
+      width: 25px;
+      height: 3px;
+      background-color: #0d1b2a;
+      margin: 4px 0;
+    }
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      right: 2rem;
+      background-color: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      z-index: 1000;
+    }
+    .mobile-menu a {
+      padding: 1rem;
+      border-bottom: 1px solid #eee;
+      text-decoration: none;
+      color: #0d1b2a;
+    }
     .main {
-      max-width: 500px;
+      max-width: 600px;
       margin: 3rem auto;
       padding: 0 2rem;
     }
@@ -53,7 +83,7 @@
       margin-top: 1rem;
       margin-bottom: 0.3rem;
     }
-    input, select {
+    input, select, textarea {
       padding: 0.8rem;
       font-size: 1rem;
       border: 1px solid #ccc;
@@ -86,6 +116,18 @@
       text-decoration: none;
       font-weight: 500;
     }
+    @media (max-width: 768px) {
+      .nav {
+        display: none;
+      }
+      .hamburger {
+        display: flex;
+      }
+      .mobile-menu.show {
+        display: flex;
+        width: 200px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -94,22 +136,43 @@
     <nav class="nav">
       <a href="/talfy-for-talent.html">Talfy for Talent</a>
       <a href="/talfy-for-company.html">Talfy for Company</a>
+      <a href="/pricing.html">Pricing</a>
       <a href="/about.html">About us</a>
       <a href="/contact.html">Contact</a>
-      <a href="/pricing.html">Pricing</a>
       <a href="/login.html">Login</a>
       <a href="/register.html">Register</a>
     </nav>
+    <div class="hamburger" onclick="toggleMenu()">
+      <div></div><div></div><div></div>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="/talfy-for-talent.html">Talfy for Talent</a>
+      <a href="/talfy-for-company.html">Talfy for Company</a>
+      <a href="/pricing.html">Pricing</a>
+      <a href="/about.html">About us</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/login.html">Login</a>
+      <a href="/register.html">Register</a>
+    </div>
   </header>
 
   <main class="main">
     <h1>Complete Your Company Profile</h1>
-    <form action="/submit-company-profile" method="POST">
+    <form action="/submit-company-profile" method="POST" enctype="multipart/form-data">
+      <label for="logo">Upload Company Logo</label>
+      <input type="file" name="logo" id="logo" accept="image/*" />
+
       <label for="company_name">Company Name</label>
       <input type="text" name="company_name" id="company_name" required />
 
-      <label for="vat_number">VAT Number</label>
-      <input type="text" name="vat_number" id="vat_number" required />
+      <label for="vat_code">VAT / Tax ID</label>
+      <input type="text" name="vat_code" id="vat_code" required />
+
+      <label for="billing_address">Billing Address</label>
+      <input type="text" name="billing_address" id="billing_address" required />
+
+      <label for="country">Country</label>
+      <input type="text" name="country" id="country" required />
 
       <label for="sector">Industry Sector</label>
       <input type="text" name="sector" id="sector" required />
@@ -117,25 +180,32 @@
       <label for="company_size">Company Size</label>
       <select name="company_size" id="company_size" required>
         <option value="">Select</option>
-        <option>1–10</option>
-        <option>11–50</option>
-        <option>51–200</option>
-        <option>201–500</option>
-        <option>500+</option>
+        <option>Small</option>
+        <option>Medium</option>
+        <option>Large</option>
       </select>
 
-      <label for="country">Country</label>
-      <input type="text" name="country" id="country" required />
+      <label for="employee_count">Number of Employees</label>
+      <select name="employee_count" id="employee_count" required>
+        <option value="">Select</option>
+        <option>&lt; 10</option>
+        <option>10–50</option>
+        <option>&gt; 50</option>
+      </select>
 
-      <label for="website">Website</label>
-      <input type="url" name="website" id="website" required />
-
-      <button type="submit">Save Company Profile</button>
+      <button type="submit">Save Profile</button>
     </form>
   </main>
 
   <footer class="footer">
     <div>&copy; 2025 Talfy · <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a></div>
   </footer>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("mobileMenu");
+      menu.classList.toggle("show");
+    }
+  </script>
 </body>
 </html>

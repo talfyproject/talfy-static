@@ -18,6 +18,7 @@
       align-items: center;
       padding: 1.2rem 2rem;
       border-bottom: 1px solid #e5e5e5;
+      position: relative;
     }
     .logo {
       font-size: 3rem;
@@ -27,12 +28,42 @@
       margin: 0;
       text-decoration: none;
     }
+    .nav {
+      display: flex;
+    }
     .nav a {
       margin-left: 1.5rem;
       text-decoration: none;
       color: #0d1b2a;
       font-size: 0.95rem;
       font-weight: 500;
+    }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+    .hamburger div {
+      width: 25px;
+      height: 3px;
+      background-color: #0d1b2a;
+      margin: 4px 0;
+    }
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      right: 2rem;
+      background-color: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      z-index: 1000;
+    }
+    .mobile-menu a {
+      padding: 1rem;
+      border-bottom: 1px solid #eee;
+      text-decoration: none;
+      color: #0d1b2a;
     }
     .main {
       min-height: 60vh;
@@ -46,6 +77,26 @@
       font-weight: 700;
       font-size: 2.2rem;
       margin-bottom: 2rem;
+    }
+    .main p {
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 2.5rem;
+    }
+    .button-link {
+      background-color: #134e3a;
+      color: white;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .button-link:hover {
+      background-color: #0b3a2a;
     }
     .footer {
       position: relative;
@@ -69,15 +120,22 @@
       color: #134e3a;
       font-weight: 500;
     }
-    .button-link {
-      display: inline-block;
-      margin-top: 2.5rem;
-      padding: 1rem 1.5rem;
-      background-color: #134e3a;
-      color: white;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: 500;
+    @media (max-width: 768px) {
+      .nav {
+        display: none;
+      }
+      .hamburger {
+        display: flex;
+      }
+      .mobile-menu.show {
+        display: flex;
+        width: 200px;
+      }
+      .footer-right {
+        position: static;
+        text-align: center;
+        margin-top: 1rem;
+      }
     }
   </style>
 </head>
@@ -93,11 +151,24 @@
       <a href="/login.html">Login</a>
       <a href="/register.html">Register</a>
     </nav>
+    <div class="hamburger" onclick="toggleMenu()">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="/talfy-for-talent.html">Talfy for Talent</a>
+      <a href="/talfy-for-company.html">Talfy for Company</a>
+      <a href="/about.html">About us</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/pricing.html">Pricing</a>
+      <a href="/login.html">Login</a>
+      <a href="/register.html">Register</a>
+    </div>
   </header>
 
   <main class="main">
     <h1>Talfy for Company</h1>
-
     <p>
       Hiring finance professionals has never been easier.<br>
       Talfy offers access to a large database of verified candidates – accountants, controllers, finance managers, CFOs, and more.<br>
@@ -106,15 +177,21 @@
       Candidates remain anonymous and their profiles are carefully curated to ensure quality.<br>
       With Talfy, your recruitment becomes faster, cheaper, and smarter.
     </p>
-
     <a class="button-link" href="/pricing.html">Discover our pricing plans to find your next finance talent</a>
   </main>
 
-<footer class="footer">
-  <div class="footer-center">&copy; 2025 Talfy. All rights reserved.</div>
-  <div class="footer-right">
-    <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a>
-  </div>
-</footer>
+  <footer class="footer">
+    <div class="footer-center">&copy; 2025 Talfy. All rights reserved.</div>
+    <div class="footer-right">
+      <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("mobileMenu");
+      menu.classList.toggle("show");
+    }
+  </script>
 </body>
 </html>

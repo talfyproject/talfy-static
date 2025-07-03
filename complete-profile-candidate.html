@@ -16,7 +16,19 @@
       background-color: #003300;
       color: white;
       padding: 1rem;
-      text-align: center;
+    }
+
+    header nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 15px;
+      font-weight: bold;
     }
 
     .container {
@@ -59,17 +71,10 @@
       box-shadow: 0 0 5px rgba(0,0,0,0.1);
     }
 
-    .checkbox-group, .multi-select {
+    .checkbox-group {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-    }
-
-    .checkbox-group label,
-    .multi-select label {
-      display: flex;
-      align-items: center;
-      gap: 5px;
     }
 
     .row {
@@ -81,6 +86,28 @@
     .row > div {
       flex: 1;
       min-width: 120px;
+    }
+
+    .avatars {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      margin-top: 0.5rem;
+    }
+
+    .avatars label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .avatars img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      object-fit: cover;
     }
 
     button {
@@ -97,10 +124,29 @@
       background-color: #004d00;
     }
 
+    footer {
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: white;
+      text-decoration: underline;
+    }
+
     @media (max-width: 600px) {
       .container {
         margin: 1rem;
         padding: 1rem;
+      }
+
+      header nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .avatars {
+        flex-direction: column;
       }
     }
   </style>
@@ -108,7 +154,18 @@
 <body>
 
 <header>
-  <h1>Talfy</h1>
+  <nav>
+    <div><strong>Talfy</strong></div>
+    <div>
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="talfy-for-talent.html">For Talent</a>
+      <a href="talfy-for-company.html">For Company</a>
+      <a href="login.html">Login</a>
+      <a href="register.html">Register</a>
+    </div>
+  </nav>
 </header>
 
 <div class="container">
@@ -119,9 +176,17 @@
     <div class="section">
       <label>Upload a Photo or Choose an Avatar:</label>
       <input type="file" name="photo" accept="image/*"/>
-      <div class="row">
-        <label><input type="radio" name="avatar" value="male" /> Male Avatar</label>
-        <label><input type="radio" name="avatar" value="female" /> Female Avatar</label>
+      <div class="avatars">
+        <label>
+          <input type="radio" name="avatar" value="male" />
+          <img src="https://via.placeholder.com/80?text=Male" alt="Male Avatar"/>
+          Male
+        </label>
+        <label>
+          <input type="radio" name="avatar" value="female" />
+          <img src="https://via.placeholder.com/80?text=Female" alt="Female Avatar"/>
+          Female
+        </label>
       </div>
     </div>
 
@@ -134,22 +199,39 @@
 
       <label>Date of Birth</label>
       <div class="row">
-        <select name="dob_day" required>
-          <option value="">Day</option>
-          <!-- 1 to 31 -->
-          ${[...Array(31)].map((_, i) => `<option>${i+1}</option>`).join('')}
-        </select>
-        <select name="dob_month" required>
-          <option value="">Month</option>
-          <option>January</option><option>February</option><option>March</option>
-          <option>April</option><option>May</option><option>June</option>
-          <option>July</option><option>August</option><option>September</option>
-          <option>October</option><option>November</option><option>December</option>
-        </select>
-        <select name="dob_year" required>
-          <option value="">Year</option>
-          ${[...Array(70)].map((_, i) => `<option>${2025 - i}</option>`).join('')}
-        </select>
+        <div>
+          <select name="dob_day" required>
+            <option value="">Day</option>
+            <!-- 1 to 31 -->
+            <!-- Inseriti manualmente -->
+            <script>
+              for (let i = 1; i <= 31; i++) {
+                document.write(`<option value="${i}">${i}</option>`);
+              }
+            </script>
+          </select>
+        </div>
+        <div>
+          <select name="dob_month" required>
+            <option value="">Month</option>
+            <option>January</option><option>February</option><option>March</option>
+            <option>April</option><option>May</option><option>June</option>
+            <option>July</option><option>August</option><option>September</option>
+            <option>October</option><option>November</option><option>December</option>
+          </select>
+        </div>
+        <div>
+          <select name="dob_year" required>
+            <option value="">Year</option>
+            <!-- Inseriti manualmente -->
+            <script>
+              const currentYear = new Date().getFullYear();
+              for (let i = currentYear; i >= 1950; i--) {
+                document.write(`<option value="${i}">${i}</option>`);
+              }
+            </script>
+          </select>
+        </div>
       </div>
     </div>
 
@@ -162,7 +244,7 @@
         <label><input type="checkbox" name="job_titles" value="Accountant"/> Accountant</label>
         <label><input type="checkbox" name="job_titles" value="Finance Manager"/> Finance Manager</label>
         <label><input type="checkbox" name="job_titles" value="Auditor"/> Auditor</label>
-        <label><input type="checkbox" name="job_titles" value="Admin Manager"/> Administrative Manager</label>
+        <label><input type="checkbox" name="job_titles" value="Administration Manager"/> Administration Manager</label>
         <label><input type="checkbox" name="job_titles" value="Other"/> Other</label>
       </div>
     </div>
@@ -244,7 +326,7 @@
 </div>
 
 <footer>
-  <p>© 2025 Talfy — <a href="privacy.html" style="color:white;">Privacy</a> — <a href="terms.html" style="color:white;">Terms</a></p>
+  <p>© 2025 Talfy — <a href="privacy.html">Privacy</a> — <a href="terms.html">Terms</a></p>
 </footer>
 
 </body>

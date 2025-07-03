@@ -2,240 +2,128 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Complete Profile – Candidate</title>
+  <link rel="stylesheet" href="style.css"/>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: "Segoe UI", sans-serif;
+      background-color: white;
       margin: 0;
       padding: 0;
-      background-color: #fff;
-      color: #0d1b2a;
     }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.2rem 2rem;
-      border-bottom: 1px solid #e5e5e5;
-      position: relative;
-    }
-    .logo {
-      font-size: 3rem;
-      font-weight: 700;
-      color: #134e3a;
-      text-transform: lowercase;
-      text-decoration: none;
-    }
-    .nav {
-      display: flex;
-    }
-    .nav a {
-      margin-left: 1.5rem;
-      text-decoration: none;
-      color: #0d1b2a;
-      font-size: 0.95rem;
-      font-weight: 500;
-    }
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-    }
-    .hamburger div {
-      width: 25px;
-      height: 3px;
-      background-color: #0d1b2a;
-      margin: 4px 0;
-    }
-    .mobile-menu {
-      display: none;
-      flex-direction: column;
-      position: absolute;
-      top: 100%;
-      right: 2rem;
-      background-color: #fff;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      z-index: 1000;
-    }
-    .mobile-menu a {
+    header, footer {
+      background-color: #003d2d;
+      color: white;
       padding: 1rem;
-      border-bottom: 1px solid #eee;
-      text-decoration: none;
-      color: #0d1b2a;
-    }
-    .main {
-      max-width: 900px;
-      margin: 3rem auto;
-      padding: 0 2rem;
-    }
-    h1 {
       text-align: center;
-      font-size: 2rem;
-      margin-bottom: 2rem;
     }
-    form {
-      display: flex;
-      flex-direction: column;
+    main {
+      max-width: 800px;
+      margin: auto;
+      padding: 2rem;
     }
-    label {
-      margin-top: 1rem;
-      font-weight: bold;
-    }
-    input, select, textarea {
-      padding: 0.7rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      margin-top: 0.3rem;
-    }
-    .avatar-selection {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
+    .form-group {
       margin-bottom: 1rem;
     }
-    .avatar-selection label {
-      text-align: center;
-      cursor: pointer;
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.4rem;
     }
-    .avatar-selection input {
-      display: none;
-    }
-    .avatar-selection img {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      border: 2px solid transparent;
-    }
-    .avatar-selection input:checked + img {
-      border-color: #134e3a;
-    }
-    .birth-selects {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
+    input[type="text"],
+    select,
+    input[type="file"],
+    textarea {
+      width: 100%;
+      padding: 0.5rem;
+      font-size: 1rem;
     }
     .checkbox-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 0.5rem;
-      margin-top: 0.5rem;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 0.3rem;
     }
-    .checkbox-grid label {
+    .avatar-selection {
       display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      gap: 1rem;
+      margin-bottom: 1rem;
     }
-    button {
-      margin-top: 2rem;
-      padding: 0.8rem;
-      background-color: #134e3a;
-      color: white;
-      font-size: 1rem;
-      font-weight: bold;
-      border: none;
-      border-radius: 6px;
+    .avatar-selection img {
+      width: 100px;
       cursor: pointer;
+      border: 3px solid transparent;
+      border-radius: 10px;
     }
-    button:hover {
-      background-color: #0b3a2a;
+    .avatar-selection input[type="radio"] {
+      display: none;
     }
-    .footer {
-      margin-top: 3rem;
-      padding: 1.2rem 2rem;
-      border-top: 1px solid #e5e5e5;
-      font-size: 0.85rem;
-      color: #0d1b2a;
-      text-align: center;
+    .avatar-selection input[type="radio"]:checked + img {
+      border: 3px solid #003d2d;
     }
-    .footer a {
-      color: #134e3a;
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    @media (max-width: 768px) {
-      .nav {
-        display: none;
+    @media (max-width: 600px) {
+      main {
+        padding: 1rem;
       }
-      .hamburger {
-        display: flex;
-      }
-      .mobile-menu.show {
-        display: flex;
-        width: 200px;
+      .avatar-selection {
+        flex-direction: column;
+        align-items: center;
       }
     }
   </style>
 </head>
 <body>
-  <header class="header">
-    <a href="/index.html" class="logo">talfy</a>
-    <nav class="nav">
-      <a href="/talfy-for-talent.html">Talfy for Talent</a>
-      <a href="/talfy-for-company.html">Talfy for Company</a>
-      <a href="/pricing.html">Pricing</a>
-      <a href="/about.html">About us</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/login.html">Login</a>
-      <a href="/register.html">Register</a>
-    </nav>
-    <div class="hamburger" onclick="toggleMenu()">
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
-    <div class="mobile-menu" id="mobileMenu">
-      <a href="/talfy-for-talent.html">Talfy for Talent</a>
-      <a href="/talfy-for-company.html">Talfy for Company</a>
-      <a href="/pricing.html">Pricing</a>
-      <a href="/about.html">About us</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/login.html">Login</a>
-      <a href="/register.html">Register</a>
-    </div>
-  </header>
 
-  <main class="main">
-    <h1>Complete Your Candidate Profile</h1>
-    <form action="/submit-candidate-profile" method="POST" enctype="multipart/form-data">
-      
-      <label>Choose Avatar</label>
+<header>
+  <h1>Complete your Profile – Candidate</h1>
+</header>
+
+<main>
+  <form action="/submit-candidate-profile" method="POST" enctype="multipart/form-data">
+    
+    <div class="form-group">
+      <label>Choose your avatar or upload a photo:</label>
       <div class="avatar-selection">
         <label>
-          <input type="radio" name="avatar" value="male" checked />
-          <img src="/static/avatar-male.png" alt="Male Avatar" />
+          <input type="radio" name="avatar" value="avatar-male" checked />
+          <img src="img/avatar-male.png" alt="Male Avatar" />
         </label>
         <label>
-          <input type="radio" name="avatar" value="female" />
-          <img src="/static/avatar-female.png" alt="Female Avatar" />
+          <input type="radio" name="avatar" value="avatar-female" />
+          <img src="img/avatar-female.png" alt="Female Avatar" />
+        </label>
+        <label>
+          <input type="file" name="photo" accept="image/*" />
         </label>
       </div>
+    </div>
 
-      <label>or Upload Photo</label>
-      <input type="file" name="photo" accept="image/*" />
+    <div class="form-group">
+      <label>First Name:</label>
+      <input type="text" name="first_name" required />
+    </div>
 
-      <label for="name">First Name</label>
-      <input type="text" name="name" required />
+    <div class="form-group">
+      <label>Last Name:</label>
+      <input type="text" name="last_name" required />
+    </div>
 
-      <label for="surname">Last Name</label>
-      <input type="text" name="surname" required />
-
-      <label>Date of Birth</label>
-      <div class="birth-selects">
+    <div class="form-group">
+      <label>Date of Birth:</label>
+      <div style="display: flex; gap: 0.5rem;">
         <select name="birth_day" required>
           <option value="">Day</option>
-          <!-- Days 1-31 -->
-          {% for d in range(1, 32) %}
-          <option value="{{ d }}">{{ d }}</option>
+          <!-- 1 to 31 -->
+          {% for i in range(1, 32) %}
+          <option value="{{ i }}">{{ i }}</option>
           {% endfor %}
         </select>
         <select name="birth_month" required>
           <option value="">Month</option>
-          {% for m in ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'] %}
-          <option value="{{ m }}">{{ m }}</option>
-          {% endfor %}
+          <option value="1">January</option>
+          <option value="2">February</option>
+          <!-- ... -->
+          <option value="12">December</option>
         </select>
         <select name="birth_year" required>
           <option value="">Year</option>
@@ -244,66 +132,86 @@
           {% endfor %}
         </select>
       </div>
+    </div>
 
-      <label>Job Titles</label>
+    <div class="form-group">
+      <label>Job Titles (multiple possible):</label>
       <div class="checkbox-grid">
-        {% for job in ['Controller', 'Junior Controller', 'Accountant', 'General Accountant', 'Receivable Accountant', 'Payable Accountant', 'Administrative Manager', 'Finance Manager', 'Credit Manager', 'Risk Manager', 'Auditor', 'Treasury Analyst', 'CFO', 'Investment Analyst'] %}
-        <label><input type="checkbox" name="job_titles" value="{{ job }}"> {{ job }}</label>
-        {% endfor %}
+        <label><input type="checkbox" name="job_title" value="Controller"> Controller</label>
+        <label><input type="checkbox" name="job_title" value="Junior Accountant"> Junior Accountant</label>
+        <label><input type="checkbox" name="job_title" value="Treasury Specialist"> Treasury Specialist</label>
+        <label><input type="checkbox" name="job_title" value="Risk Manager"> Risk Manager</label>
+        <label><input type="checkbox" name="job_title" value="Finance Manager"> Finance Manager</label>
+        <!-- Aggiungi altri ruoli -->
       </div>
+    </div>
 
-      <label>Industry Sectors</label>
+    <div class="form-group">
+      <label>Industries (multiple possible):</label>
       <div class="checkbox-grid">
-        {% for sector in ['Banking', 'Insurance', 'Manufacturing', 'Retail', 'Consulting', 'Healthcare', 'Public Sector', 'Tech', 'Logistics', 'Utilities'] %}
-        <label><input type="checkbox" name="sectors" value="{{ sector }}"> {{ sector }}</label>
-        {% endfor %}
+        <label><input type="checkbox" name="industry" value="Banking"> Banking</label>
+        <label><input type="checkbox" name="industry" value="Retail"> Retail</label>
+        <label><input type="checkbox" name="industry" value="Manufacturing"> Manufacturing</label>
+        <label><input type="checkbox" name="industry" value="Consulting"> Consulting</label>
+        <label><input type="checkbox" name="industry" value="Insurance"> Insurance</label>
       </div>
+    </div>
 
-      <label>Tools / Software</label>
+    <div class="form-group">
+      <label>Tools (multiple possible):</label>
       <div class="checkbox-grid">
-        {% for tool in ['SAP', 'Oracle', 'Excel', 'Power BI', 'QuickBooks', 'Teamsystem', 'Xero', 'Zoho Books', 'Tableau'] %}
-        <label><input type="checkbox" name="tools" value="{{ tool }}"> {{ tool }}</label>
-        {% endfor %}
+        <label><input type="checkbox" name="tools" value="Excel"> Excel</label>
+        <label><input type="checkbox" name="tools" value="SAP"> SAP</label>
+        <label><input type="checkbox" name="tools" value="Oracle"> Oracle</label>
+        <label><input type="checkbox" name="tools" value="Teamsystem"> Teamsystem</label>
+        <label><input type="checkbox" name="tools" value="Qlik"> Qlik</label>
       </div>
+    </div>
 
-      <label for="english_level">English Level</label>
+    <div class="form-group">
+      <label>English Level:</label>
       <select name="english_level" required>
-        <option value="">Select</option>
-        <option>A1</option><option>A2</option><option>B1</option>
-        <option>B2</option><option>C1</option><option>Native</option>
+        <option value="">Select Level</option>
+        <option value="A1">A1</option>
+        <option value="A2">A2</option>
+        <option value="B1">B1</option>
+        <option value="B2">B2</option>
+        <option value="C1">C1</option>
+        <option value="Native">Native</option>
       </select>
+    </div>
 
-      <label for="education_level">Education Level</label>
+    <div class="form-group">
+      <label>Education Level:</label>
       <select name="education_level" required>
-        <option value="">Select</option>
-        <option>High School</option>
-        <option>Bachelor's Degree</option>
-        <option>Master's Degree</option>
-        <option>PhD</option>
-        <option>Other</option>
+        <option value="">Select Degree</option>
+        <option value="High School">High School</option>
+        <option value="Bachelor">Bachelor</option>
+        <option value="Master">Master</option>
+        <option value="PhD">PhD</option>
       </select>
+    </div>
 
-      <label>Area of Study</label>
+    <div class="form-group">
+      <label>Education Area (multiple possible):</label>
       <div class="checkbox-grid">
-        {% for area in ['Economics', 'Engineering', 'Mathematics', 'Law', 'Languages', 'Sciences', 'Business', 'Computer Science'] %}
-        <label><input type="checkbox" name="education_area" value="{{ area }}"> {{ area }}</label>
-        {% endfor %}
+        <label><input type="checkbox" name="education_area" value="Finance"> Finance</label>
+        <label><input type="checkbox" name="education_area" value="Engineering"> Engineering</label>
+        <label><input type="checkbox" name="education_area" value="Linguistic"> Linguistic</label>
+        <label><input type="checkbox" name="education_area" value="Legal"> Legal</label>
+        <label><input type="checkbox" name="education_area" value="Economics"> Economics</label>
       </div>
+    </div>
 
-      <button type="submit">Save Profile</button>
-    </form>
-  </main>
+    <div class="form-group">
+      <button type="submit">Submit Profile</button>
+    </div>
+  </form>
+</main>
 
-  <footer class="footer">
-    &copy; 2025 Talfy · <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a>
-  </footer>
+<footer>
+  <p>&copy; 2025 Talfy – All rights reserved | <a href="privacy.html" style="color:white;">Privacy</a> | <a href="terms.html" style="color:white;">Terms</a></p>
+</footer>
 
-  <script>
-    function toggleMenu() {
-      const menu = document.getElementById("mobileMenu");
-      menu.classList.toggle("show");
-    }
-  </script>
 </body>
 </html>
-

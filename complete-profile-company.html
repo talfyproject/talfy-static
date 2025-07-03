@@ -13,67 +13,29 @@
       background-color: #fff;
       color: #0d1b2a;
     }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .header, .footer {
       padding: 1.2rem 2rem;
       border-bottom: 1px solid #e5e5e5;
-      position: relative;
+    }
+    .footer {
+      border-top: 1px solid #e5e5e5;
+      font-size: 0.85rem;
+      text-align: center;
     }
     .logo {
-      font-size: 3rem;
+      font-size: 2rem;
       font-weight: 700;
       color: #134e3a;
-      text-transform: lowercase;
       text-decoration: none;
-    }
-    .nav {
-      display: flex;
-    }
-    .nav a {
-      margin-left: 1.5rem;
-      text-decoration: none;
-      color: #0d1b2a;
-      font-size: 0.95rem;
-      font-weight: 500;
-    }
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-    }
-    .hamburger div {
-      width: 25px;
-      height: 3px;
-      background-color: #0d1b2a;
-      margin: 4px 0;
-    }
-    .mobile-menu {
-      display: none;
-      flex-direction: column;
-      position: absolute;
-      top: 100%;
-      right: 2rem;
-      background-color: #fff;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      z-index: 1000;
-    }
-    .mobile-menu a {
-      padding: 1rem;
-      border-bottom: 1px solid #eee;
-      text-decoration: none;
-      color: #0d1b2a;
     }
     .main {
       max-width: 600px;
-      margin: 3rem auto;
+      margin: 2rem auto;
       padding: 0 2rem;
     }
     h1 {
       text-align: center;
-      font-size: 2rem;
-      margin-bottom: 2rem;
+      font-size: 1.8rem;
     }
     form {
       display: flex;
@@ -81,20 +43,23 @@
     }
     label {
       margin-top: 1rem;
-      margin-bottom: 0.3rem;
+      font-weight: 600;
     }
-    input, select, textarea {
-      padding: 0.8rem;
+    input, select {
+      padding: 0.6rem;
       font-size: 1rem;
       border: 1px solid #ccc;
       border-radius: 6px;
+      margin-top: 0.3rem;
+    }
+    input[type="file"] {
+      border: none;
     }
     button {
       margin-top: 2rem;
       padding: 0.8rem;
       background-color: #134e3a;
       color: white;
-      font-size: 1rem;
       font-weight: bold;
       border: none;
       border-radius: 6px;
@@ -103,57 +68,12 @@
     button:hover {
       background-color: #0b3a2a;
     }
-    .footer {
-      margin-top: 3rem;
-      padding: 1.2rem 2rem;
-      border-top: 1px solid #e5e5e5;
-      font-size: 0.85rem;
-      color: #0d1b2a;
-      text-align: center;
-    }
-    .footer a {
-      color: #134e3a;
-      text-decoration: none;
-      font-weight: 500;
-    }
-    @media (max-width: 768px) {
-      .nav {
-        display: none;
-      }
-      .hamburger {
-        display: flex;
-      }
-      .mobile-menu.show {
-        display: flex;
-        width: 200px;
-      }
-    }
   </style>
 </head>
 <body>
+
   <header class="header">
     <a href="/index.html" class="logo">talfy</a>
-    <nav class="nav">
-      <a href="/talfy-for-talent.html">Talfy for Talent</a>
-      <a href="/talfy-for-company.html">Talfy for Company</a>
-      <a href="/pricing.html">Pricing</a>
-      <a href="/about.html">About us</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/login.html">Login</a>
-      <a href="/register.html">Register</a>
-    </nav>
-    <div class="hamburger" onclick="toggleMenu()">
-      <div></div><div></div><div></div>
-    </div>
-    <div class="mobile-menu" id="mobileMenu">
-      <a href="/talfy-for-talent.html">Talfy for Talent</a>
-      <a href="/talfy-for-company.html">Talfy for Company</a>
-      <a href="/pricing.html">Pricing</a>
-      <a href="/about.html">About us</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/login.html">Login</a>
-      <a href="/register.html">Register</a>
-    </div>
   </header>
 
   <main class="main">
@@ -165,7 +85,7 @@
       <label for="company_name">Company Name</label>
       <input type="text" name="company_name" id="company_name" required />
 
-      <label for="vat_code">VAT / Tax ID</label>
+      <label for="vat_code">VAT / Fiscal Code</label>
       <input type="text" name="vat_code" id="vat_code" required />
 
       <label for="billing_address">Billing Address</label>
@@ -175,22 +95,30 @@
       <input type="text" name="country" id="country" required />
 
       <label for="sector">Industry Sector</label>
-      <input type="text" name="sector" id="sector" required />
+      <select name="sector" id="sector" required>
+        <option value="">Select Sector</option>
+        <option>Finance</option>
+        <option>Retail</option>
+        <option>Technology</option>
+        <option>Manufacturing</option>
+        <option>Consulting</option>
+        <option>Healthcare</option>
+      </select>
 
       <label for="company_size">Company Size</label>
       <select name="company_size" id="company_size" required>
-        <option value="">Select</option>
+        <option value="">Select Size</option>
         <option>Small</option>
         <option>Medium</option>
         <option>Large</option>
       </select>
 
-      <label for="employee_count">Number of Employees</label>
-      <select name="employee_count" id="employee_count" required>
+      <label for="employee_number">Number of Employees</label>
+      <select name="employee_number" id="employee_number" required>
         <option value="">Select</option>
-        <option>&lt; 10</option>
+        <option>Less than 10</option>
         <option>10–50</option>
-        <option>&gt; 50</option>
+        <option>More than 50</option>
       </select>
 
       <button type="submit">Save Profile</button>
@@ -198,14 +126,8 @@
   </main>
 
   <footer class="footer">
-    <div>&copy; 2025 Talfy · <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a></div>
+    &copy; 2025 Talfy · <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a>
   </footer>
 
-  <script>
-    function toggleMenu() {
-      const menu = document.getElementById("mobileMenu");
-      menu.classList.toggle("show");
-    }
-  </script>
 </body>
 </html>

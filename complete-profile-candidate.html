@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Complete Profile – Candidate</title>
   <style>
     body {
@@ -13,44 +13,29 @@
       background-color: #fff;
       color: #0d1b2a;
     }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .header, .footer {
       padding: 1.2rem 2rem;
       border-bottom: 1px solid #e5e5e5;
     }
+    .footer {
+      border-top: 1px solid #e5e5e5;
+      font-size: 0.85rem;
+      text-align: center;
+    }
     .logo {
-      font-size: 2.5rem;
+      font-size: 2rem;
       font-weight: 700;
       color: #134e3a;
-      text-transform: lowercase;
       text-decoration: none;
-    }
-    .nav {
-      display: flex;
-    }
-    .nav a {
-      margin-left: 1rem;
-      text-decoration: none;
-      color: #0d1b2a;
-      font-size: 0.95rem;
-      font-weight: 500;
-    }
-    .menu-icon {
-      display: none;
-      font-size: 2rem;
-      cursor: pointer;
     }
     .main {
       max-width: 600px;
       margin: 2rem auto;
-      padding: 0 1rem;
+      padding: 0 2rem;
     }
     h1 {
       text-align: center;
       font-size: 1.8rem;
-      margin-bottom: 1.5rem;
     }
     form {
       display: flex;
@@ -58,27 +43,30 @@
     }
     label {
       margin-top: 1rem;
-      margin-bottom: 0.3rem;
+      font-weight: 600;
     }
-    input, select, textarea {
-      padding: 0.7rem;
+    input, select {
+      padding: 0.6rem;
       font-size: 1rem;
       border: 1px solid #ccc;
       border-radius: 6px;
+      margin-top: 0.3rem;
     }
-    .dob-container {
+    input[type="file"] {
+      border: none;
+    }
+    .multi-select {
+      height: 100px;
+    }
+    .dob-selects {
       display: flex;
-      gap: 0.5rem;
-    }
-    .dob-container select {
-      flex: 1;
+      gap: 1rem;
     }
     button {
       margin-top: 2rem;
-      padding: 0.9rem;
+      padding: 0.8rem;
       background-color: #134e3a;
       color: white;
-      font-size: 1rem;
       font-weight: bold;
       border: none;
       border-radius: 6px;
@@ -87,107 +75,84 @@
     button:hover {
       background-color: #0b3a2a;
     }
-    .footer {
-      margin-top: 3rem;
-      padding: 1.2rem 2rem;
-      border-top: 1px solid #e5e5e5;
-      font-size: 0.85rem;
-      color: #0d1b2a;
-      text-align: center;
-    }
-    .footer a {
-      color: #134e3a;
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    @media (max-width: 768px) {
-      .nav {
-        display: none;
-        flex-direction: column;
-        margin-top: 1rem;
-      }
-      .nav a {
-        margin: 0.5rem 0;
-      }
-      .menu-icon {
-        display: block;
-      }
-    }
   </style>
 </head>
 <body>
+
   <header class="header">
     <a href="/index.html" class="logo">talfy</a>
-    <div class="menu-icon" onclick="toggleMenu()">☰</div>
-    <nav class="nav" id="nav">
-      <a href="/talfy-for-talent.html">Talfy for Talent</a>
-      <a href="/talfy-for-company.html">Talfy for Company</a>
-      <a href="/about.html">About us</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/pricing.html">Pricing</a>
-      <a href="/login.html">Login</a>
-      <a href="/register.html">Register</a>
-    </nav>
   </header>
 
   <main class="main">
-    <h1>Complete your profile</h1>
-    <form action="/submit-candidate-profile" method="POST">
-      <label for="name">First Name</label>
-      <input type="text" id="name" name="name" required />
+    <h1>Complete Your Candidate Profile</h1>
+    <form action="/submit-candidate-profile" method="POST" enctype="multipart/form-data">
+      <label for="avatar">Upload your photo</label>
+      <input type="file" name="avatar" id="avatar" accept="image/*" />
 
-      <label for="surname">Last Name</label>
-      <input type="text" id="surname" name="surname" required />
+      <label for="firstname">First Name</label>
+      <input type="text" name="firstname" id="firstname" required />
+
+      <label for="lastname">Last Name</label>
+      <input type="text" name="lastname" id="lastname" required />
 
       <label>Date of Birth</label>
-      <div class="dob-container">
+      <div class="dob-selects">
         <select name="dob_day" required>
           <option value="">Day</option>
-          {% for d in range(1, 32) %}<option>{{ d }}</option>{% endfor %}
+          <script>for (let i = 1; i <= 31; i++) document.write(`<option>${i}</option>`);</script>
         </select>
         <select name="dob_month" required>
           <option value="">Month</option>
-          <option>01</option><option>02</option><option>03</option><option>04</option>
-          <option>05</option><option>06</option><option>07</option><option>08</option>
-          <option>09</option><option>10</option><option>11</option><option>12</option>
+          <option>January</option><option>February</option><option>March</option>
+          <option>April</option><option>May</option><option>June</option>
+          <option>July</option><option>August</option><option>September</option>
+          <option>October</option><option>November</option><option>December</option>
         </select>
         <select name="dob_year" required>
           <option value="">Year</option>
-          {% for y in range(1950, 2010) %}<option>{{ y }}</option>{% endfor %}
+          <script>for (let i = 2005; i >= 1950; i--) document.write(`<option>${i}</option>`);</script>
         </select>
       </div>
 
-      <label for="job_title">Job Title</label>
-      <select id="job_title" name="job_title" required>
-        <option value="">Select a job title</option>
-        <option>Accountant</option>
+      <label for="job_title">Job Title (Multiple)</label>
+      <select name="job_title[]" id="job_title" multiple class="multi-select">
+        <option>Junior Accountant</option>
+        <option>Specialist Accountant</option>
         <option>Controller</option>
-        <option>Finance Manager</option>
+        <option>CFO</option>
         <option>Auditor</option>
-        <option>Treasury Specialist</option>
+        <option>Finance Manager</option>
         <option>Credit Manager</option>
       </select>
 
-      <label for="sector1">Sector 1</label>
-      <input type="text" id="sector1" name="sector1" required />
+      <label for="sector">Industry Sector (Multiple)</label>
+      <select name="sector[]" id="sector" multiple class="multi-select">
+        <option>Banking</option>
+        <option>Retail</option>
+        <option>Manufacturing</option>
+        <option>Consulting</option>
+        <option>Insurance</option>
+      </select>
 
-      <label for="sector2">Sector 2</label>
-      <input type="text" id="sector2" name="sector2" required />
+      <label for="tools">Tools/Software (Multiple)</label>
+      <select name="tools[]" id="tools" multiple class="multi-select">
+        <option>Excel</option>
+        <option>SAP</option>
+        <option>QuickBooks</option>
+        <option>Oracle</option>
+        <option>Power BI</option>
+      </select>
 
-      <label for="tools">Tools Known</label>
-      <textarea id="tools" name="tools" rows="3" placeholder="SAP, Excel, Oracle..." required></textarea>
-
-      <label for="english">English Level</label>
-      <select id="english" name="english" required>
-        <option value="">Select level</option>
+      <label for="english_level">English Level</label>
+      <select name="english_level" id="english_level" required>
+        <option value="">Select</option>
         <option>A1</option><option>A2</option><option>B1</option>
         <option>B2</option><option>C1</option><option>Native</option>
       </select>
 
-      <label for="education_level">Education Level</label>
-      <select id="education_level" name="education_level" required>
-        <option value="">Select degree</option>
+      <label for="education">Education Level</label>
+      <select name="education" id="education" required>
+        <option value="">Select</option>
         <option>High School</option>
         <option>Bachelor's Degree</option>
         <option>Master's Degree</option>
@@ -195,10 +160,16 @@
         <option>Other</option>
       </select>
 
-      <label for="education_area">Education Area</label>
-      <input type="text" id="education_area" name="education_area" placeholder="Finance, Engineering, Linguistics..." required />
+      <label for="area_of_study">Area of Study (Multiple)</label>
+      <select name="area_of_study[]" id="area_of_study" multiple class="multi-select">
+        <option>Finance</option>
+        <option>Engineering</option>
+        <option>Economics</option>
+        <option>Languages</option>
+        <option>Technology</option>
+      </select>
 
-      <button type="submit">Submit Profile</button>
+      <button type="submit">Save Profile</button>
     </form>
   </main>
 
@@ -206,11 +177,5 @@
     &copy; 2025 Talfy · <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a>
   </footer>
 
-  <script>
-    function toggleMenu() {
-      const nav = document.getElementById('nav');
-      nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
-    }
-  </script>
 </body>
 </html>

@@ -3,71 +3,104 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Complete Profile – Candidate</title>
-  <link rel="stylesheet" href="style.css"/>
+  <title>Complete Candidate Profile - Talfy</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Segoe+UI&display=swap"/>
   <style>
     body {
-      font-family: "Segoe UI", sans-serif;
-      background-color: white;
       margin: 0;
-      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #ffffff;
     }
+
     header, footer {
-      background-color: #003d2d;
+      background-color: #003300;
       color: white;
       padding: 1rem;
       text-align: center;
     }
-    main {
+
+    .container {
       max-width: 800px;
-      margin: auto;
+      margin: 2rem auto;
       padding: 2rem;
-    }
-    .form-group {
-      margin-bottom: 1rem;
-    }
-    label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 0.4rem;
-    }
-    input[type="text"],
-    select,
-    input[type="file"],
-    textarea {
-      width: 100%;
-      padding: 0.5rem;
-      font-size: 1rem;
-    }
-    .checkbox-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 0.3rem;
-    }
-    .avatar-selection {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
-    .avatar-selection img {
-      width: 100px;
-      cursor: pointer;
-      border: 3px solid transparent;
+      background-color: #f5f5f5;
       border-radius: 10px;
     }
-    .avatar-selection input[type="radio"] {
-      display: none;
+
+    h2 {
+      text-align: center;
+      color: #003300;
     }
-    .avatar-selection input[type="radio"]:checked + img {
-      border: 3px solid #003d2d;
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
     }
+
+    label {
+      font-weight: bold;
+      margin-bottom: 0.2rem;
+    }
+
+    input[type="text"],
+    input[type="file"],
+    select {
+      padding: 0.5rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      width: 100%;
+    }
+
+    .section {
+      background-color: #ffffff;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    .checkbox-group, .multi-select {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .checkbox-group label,
+    .multi-select label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .row > div {
+      flex: 1;
+      min-width: 120px;
+    }
+
+    button {
+      background-color: #003300;
+      color: white;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    button:hover {
+      background-color: #004d00;
+    }
+
     @media (max-width: 600px) {
-      main {
+      .container {
+        margin: 1rem;
         padding: 1rem;
-      }
-      .avatar-selection {
-        flex-direction: column;
-        align-items: center;
       }
     }
   </style>
@@ -75,142 +108,143 @@
 <body>
 
 <header>
-  <h1>Complete your Profile – Candidate</h1>
+  <h1>Talfy</h1>
 </header>
 
-<main>
-  <form action="/submit-candidate-profile" method="POST" enctype="multipart/form-data">
-    
-    <div class="form-group">
-      <label>Choose your avatar or upload a photo:</label>
-      <div class="avatar-selection">
-        <label>
-          <input type="radio" name="avatar" value="avatar-male" checked />
-          <img src="img/avatar-male.png" alt="Male Avatar" />
-        </label>
-        <label>
-          <input type="radio" name="avatar" value="avatar-female" />
-          <img src="img/avatar-female.png" alt="Female Avatar" />
-        </label>
-        <label>
-          <input type="file" name="photo" accept="image/*" />
-        </label>
+<div class="container">
+  <h2>Complete Your Candidate Profile</h2>
+
+  <form action="/submit-profile" method="POST" enctype="multipart/form-data">
+
+    <div class="section">
+      <label>Upload a Photo or Choose an Avatar:</label>
+      <input type="file" name="photo" accept="image/*"/>
+      <div class="row">
+        <label><input type="radio" name="avatar" value="male" /> Male Avatar</label>
+        <label><input type="radio" name="avatar" value="female" /> Female Avatar</label>
       </div>
     </div>
 
-    <div class="form-group">
-      <label>First Name:</label>
-      <input type="text" name="first_name" required />
-    </div>
+    <div class="section">
+      <label>First Name</label>
+      <input type="text" name="first_name" required/>
 
-    <div class="form-group">
-      <label>Last Name:</label>
-      <input type="text" name="last_name" required />
-    </div>
+      <label>Last Name</label>
+      <input type="text" name="last_name" required/>
 
-    <div class="form-group">
-      <label>Date of Birth:</label>
-      <div style="display: flex; gap: 0.5rem;">
-        <select name="birth_day" required>
+      <label>Date of Birth</label>
+      <div class="row">
+        <select name="dob_day" required>
           <option value="">Day</option>
           <!-- 1 to 31 -->
-          {% for i in range(1, 32) %}
-          <option value="{{ i }}">{{ i }}</option>
-          {% endfor %}
+          ${[...Array(31)].map((_, i) => `<option>${i+1}</option>`).join('')}
         </select>
-        <select name="birth_month" required>
+        <select name="dob_month" required>
           <option value="">Month</option>
-          <option value="1">January</option>
-          <option value="2">February</option>
-          <!-- ... -->
-          <option value="12">December</option>
+          <option>January</option><option>February</option><option>March</option>
+          <option>April</option><option>May</option><option>June</option>
+          <option>July</option><option>August</option><option>September</option>
+          <option>October</option><option>November</option><option>December</option>
         </select>
-        <select name="birth_year" required>
+        <select name="dob_year" required>
           <option value="">Year</option>
-          {% for y in range(1950, 2008) %}
-          <option value="{{ y }}">{{ y }}</option>
-          {% endfor %}
+          ${[...Array(70)].map((_, i) => `<option>${2025 - i}</option>`).join('')}
         </select>
       </div>
     </div>
 
-    <div class="form-group">
-      <label>Job Titles (multiple possible):</label>
-      <div class="checkbox-grid">
-        <label><input type="checkbox" name="job_title" value="Controller"> Controller</label>
-        <label><input type="checkbox" name="job_title" value="Junior Accountant"> Junior Accountant</label>
-        <label><input type="checkbox" name="job_title" value="Treasury Specialist"> Treasury Specialist</label>
-        <label><input type="checkbox" name="job_title" value="Risk Manager"> Risk Manager</label>
-        <label><input type="checkbox" name="job_title" value="Finance Manager"> Finance Manager</label>
-        <!-- Aggiungi altri ruoli -->
+    <div class="section">
+      <label>Job Titles (multiple)</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="job_titles" value="CFO"/> CFO</label>
+        <label><input type="checkbox" name="job_titles" value="Controller"/> Controller</label>
+        <label><input type="checkbox" name="job_titles" value="Treasury"/> Treasury</label>
+        <label><input type="checkbox" name="job_titles" value="Accountant"/> Accountant</label>
+        <label><input type="checkbox" name="job_titles" value="Finance Manager"/> Finance Manager</label>
+        <label><input type="checkbox" name="job_titles" value="Auditor"/> Auditor</label>
+        <label><input type="checkbox" name="job_titles" value="Admin Manager"/> Administrative Manager</label>
+        <label><input type="checkbox" name="job_titles" value="Other"/> Other</label>
       </div>
     </div>
 
-    <div class="form-group">
-      <label>Industries (multiple possible):</label>
-      <div class="checkbox-grid">
-        <label><input type="checkbox" name="industry" value="Banking"> Banking</label>
-        <label><input type="checkbox" name="industry" value="Retail"> Retail</label>
-        <label><input type="checkbox" name="industry" value="Manufacturing"> Manufacturing</label>
-        <label><input type="checkbox" name="industry" value="Consulting"> Consulting</label>
-        <label><input type="checkbox" name="industry" value="Insurance"> Insurance</label>
+    <div class="section">
+      <label>Industries (multiple)</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="industries" value="Banking"/> Banking</label>
+        <label><input type="checkbox" name="industries" value="Manufacturing"/> Manufacturing</label>
+        <label><input type="checkbox" name="industries" value="Consulting"/> Consulting</label>
+        <label><input type="checkbox" name="industries" value="Retail"/> Retail</label>
+        <label><input type="checkbox" name="industries" value="Insurance"/> Insurance</label>
+        <label><input type="checkbox" name="industries" value="Other"/> Other</label>
       </div>
     </div>
 
-    <div class="form-group">
-      <label>Tools (multiple possible):</label>
-      <div class="checkbox-grid">
-        <label><input type="checkbox" name="tools" value="Excel"> Excel</label>
-        <label><input type="checkbox" name="tools" value="SAP"> SAP</label>
-        <label><input type="checkbox" name="tools" value="Oracle"> Oracle</label>
-        <label><input type="checkbox" name="tools" value="Teamsystem"> Teamsystem</label>
-        <label><input type="checkbox" name="tools" value="Qlik"> Qlik</label>
+    <div class="section">
+      <label>Tools (multiple)</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="tools" value="Oracle"/> Oracle</label>
+        <label><input type="checkbox" name="tools" value="SAP"/> SAP</label>
+        <label><input type="checkbox" name="tools" value="Excel"/> Excel</label>
+        <label><input type="checkbox" name="tools" value="Team System"/> Team System</label>
+        <label><input type="checkbox" name="tools" value="Power BI"/> Power BI</label>
+        <label><input type="checkbox" name="tools" value="Qlik"/> Qlik</label>
+        <label><input type="checkbox" name="tools" value="Other"/> Other</label>
       </div>
     </div>
 
-    <div class="form-group">
-      <label>English Level:</label>
-      <select name="english_level" required>
-        <option value="">Select Level</option>
-        <option value="A1">A1</option>
-        <option value="A2">A2</option>
-        <option value="B1">B1</option>
-        <option value="B2">B2</option>
-        <option value="C1">C1</option>
-        <option value="Native">Native</option>
+    <div class="section">
+      <label>Mother Tongue</label>
+      <select name="mother_tongue" required>
+        <option value="">Select Language</option>
+        <option>Italian</option><option>English</option><option>French</option>
+        <option>German</option><option>Spanish</option><option>Chinese</option>
+        <option>Arabic</option><option>Other</option>
       </select>
+
+      <label>Second Language</label>
+      <div class="row">
+        <select name="second_lang">
+          <option value="">Select Language</option>
+          <option>English</option><option>French</option><option>German</option>
+        </select>
+        <select name="second_lang_level">
+          <option value="">Level</option>
+          <option>A1</option><option>A2</option><option>B1</option><option>B2</option>
+          <option>C1</option><option>C2</option><option>Native</option>
+        </select>
+      </div>
     </div>
 
-    <div class="form-group">
-      <label>Education Level:</label>
+    <div class="section">
+      <label>Education Level</label>
       <select name="education_level" required>
-        <option value="">Select Degree</option>
-        <option value="High School">High School</option>
-        <option value="Bachelor">Bachelor</option>
-        <option value="Master">Master</option>
-        <option value="PhD">PhD</option>
+        <option value="">Select</option>
+        <option>High School</option>
+        <option>Bachelor</option>
+        <option>Master</option>
+        <option>MBA</option>
+        <option>PhD</option>
+        <option>Other</option>
       </select>
-    </div>
 
-    <div class="form-group">
-      <label>Education Area (multiple possible):</label>
-      <div class="checkbox-grid">
-        <label><input type="checkbox" name="education_area" value="Finance"> Finance</label>
-        <label><input type="checkbox" name="education_area" value="Engineering"> Engineering</label>
-        <label><input type="checkbox" name="education_area" value="Linguistic"> Linguistic</label>
-        <label><input type="checkbox" name="education_area" value="Legal"> Legal</label>
-        <label><input type="checkbox" name="education_area" value="Economics"> Economics</label>
+      <label>Education Area</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="education_area" value="Finance"/> Finance</label>
+        <label><input type="checkbox" name="education_area" value="Engineering"/> Engineering</label>
+        <label><input type="checkbox" name="education_area" value="Law"/> Law</label>
+        <label><input type="checkbox" name="education_area" value="Economics"/> Economics</label>
+        <label><input type="checkbox" name="education_area" value="Humanities"/> Humanities</label>
+        <label><input type="checkbox" name="education_area" value="Other"/> Other</label>
       </div>
     </div>
 
-    <div class="form-group">
-      <button type="submit">Submit Profile</button>
-    </div>
+    <button type="submit">Save Profile</button>
+
   </form>
-</main>
+</div>
 
 <footer>
-  <p>&copy; 2025 Talfy – All rights reserved | <a href="privacy.html" style="color:white;">Privacy</a> | <a href="terms.html" style="color:white;">Terms</a></p>
+  <p>© 2025 Talfy — <a href="privacy.html" style="color:white;">Privacy</a> — <a href="terms.html" style="color:white;">Terms</a></p>
 </footer>
 
 </body>

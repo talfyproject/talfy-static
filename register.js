@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
     const confirmPassword = document.getElementById("confirm_password").value;
+    const userType = document.querySelector('input[name="user_type"]:checked')?.value;
 
     if (password !== confirmPassword) {
       message.textContent = "Passwords do not match.";
@@ -26,14 +27,15 @@ document.addEventListener("DOMContentLoaded", () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         email,
-        password
+        password,
+        user_type: userType,
       }),
     });
 
     const data = await response.json();
 
     if (response.ok) {
-      window.location.href = "/complete-profile-candidate";
+      window.location.href = userType === "candidate" ? "/complete-profile-candidate.html" : "/complete-profile-company.html";
     } else {
       message.textContent = data.error || "Registration failed. Please try again.";
     }

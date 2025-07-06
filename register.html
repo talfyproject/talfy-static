@@ -1,57 +1,107 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Register – Talfy</title>
-  <link rel="stylesheet" href="/static/style.css" />
-  <script defer src="/static/register.js"></script>
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    function validatePassword() {
+      const password = document.getElementById("password").value;
+      const confirm = document.getElementById("confirm-password").value;
+      const warning = document.getElementById("password-warning");
+      const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{6,}$/;
+
+      if (!regex.test(password)) {
+        warning.textContent = "Password must have 1 uppercase letter, 1 number, 1 symbol.";
+        warning.style.color = "red";
+      } else if (password !== confirm) {
+        warning.textContent = "Passwords do not match.";
+        warning.style.color = "red";
+      } else {
+        warning.textContent = "Password valid.";
+        warning.style.color = "green";
+      }
+    }
+
+    async function handleRegistration(event) {
+      event.preventDefault();
+      const email = document.querySelector('input[name="email"]').value;
+      const password = document.querySelector('input[name="password"]').value;
+      const role = document.querySelector('input[name="role"]:checked')?.value;
+
+      if (!role) {
+        alert("Please select a user type.");
+        return;
+      }
+
+      const response = await fetch('https://talfy-backend.onrender.com/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, role })
+      });
+
+      if (response.ok) {
+        if (role === 'candidate') {
+          window.location.href = '/complete-profile-candidate.html';
+        } else {
+          window.location.href = '/complete-profile-company.html';
+        }
+      } else {
+        alert("Registration failed.");
+      }
+    }
+  </script>
 </head>
 <body>
 
-  <!-- Header (uguale a login/index) -->
   <header class="header">
-    <div class="logo">talfy</div>
-    <nav>
-      <a href="/">Home</a>
-      <a href="/about">About</a>
-      <a href="/contact">Contact</a>
+    <a href="/index.html" class="logo">talfy</a>
+    <nav class="nav">
+      <a href="/talfy-for-talent.html">Talfy for Talent</a>
+      <a href="/talfy-for-company.html">Talfy for Company</a>
+      <a href="/pricing.html">Pricing</a>
+      <a href="/about.html">About us</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/login.html">Login</a>
+      <a href="/register.html">Register</a>
     </nav>
+    <button class="hamburger" onclick="toggleMenu()">☰</button>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="/talfy-for-talent.html">Talfy for Talent</a>
+      <a href="/talfy-for-company.html">Talfy for Company</a>
+      <a href="/pricing.html">Pricing</a>
+      <a href="/about.html">About us</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/login.html">Login</a>
+      <a href="/register.html">Register</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+    </div>
   </header>
 
-  <!-- Form registrazione in stile Canva -->
-  <main class="form-container">
+  <main>
     <h2>Register</h2>
-    <form id="registerForm">
-      <label for="first_name">First Name</label>
-      <input type="text" id="first_name" name="first_name" required />
+    <form onsubmit="handleRegistration(event)" style="max-width: 400px; margin: auto;">
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="password" id="password" name="password" placeholder="Password" oninput="validatePassword()" required />
+      <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm Password" oninput="validatePassword()" required />
+      <p id="password-warning" style="font-size: 0.9em; margin-top: -0.5rem;"></p>
 
-      <label for="last_name">Last Name</label>
-      <input type="text" id="last_name" name="last_name" required />
+      <label style="margin-top: 1rem; display: block; text-align: left;">User type:</label>
+      <label><input type="radio" name="role" value="candidate" required /> Candidate</label><br/>
+      <label><input type="radio" name="role" value="company" required /> Company</label>
 
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" required />
-
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" required />
-      <small>Password must contain at least 1 uppercase, 1 number, 1 symbol</small>
-
-      <fieldset>
-        <legend>Register as</legend>
-        <label><input type="radio" name="user_type" value="candidate" required /> Candidate</label>
-        <label><input type="radio" name="user_type" value="company" /> Company</label>
-      </fieldset>
-
-      <button type="submit">Create Account</button>
+      <button type="submit" style="margin-top: 1.5rem;">Register</button>
     </form>
-    <div id="registerMessage" class="message"></div>
+    <p style="text-align: center; margin-top: 1rem;">Already have an account? <a href="/login.html">Login here</a></p>
   </main>
 
-  <!-- Footer -->
   <footer class="footer">
-    <p>&copy; 2025 Talfy. All rights reserved.</p>
-    <a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a>
+    <div class="footer-center">&copy; 2025 Talfy. All rights reserved.</div>
+    <div class="footer-right">
+      <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a>
+    </div>
   </footer>
 
 </body>

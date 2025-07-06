@@ -1,58 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Complete Candidate Profile - Talfy</title>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
   <header class="header">
     <a href="index.html" class="logo">talfy</a>
     <nav class="nav">
-      <a href="about.html">About Us</a>
+      <a href="about.html">About</a>
       <a href="contact.html">Contact</a>
-      <a href="pricing.html">Pricing</a>
-      <a href="talfy-for-talent.html">For Talent</a>
-      <a href="talfy-for-company.html">For Company</a>
       <a href="login.html">Login</a>
-      <a href="register.html">Register</a>
     </nav>
   </header>
 
   <main class="main">
     <h2>Complete Your Candidate Profile</h2>
-
     <form id="candidateProfileForm">
       <label>Display Name</label>
-      <input type="text" id="display_name" required />
+      <input type="text" name="display_name" required>
 
-      <label>Current Job</label>
-      <input type="text" id="current_job" required />
+      <label>Current Job Title</label>
+      <input type="text" name="current_job">
 
       <label>Years of Experience</label>
-      <input type="number" id="experience_years" required min="0" />
+      <input type="number" name="experience_years">
 
       <label>Salary Range</label>
-      <input type="text" id="salary_range" required />
+      <input type="text" name="salary_range">
 
       <label>Sector</label>
-      <input type="text" id="sector" required />
+      <input type="text" name="sector">
 
-      <label>Tools Known (comma-separated)</label>
-      <input type="text" id="tools" required />
+      <label>Tools Known (select multiple)</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="tools" value="Excel"> Excel</label>
+        <label><input type="checkbox" name="tools" value="SAP"> SAP</label>
+        <label><input type="checkbox" name="tools" value="Oracle"> Oracle</label>
+        <label><input type="checkbox" name="tools" value="Power BI"> Power BI</label>
+        <label><input type="checkbox" name="tools" value="Team System"> Team System</label>
+        <label><input type="checkbox" name="tools" value="Other"> Other</label>
+      </div>
 
-      <label>Choose an Avatar</label>
+      <label>Choose Avatar</label>
       <div class="radio-group">
-        <label>
-          <input type="radio" name="avatar" value="male" required />
-          <img src="https://via.placeholder.com/80?text=Male" alt="Male Avatar" />
-        </label>
-        <label>
-          <input type="radio" name="avatar" value="female" />
-          <img src="https://via.placeholder.com/80?text=Female" alt="Female Avatar" />
-        </label>
+        <label><input type="radio" name="avatar" value="male"> Male</label>
+        <label><input type="radio" name="avatar" value="female"> Female</label>
       </div>
 
       <button type="submit">Save Profile</button>
@@ -64,7 +59,7 @@
   <footer class="footer">
     <div class="footer-center">&copy; 2025 Talfy. All rights reserved.</div>
     <div class="footer-right">
-      <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a>
+      <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a>
     </div>
   </footer>
 

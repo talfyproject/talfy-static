@@ -3,255 +3,56 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Register – Talfy</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #fff;
-      color: #0d1b2a;
-    }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.2rem 2rem;
-      border-bottom: 1px solid #e5e5e5;
-      position: relative;
-    }
-    .logo {
-      font-size: 3rem;
-      font-weight: 700;
-      color: #134e3a;
-      text-transform: lowercase;
-      margin: 0;
-      text-decoration: none;
-    }
-    .nav {
-      display: flex;
-    }
-    .nav a {
-      margin-left: 1.5rem;
-      text-decoration: none;
-      color: #0d1b2a;
-      font-size: 0.95rem;
-      font-weight: 500;
-    }
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-    }
-    .hamburger div {
-      width: 25px;
-      height: 3px;
-      background-color: #0d1b2a;
-      margin: 4px 0;
-    }
-    .mobile-menu {
-      display: none;
-      flex-direction: column;
-      position: absolute;
-      top: 100%;
-      right: 2rem;
-      background-color: #fff;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      z-index: 1000;
-    }
-    .mobile-menu a {
-      padding: 1rem;
-      border-bottom: 1px solid #eee;
-      text-decoration: none;
-      color: #0d1b2a;
-    }
-    .main {
-      min-height: 60vh;
-      max-width: 400px;
-      margin: 3rem auto;
-      padding: 0 2rem;
-      background: #fff;
-      text-align: center;
-    }
-    .main h1 {
-      font-weight: 700;
-      font-size: 2rem;
-      margin-bottom: 2rem;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-    }
-    input, select {
-      margin-bottom: 1.2rem;
-      padding: 0.8rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    button {
-      padding: 0.8rem;
-      background-color: #134e3a;
-      color: white;
-      font-size: 1rem;
-      font-weight: bold;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0b3a2a;
-    }
-    .footer {
-      position: relative;
-      margin-top: 3rem;
-      padding: 1.2rem 2rem;
-      border-top: 1px solid #e5e5e5;
-      font-size: 0.85rem;
-      color: #0d1b2a;
-    }
-    .footer-center {
-      text-align: center;
-      font-weight: 400;
-    }
-    .footer-right {
-      position: absolute;
-      bottom: 1.2rem;
-      right: 2rem;
-    }
-    .footer-right a {
-      text-decoration: none;
-      color: #134e3a;
-      font-weight: 500;
-    }
-    @media (max-width: 768px) {
-      .nav {
-        display: none;
-      }
-      .hamburger {
-        display: flex;
-      }
-      .mobile-menu.show {
-        display: flex;
-        width: 200px;
-      }
-      .footer-right {
-        position: static;
-        text-align: center;
-        margin-top: 1rem;
-      }
-    }
-  </style>
-  <script>
-    function toggleJobTitle() {
-      const candidateRadio = document.getElementById('role-candidate');
-      const jobTitleField = document.getElementById('job-title-group');
-      jobTitleField.style.display = candidateRadio.checked ? 'block' : 'none';
-    }
-
-    function validatePassword() {
-      const password = document.getElementById("password").value;
-      const confirm = document.getElementById("confirm-password").value;
-      const warning = document.getElementById("password-warning");
-
-      const rules = [
-        /[A-Z]/.test(password),
-        /[0-9]/.test(password),
-        /[!@#$%^&*(),.?":{}|<>]/.test(password),
-        password.length >= 8
-      ];
-
-      if (!rules.every(r => r)) {
-        warning.style.color = "red";
-        warning.textContent = "Password must be at least 8 characters, include 1 uppercase letter, 1 number, and 1 symbol.";
-        return false;
-      }
-
-      if (password !== confirm) {
-        warning.style.color = "red";
-        warning.textContent = "Passwords do not match.";
-        return false;
-      }
-
-      warning.style.color = "green";
-      warning.textContent = "Password is valid.";
-      return true;
-    }
-
-    function toggleMenu() {
-      const menu = document.getElementById("mobileMenu");
-      menu.classList.toggle("show");
-    }
-  </script>
+  <link rel="stylesheet" href="/static/style.css" />
+  <script defer src="/static/register.js"></script>
 </head>
 <body>
+
+  <!-- Header (uguale a login/index) -->
   <header class="header">
-    <a href="/index.html" class="logo">talfy</a>
-    <nav class="nav">
-      <a href="/talfy-for-talent.html">Talfy for Talent</a>
-      <a href="/talfy-for-company.html">Talfy for Company</a>
-      <a href="/about.html">About us</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/pricing.html">Pricing</a>
-      <a href="/login.html">Login</a>
-      <a href="/register.html">Register</a>
+    <div class="logo">talfy</div>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
     </nav>
-    <div class="hamburger" onclick="toggleMenu()">
-      <div></div><div></div><div></div>
-    </div>
-    <div class="mobile-menu" id="mobileMenu">
-      <a href="/talfy-for-talent.html">Talfy for Talent</a>
-      <a href="/talfy-for-company.html">Talfy for Company</a>
-      <a href="/about.html">About us</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/pricing.html">Pricing</a>
-      <a href="/login.html">Login</a>
-      <a href="/register.html">Register</a>
-    </div>
   </header>
 
-  <main class="main">
-    <h1>Register</h1>
-    <form action="/register" method="POST" onsubmit="return validatePassword()">
-      <input type="email" name="email" placeholder="Email" required />
-      <input type="password" id="password" name="password" placeholder="Password" oninput="validatePassword()" required />
-      <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm Password" oninput="validatePassword()" required />
-      <p id="password-warning" style="font-size: 0.9em; margin-top: -1rem; margin-bottom: 1rem;"></p>
+  <!-- Form registrazione in stile Canva -->
+  <main class="form-container">
+    <h2>Register</h2>
+    <form id="registerForm">
+      <label for="first_name">First Name</label>
+      <input type="text" id="first_name" name="first_name" required />
 
-      <label style="text-align: left;">User type:</label>
-      <div style="margin-bottom: 1rem; text-align: left;">
-        <label><input type="radio" name="role" id="role-candidate" value="candidate" onclick="toggleJobTitle()" required /> Candidate</label><br />
-        <label><input type="radio" name="role" id="role-company" value="company" onclick="toggleJobTitle()" required /> Company</label>
-      </div>
+      <label for="last_name">Last Name</label>
+      <input type="text" id="last_name" name="last_name" required />
 
-      <div id="job-title-group" style="display: none;">
-        <label for="job-title" style="text-align: left; display: block;">Job title</label>
-        <select id="job-title" name="job_title">
-          <option value="">-- Select a title --</option>
-          <option>Finance Manager</option>
-          <option>Administrative Manager</option>
-          <option>Payable Accountant</option>
-          <option>Receivable Accountant</option>
-          <option>General Accountant</option>
-          <option>Junior Controller</option>
-          <option>Specialist Controller</option>
-          <option>Credit Manager</option>
-          <option>Risk Manager</option>
-          <option>Investment Analyst</option>
-          <option>Corporate Manager</option>
-        </select>
-      </div>
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required />
 
-      <button type="submit">Register</button>
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required />
+      <small>Password must contain at least 1 uppercase, 1 number, 1 symbol</small>
+
+      <fieldset>
+        <legend>Register as</legend>
+        <label><input type="radio" name="user_type" value="candidate" required /> Candidate</label>
+        <label><input type="radio" name="user_type" value="company" /> Company</label>
+      </fieldset>
+
+      <button type="submit">Create Account</button>
     </form>
+    <div id="registerMessage" class="message"></div>
   </main>
 
+  <!-- Footer -->
   <footer class="footer">
-    <div class="footer-center">&copy; 2025 Talfy. All rights reserved.</div>
-    <div class="footer-right">
-      <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a>
-    </div>
+    <p>&copy; 2025 Talfy. All rights reserved.</p>
+    <a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a>
   </footer>
+
 </body>
 </html>

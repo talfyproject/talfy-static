@@ -22,22 +22,35 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const response = await fetch("https://talfy-backend.onrender.com/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email,
-        password,
-        user_type: userType,
-      }),
-    });
+    try {
+      const response = await fetch("https://talfy-backend.onrender.com/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          password,
+          user_type: userType,
+        }),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (response.ok) {
-      window.location.href = userType === "candidate" ? "/complete-profile-candidate.html" : "/complete-profile-company.html";
-    } else {
-      message.textContent = data.error || "Registration failed. Please try again.";
+      if (response.ok) {
+        // Salva user_id nel localStorage
+        localStorage.setItem("user_id", data.user_id);
+        localStorage.setItem("user_type", userType);
+
+        // Reindirizza in base al tipo di utente
+        window.location.href =
+          userType === "candidate"
+            ? "/complete-profile-candidate.html"
+            : "/complete-profile-company.html";
+      } else {
+        message.textContent = data.error || "Registration failed. Please try again.";
+      }
+    } catch (error) {
+      message.textContent = "Network error. Please try again later.";
+      console.error("Registration error:", error);
     }
   });
 });

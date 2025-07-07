@@ -6,27 +6,25 @@
   <title>Register – Talfy</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script>
-    function toggleMenu() {
-      document.getElementById("mobileMenu").classList.toggle("active");
-    }
+<script>
+  function selectUserType(type) {
+    const candidateCard = document.getElementById('candidateCard');
+    const companyCard = document.getElementById('companyCard');
+    const userTypeInput = document.getElementById('userType');
 
-    function selectUserType(type) {
-      const candidateCard = document.getElementById('candidateCard');
-      const companyCard = document.getElementById('companyCard');
-      const userTypeInput = document.getElementById('userType');
-      
-      if (type === 'candidate') {
-        candidateCard.classList.add('selected');
-        companyCard.classList.remove('selected');
-        userTypeInput.value = 'candidate';
-      } else {
-        companyCard.classList.add('selected');
-        candidateCard.classList.remove('selected');
-        userTypeInput.value = 'company';
-      }
+    console.log("User type selected:", type); // <-- DEBUG
+
+    if (type === 'candidate') {
+      candidateCard.classList.add('selected');
+      companyCard.classList.remove('selected');
+      userTypeInput.value = 'candidate';
+    } else {
+      companyCard.classList.add('selected');
+      candidateCard.classList.remove('selected');
+      userTypeInput.value = 'company';
     }
-  </script>
+  }
+</script>
 </head>
 <body>
 

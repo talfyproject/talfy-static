@@ -1,16 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("candidateProfileForm");
-  const message = document.getElementById("saveMessage");
+  const message = document.getElementById("profileMessage");
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     message.textContent = "";
 
     const userId = localStorage.getItem("user_id");
-
     if (!userId) {
       message.textContent = "User ID not found. Please register again.";
-      message.style.color = "red";
       return;
     }
 
@@ -20,11 +18,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const salary = document.getElementById("salary_range").value.trim();
     const sector = getCheckedValues("sector[]").join(", ");
     const tools = getCheckedValues("tools[]").join(", ");
-    const avatar = document.querySelector('input[name="avatar"]:checked')?.value;
+    const avatar = document.querySelector('input[name="avatar_choice"]:checked')?.value;
 
     if (!name || !job || isNaN(exp) || !salary || !sector || !tools || !avatar) {
       message.textContent = "Please fill in all required fields.";
-      message.style.color = "red";
       return;
     }
 
@@ -61,7 +58,6 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (err) {
       console.error(err);
       message.textContent = "Network error. Try again later.";
-      message.style.color = "red";
     }
   });
 

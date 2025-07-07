@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Complete Candidate Profile - Talfy</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Complete Candidate Profile</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
   <header class="header">
     <a href="index.html" class="logo">talfy</a>
     <nav class="nav">
-      <a href="about.html">About</a>
+      <a href="about.html">About us</a>
       <a href="contact.html">Contact</a>
       <a href="login.html">Login</a>
+      <a href="register.html">Register</a>
     </nav>
   </header>
 
@@ -20,49 +21,97 @@
     <h2>Complete Your Candidate Profile</h2>
     <form id="candidateProfileForm">
       <label>Display Name</label>
-      <input type="text" name="display_name" required>
+      <input type="text" id="display_name" required />
 
-      <label>Current Job Title</label>
-      <input type="text" name="current_job">
+      <label>Current Job</label>
+      <input type="text" id="current_job" required />
 
-      <label>Years of Experience</label>
-      <input type="number" name="experience_years">
+      <label>Experience (years)</label>
+      <input type="number" id="experience_years" min="0" required />
 
       <label>Salary Range</label>
-      <input type="text" name="salary_range">
+      <input type="text" id="salary_range" required />
 
       <label>Sector</label>
-      <input type="text" name="sector">
-
-      <label>Tools Known (select multiple)</label>
-      <div class="checkbox-group">
-        <label><input type="checkbox" name="tools" value="Excel"> Excel</label>
-        <label><input type="checkbox" name="tools" value="SAP"> SAP</label>
-        <label><input type="checkbox" name="tools" value="Oracle"> Oracle</label>
-        <label><input type="checkbox" name="tools" value="Power BI"> Power BI</label>
-        <label><input type="checkbox" name="tools" value="Team System"> Team System</label>
-        <label><input type="checkbox" name="tools" value="Other"> Other</label>
+      <div class="checkbox-group" id="sector-group">
+        <label><input type="checkbox" value="Banking" /> Banking</label>
+        <label><input type="checkbox" value="Consulting" /> Consulting</label>
+        <label><input type="checkbox" value="Industry" /> Industry</label>
+        <label><input type="checkbox" value="Retail" /> Retail</label>
       </div>
 
-      <label>Choose Avatar</label>
-      <div class="radio-group">
-        <label><input type="radio" name="avatar" value="male"> Male</label>
-        <label><input type="radio" name="avatar" value="female"> Female</label>
+      <label>Tools</label>
+      <div class="checkbox-group" id="tools-group">
+        <label><input type="checkbox" value="Excel" /> Excel</label>
+        <label><input type="checkbox" value="SAP" /> SAP</label>
+        <label><input type="checkbox" value="Power BI" /> Power BI</label>
+        <label><input type="checkbox" value="Oracle" /> Oracle</label>
+      </div>
+
+      <label>Education Area</label>
+      <div class="checkbox-group" id="education-group">
+        <label><input type="checkbox" value="Economics" /> Economics</label>
+        <label><input type="checkbox" value="Engineering" /> Engineering</label>
+        <label><input type="checkbox" value="Law" /> Law</label>
+        <label><input type="checkbox" value="Linguistics" /> Linguistics</label>
+      </div>
+
+      <label>Date of Birth</label>
+      <div class="dob-group">
+        <select id="dob_day"></select>
+        <select id="dob_month">
+          <option value="">Month</option>
+          <option value="1">January</option>
+          <option value="2">February</option>
+          <option value="3">March</option>
+          <option value="4">April</option>
+          <option value="5">May</option>
+          <option value="6">June</option>
+          <option value="7">July</option>
+          <option value="8">August</option>
+          <option value="9">September</option>
+          <option value="10">October</option>
+          <option value="11">November</option>
+          <option value="12">December</option>
+        </select>
+        <select id="dob_year"></select>
+      </div>
+
+      <label>Upload Photo or Choose Avatar</label>
+      <div class="avatar-group">
+        <label><input type="radio" name="avatar_choice" value="img/avatar-male.png" checked />
+          <img src="img/avatar-male.png" width="60" style="vertical-align: middle;" /></label>
+        <label><input type="radio" name="avatar_choice" value="img/avatar-female.png" />
+          <img src="img/avatar-female.png" width="60" style="vertical-align: middle;" /></label>
+        <label>
+          <input type="file" id="avatar_upload" accept="image/*" />
+        </label>
       </div>
 
       <button type="submit">Save Profile</button>
     </form>
-
-    <p id="profileMessage" class="message"></p>
+    <p id="formMessage" class="message"></p>
   </main>
 
   <footer class="footer">
-    <div class="footer-center">&copy; 2025 Talfy. All rights reserved.</div>
-    <div class="footer-right">
-      <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a>
-    </div>
+    <div class="footer-center">&copy; 2025 Talfy</div>
+    <div class="footer-right"><a href="/privacy.html">Privacy</a></div>
   </footer>
 
   <script src="complete-profile-candidate.js"></script>
+  <script>
+    // Populate day/year dropdowns
+    const daySelect = document.getElementById("dob_day");
+    const yearSelect = document.getElementById("dob_year");
+    daySelect.innerHTML = '<option value="">Day</option>';
+    yearSelect.innerHTML = '<option value="">Year</option>';
+    for (let i = 1; i <= 31; i++) {
+      daySelect.innerHTML += `<option value="${i}">${i}</option>`;
+    }
+    const currentYear = new Date().getFullYear();
+    for (let y = currentYear - 70; y <= currentYear - 18; y++) {
+      yearSelect.innerHTML += `<option value="${y}">${y}</option>`;
+    }
+  </script>
 </body>
 </html>

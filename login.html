@@ -1,184 +1,109 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login – Talfy</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #fff;
-      color: #0d1b2a;
+  <title>Talfy – The smart way to find finance people</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    function toggleMenu() {
+      document.getElementById("mobileMenu").classList.toggle("active");
     }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.2rem 2rem;
-      border-bottom: 1px solid #e5e5e5;
-      position: relative;
-    }
-    .logo {
-      font-size: 3rem;
-      font-weight: 700;
-      color: #134e3a;
-      text-transform: lowercase;
-      margin: 0;
-      text-decoration: none;
-    }
-    .nav {
-      display: flex;
-    }
-    .nav a {
-      margin-left: 1.5rem;
-      text-decoration: none;
-      color: #0d1b2a;
-      font-size: 0.95rem;
-      font-weight: 500;
-    }
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-    }
-    .hamburger div {
-      width: 25px;
-      height: 3px;
-      background-color: #0d1b2a;
-      margin: 4px 0;
-    }
-    .mobile-menu {
-      display: none;
-      flex-direction: column;
-      position: absolute;
-      top: 100%;
-      right: 2rem;
-      background-color: #fff;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      z-index: 1000;
-    }
-    .mobile-menu a {
-      padding: 1rem;
-      border-bottom: 1px solid #eee;
-      text-decoration: none;
-      color: #0d1b2a;
-    }
-    .main {
-      min-height: 60vh;
-      max-width: 400px;
-      margin: 3rem auto;
-      padding: 0 2rem;
-      background: #fff;
-      text-align: center;
-    }
-    .main h1 {
-      font-weight: 700;
-      font-size: 2rem;
-      margin-bottom: 2rem;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-    }
-    input {
-      margin-bottom: 1.2rem;
-      padding: 0.8rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    button {
-      padding: 0.8rem;
-      background-color: #134e3a;
-      color: white;
-      font-size: 1rem;
-      font-weight: bold;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0b3a2a;
-    }
-    .footer {
-      position: relative;
-      margin-top: 3rem;
-      padding: 1.2rem 2rem;
-      border-top: 1px solid #e5e5e5;
-      font-size: 0.85rem;
-      color: #0d1b2a;
-    }
-    .footer-center {
-      text-align: center;
-      font-weight: 400;
-    }
-    .footer-right {
-      position: absolute;
-      bottom: 1.2rem;
-      right: 2rem;
-    }
-    .footer-right a {
-      text-decoration: none;
-      color: #134e3a;
-      font-weight: 500;
-    }
-    @media (max-width: 768px) {
-      .nav {
-        display: none;
-      }
-      .hamburger {
-        display: flex;
-      }
-      .mobile-menu.show {
-        display: flex;
-        width: 200px;
-      }
-      .footer-right {
-        position: static;
-        text-align: center;
-        margin-top: 1rem;
+
+    async function updateCounters() {
+      try {
+        const res = await fetch('https://talfy-backend.onrender.com/api/counts');
+        const data = await res.json();
+        
+        // Animazione contatori
+        animateCounter('cv-counter', data.candidates);
+        animateCounter('company-counter', data.companies);
+      } catch (err) {
+        console.error("Errore nel caricamento dei contatori:", err);
+        // Fallback con numeri demo
+        animateCounter('cv-counter', 1247);
+        animateCounter('company-counter', 89);
       }
     }
-  </style>
+
+    function animateCounter(id, target) {
+      const element = document.getElementById(id);
+      let current = 0;
+      const increment = target / 50;
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          element.innerText = target;
+          clearInterval(timer);
+        } else {
+          element.innerText = Math.floor(current);
+        }
+      }, 30);
+    }
+
+    window.onload = updateCounters;
+  </script>
 </head>
 <body>
+
   <header class="header">
     <a href="/index.html" class="logo">talfy</a>
     <nav class="nav">
-      <a href="/talfy-for-talent.html">Talfy for Talent</a>
-      <a href="/talfy-for-company.html">Talfy for Company</a>
+      <a href="/pricing.html">Pricing</a>
       <a href="/about.html">About us</a>
       <a href="/contact.html">Contact</a>
-      <a href="/pricing.html">Pricing</a>
       <a href="/login.html">Login</a>
       <a href="/register.html">Register</a>
     </nav>
-    <div class="hamburger" onclick="toggleMenu()">
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
+    <button class="hamburger" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
     <div class="mobile-menu" id="mobileMenu">
-      <a href="/talfy-for-talent.html">Talfy for Talent</a>
-      <a href="/talfy-for-company.html">Talfy for Company</a>
+      <a href="/pricing.html">Pricing</a>
       <a href="/about.html">About us</a>
       <a href="/contact.html">Contact</a>
-      <a href="/pricing.html">Pricing</a>
       <a href="/login.html">Login</a>
       <a href="/register.html">Register</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
     </div>
   </header>
 
   <main class="main">
-    <h1>Login</h1>
-    <form action="/login" method="POST">
-      <input type="email" name="email" placeholder="Email" required />
-      <input type="password" name="password" placeholder="Password" required />
-      <button type="submit">Login</button>
-    </form>
+    <div class="hero-content">
+      <h2 class="tagline">The smart way to find finance people</h2>
+      <p class="subtitle">Connect talented finance professionals with forward-thinking companies through our intelligent matching platform</p>
+
+      <div class="search-container">
+        <div class="search-wrapper">
+          <input type="text" placeholder="Search for a role, skill, or company..." />
+          <button>
+            <span>Search</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat-block" onclick="location.href='/candidates.html'">
+          <strong id="cv-counter">0</strong>
+          <div class="stat-label">Finance CVs</div>
+        </div>
+        <div class="stat-block" onclick="location.href='/companies.html'">
+          <strong id="company-counter">0</strong>
+          <div class="stat-label">Companies</div>
+        </div>
+      </div>
+
+      <p class="description">
+        Talfy connects finance professionals with companies seeking new talent. Candidates can join and create a verified profile, while employers can search easily using our smart filters.
+      </p>
+    </div>
   </main>
 
   <footer class="footer">
@@ -188,11 +113,5 @@
     </div>
   </footer>
 
-  <script>
-    function toggleMenu() {
-      const menu = document.getElementById("mobileMenu");
-      menu.classList.toggle("show");
-    }
-  </script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'95b9489a512cf349',t:'MTc1MTkxMTY2OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

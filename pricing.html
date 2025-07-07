@@ -5,217 +5,171 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pricing – Talfy</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #fff;
-      color: #0d1b2a;
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    function toggleMenu() {
+      document.getElementById("mobileMenu").classList.toggle("active");
     }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.2rem 2rem;
-      border-bottom: 1px solid #e5e5e5;
-      position: relative;
-    }
-    .logo {
-      font-size: 3rem;
-      font-weight: 700;
-      color: #134e3a;
-      text-transform: lowercase;
-      margin: 0;
-      text-decoration: none;
-    }
-    .nav {
-      display: flex;
-    }
-    .nav a {
-      margin-left: 1.5rem;
-      text-decoration: none;
-      color: #0d1b2a;
-      font-size: 0.95rem;
-      font-weight: 500;
-    }
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-    }
-    .hamburger div {
-      width: 25px;
-      height: 3px;
-      background-color: #0d1b2a;
-      margin: 4px 0;
-    }
-    .mobile-menu {
-      display: none;
-      flex-direction: column;
-      position: absolute;
-      top: 100%;
-      right: 2rem;
-      background-color: #fff;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      z-index: 1000;
-    }
-    .mobile-menu a {
-      padding: 1rem;
-      border-bottom: 1px solid #eee;
-      text-decoration: none;
-      color: #0d1b2a;
-    }
-    .main {
-      text-align: center;
-      padding: 2rem 8vw;
-    }
-    h1 {
-      font-size: 2.2rem;
-      margin-bottom: 1.5rem;
-    }
-    .plans {
-      display: flex;
-      justify-content: space-between;
-      gap: 2rem;
-      flex-wrap: wrap;
-      margin-top: 2rem;
-    }
-    .plan-box {
-      background-color: #134e3a;
-      color: white;
-      flex: 1;
-      min-width: 260px;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-      text-align: center;
-      transition: transform 0.2s ease;
-      text-decoration: none;
-    }
-    .plan-box:hover {
-      transform: translateY(-5px);
-    }
-    .plan-box h2 {
-      margin-bottom: 1rem;
-      font-size: 1.5rem;
-    }
-    .plan-box p {
-      margin: 0.5rem 0;
-      font-size: 0.95rem;
-    }
-    .footer {
-      position: relative;
-      margin-top: 3rem;
-      padding: 1.2rem 2rem;
-      border-top: 1px solid #e5e5e5;
-      font-size: 0.85rem;
-      color: #0d1b2a;
-      text-align: center;
-    }
-    .footer-right {
-      position: absolute;
-      bottom: 1.2rem;
-      right: 2rem;
-    }
-    .footer-right a {
-      text-decoration: none;
-      color: #134e3a;
-      font-weight: 500;
-    }
-    @media (max-width: 768px) {
-      .nav {
-        display: none;
-      }
-      .hamburger {
-        display: flex;
-      }
-      .mobile-menu.show {
-        display: flex;
-        width: 200px;
-      }
-      .footer-right {
-        position: static;
-        text-align: center;
-        margin-top: 1rem;
+
+    function togglePricing() {
+      const toggle = document.getElementById("pricingToggle");
+      const monthlyPrices = document.querySelectorAll(".monthly-price");
+      const annualPrices = document.querySelectorAll(".annual-price");
+      
+      toggle.classList.toggle("active");
+      
+      if (toggle.classList.contains("active")) {
+        monthlyPrices.forEach(el => el.style.display = "none");
+        annualPrices.forEach(el => el.style.display = "block");
+      } else {
+        monthlyPrices.forEach(el => el.style.display = "block");
+        annualPrices.forEach(el => el.style.display = "none");
       }
     }
-  </style>
+  </script>
 </head>
 <body>
+
   <header class="header">
     <a href="/index.html" class="logo">talfy</a>
     <nav class="nav">
-      <a href="/talfy-for-talent.html">Talfy for Talent</a>
-      <a href="/talfy-for-company.html">Talfy for Company</a>
-      <a href="/pricing.html">Pricing</a>
+      <a href="/pricing.html" class="nav-active">Pricing</a>
       <a href="/about.html">About us</a>
       <a href="/contact.html">Contact</a>
       <a href="/login.html">Login</a>
       <a href="/register.html">Register</a>
     </nav>
-    <div class="hamburger" onclick="toggleMenu()">
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
+    <button class="hamburger" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
     <div class="mobile-menu" id="mobileMenu">
-      <a href="/talfy-for-talent.html">Talfy for Talent</a>
-      <a href="/talfy-for-company.html">Talfy for Company</a>
       <a href="/pricing.html">Pricing</a>
       <a href="/about.html">About us</a>
       <a href="/contact.html">Contact</a>
       <a href="/login.html">Login</a>
       <a href="/register.html">Register</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
     </div>
   </header>
 
-  <main class="main">
-    <h1>Pricing</h1>
-    <div class="plans">
-      <a href="/plan-base.html" class="plan-box">
-        <h2>Base</h2>
-        <p>€39.99 / month<br>or €19.99 (annual)</p>
-        <p>Up to 10 profiles</p>
-        <p>Full profile access</p>
-        <p>CV download if available</p>
-        <p>Ideal for startups and small companies</p>
-      </a>
-      <a href="/plan-pro.html" class="plan-box">
-        <h2>Pro</h2>
-        <p>€59.99 / month<br>or €29.99 (annual)</p>
-        <p>Up to 25 profiles</p>
-        <p>Full profile access</p>
-        <p>CV download if available</p>
-        <p>Perfect for medium-sized businesses</p>
-      </a>
-      <a href="/plan-enterprise.html" class="plan-box">
-        <h2>Enterprise</h2>
-        <p>€89.99 / month<br>or €44.99 (annual)</p>
-        <p>Up to 50 profiles</p>
-        <p>Full profile access</p>
-        <p>CV download if available</p>
-        <p>Multi-user access</p>
-        <p>Great for large companies and headhunters</p>
-      </a>
+  <main class="main pricing-page">
+    <div class="pricing-content">
+      <div class="pricing-hero">
+        <h1 class="pricing-title">Pricing Plans</h1>
+        <div class="pricing-underline"></div>
+        <p class="pricing-subtitle">Choose the perfect plan for your hiring needs</p>
+      </div>
+
+      <div class="pricing-toggle">
+        <span class="toggle-label">Monthly</span>
+        <div class="toggle-switch" id="pricingToggle" onclick="togglePricing()">
+          <div class="toggle-slider"></div>
+        </div>
+        <span class="toggle-label">Annual <span style="color: var(--accent-color); font-weight: 600;">(Save 50%)</span></span>
+      </div>
+
+      <div class="pricing-plans">
+        <a href="/plan-base.html" class="pricing-card">
+          <div class="plan-name">Base</div>
+          <div class="plan-price monthly-price">
+            <span class="currency">€</span>39.99
+          </div>
+          <div class="plan-price annual-price" style="display: none;">
+            <span class="currency">€</span>19.99
+          </div>
+          <div class="plan-period monthly-price">per month</div>
+          <div class="plan-period annual-price" style="display: none;">per month (billed annually)</div>
+          <div class="plan-annual annual-price" style="display: none;">Save €240/year</div>
+          
+          <ul class="plan-features">
+            <li>Up to 10 profiles</li>
+            <li>Full profile access</li>
+            <li>CV download if available</li>
+            <li>Email support</li>
+          </ul>
+          
+          <div class="plan-description">Ideal for startups and small companies</div>
+        </a>
+
+        <a href="/plan-pro.html" class="pricing-card featured">
+          <div class="plan-name">Pro</div>
+          <div class="plan-price monthly-price">
+            <span class="currency">€</span>59.99
+          </div>
+          <div class="plan-price annual-price" style="display: none;">
+            <span class="currency">€</span>29.99
+          </div>
+          <div class="plan-period monthly-price">per month</div>
+          <div class="plan-period annual-price" style="display: none;">per month (billed annually)</div>
+          <div class="plan-annual annual-price" style="display: none;">Save €360/year</div>
+          
+          <ul class="plan-features">
+            <li>Up to 25 profiles</li>
+            <li>Full profile access</li>
+            <li>CV download if available</li>
+            <li>Priority support</li>
+            <li>Advanced filters</li>
+          </ul>
+          
+          <div class="plan-description">Perfect for medium-sized businesses</div>
+        </a>
+
+        <a href="/plan-enterprise.html" class="pricing-card">
+          <div class="plan-name">Enterprise</div>
+          <div class="plan-price monthly-price">
+            <span class="currency">€</span>89.99
+          </div>
+          <div class="plan-price annual-price" style="display: none;">
+            <span class="currency">€</span>44.99
+          </div>
+          <div class="plan-period monthly-price">per month</div>
+          <div class="plan-period annual-price" style="display: none;">per month (billed annually)</div>
+          <div class="plan-annual annual-price" style="display: none;">Save €540/year</div>
+          
+          <ul class="plan-features">
+            <li>Up to 50 profiles</li>
+            <li>Full profile access</li>
+            <li>CV download if available</li>
+            <li>Multi-user access</li>
+            <li>Dedicated support</li>
+            <li>Custom integrations</li>
+          </ul>
+          
+          <div class="plan-description">Great for large companies and headhunters</div>
+        </a>
+      </div>
+
+      <div class="pricing-note">
+        <h3>🔒 Lifetime Access Guarantee</h3>
+        <p>Every selected or downloaded profile will remain available in your company archive – forever. Build your talent database with confidence.</p>
+      </div>
+
+      <div class="pricing-cta">
+        <h3>Ready to find your next finance hire?</h3>
+        <p>Start your free trial today and discover top finance talent</p>
+        <div class="cta-buttons">
+          <a href="/register.html" class="cta-primary">
+            <span>Start Free Trial</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+          <a href="/contact.html" class="cta-secondary">Contact Sales</a>
+        </div>
+      </div>
     </div>
-    <p style="margin-top:2rem;font-weight:bold;">
-      Every selected or downloaded profile will remain available in your company archive – forever.
-    </p>
   </main>
 
   <footer class="footer">
-    <div>&copy; 2025 Talfy – All rights reserved</div>
+    <div class="footer-center">&copy; 2025 Talfy. All rights reserved.</div>
     <div class="footer-right">
       <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a>
     </div>
   </footer>
 
-  <script>
-    function toggleMenu() {
-      const menu = document.getElementById("mobileMenu");
-      menu.classList.toggle("show");
-    }
-  </script>
 </body>
 </html>

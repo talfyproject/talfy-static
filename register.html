@@ -26,46 +26,6 @@
         userTypeInput.value = 'company';
       }
     }
-
-    function handleRegister(event) {
-      event.preventDefault();
-      
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const confirmPassword = document.getElementById('confirmPassword').value;
-      const userType = document.getElementById('userType').value;
-      const messageEl = document.getElementById('registerMessage');
-      
-      // Basic validation
-      if (!email || !password || !confirmPassword || !userType) {
-        messageEl.textContent = 'Please fill in all fields';
-        messageEl.className = 'message error';
-        messageEl.style.display = 'block';
-        return;
-      }
-      
-      if (password !== confirmPassword) {
-        messageEl.textContent = 'Passwords do not match';
-        messageEl.className = 'message error';
-        messageEl.style.display = 'block';
-        return;
-      }
-      
-      if (password.length < 6) {
-        messageEl.textContent = 'Password must be at least 6 characters';
-        messageEl.className = 'message error';
-        messageEl.style.display = 'block';
-        return;
-      }
-      
-      // Demo success message
-      messageEl.textContent = 'Registration successful! Welcome to Talfy!';
-      messageEl.className = 'message success';
-      messageEl.style.display = 'block';
-      
-      // In a real app, you would send this data to your backend
-      console.log('Registration data:', { email, userType });
-    }
   </script>
 </head>
 <body>
@@ -102,7 +62,7 @@
       </div>
 
       <div class="register-container">
-        <form class="register-form" onsubmit="handleRegister(event)">
+        <form id="registerForm" class="register-form">
           <div class="form-section">
             <h3>Choose Your Account Type</h3>
             <div class="user-type-cards">
@@ -181,5 +141,6 @@
     </div>
   </footer>
 
+  <script src="register.js"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("registerForm");
+  const form = document.querySelector(".register-form");
   const message = document.getElementById("registerMessage");
 
   form.addEventListener("submit", async (e) => {
@@ -10,9 +10,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
     const confirmPassword = document.getElementById("confirmPassword").value;
-    const userType = document.getElementById("userType").value;
+    const user_type = document.getElementById("userType").value;
 
-    if (!email || !password || !confirmPassword || !userType) {
+    // Basic validations
+    if (!email || !password || !confirmPassword || !user_type) {
       message.textContent = "Please fill in all fields.";
       message.className = "message error";
       message.style.display = "block";
@@ -37,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const registrationData = {
       email,
       password,
-      user_type: userType,
+      user_type,
     };
 
     console.log("Registration data:", registrationData);
@@ -53,10 +54,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (response.ok) {
         localStorage.setItem("user_id", data.user_id);
-        localStorage.setItem("user_type", userType);
+        localStorage.setItem("user_type", user_type);
 
         window.location.href =
-          userType === "candidate"
+          user_type === "candidate"
             ? "/complete-profile-candidate.html"
             : "/complete-profile-company.html";
       } else {

@@ -861,3 +861,117 @@ body {
     padding: 2rem 1rem;
   }
 }
+/* TERMS PAGE STYLES */
+.terms-page {
+  padding: 2rem;
+  max-width: 1000px;
+}
+
+.terms-content {
+  animation: fadeInUp 0.8s ease;
+}
+
+.terms-hero {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.terms-title {
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.terms-underline {
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+  margin: 0 auto 1.5rem auto;
+  border-radius: 2px;
+}
+
+.terms-subtitle {
+  font-size: 1rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.terms-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.terms-section {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.terms-section:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-color);
+}
+
+.terms-section h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.terms-section p {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+.terms-section ul {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  padding-left: 1.5rem;
+}
+
+.terms-section li {
+  margin-bottom: 0.5rem;
+}
+
+.terms-cta {
+  text-align: center;
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  padding: 3rem 2rem;
+  border: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+.terms-cta h3 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.terms-cta p {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  font-size: 1.125rem;
+}
+
+/* RESPONSIVE TERMS */
+@media (max-width: 768px) {
+  .terms-section {
+    padding: 1.5rem;
+  }
+  
+  .terms-cta {
+    padding: 2rem 1rem;
+  }
+}

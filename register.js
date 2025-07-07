@@ -40,11 +40,11 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("user_id", data.user_id);
         localStorage.setItem("user_type", userType);
 
-        // Reindirizza in base al tipo di utente
+        // Reindirizza in base al tipo di utente con user_id nella URL
         window.location.href =
           userType === "candidate"
-            ? "/complete-profile-candidate.html"
-            : "/complete-profile-company.html";
+            ? `/complete-profile-candidate.html?id=${data.user_id}`
+            : `/complete-profile-company.html?id=${data.user_id}`;
       } else {
         message.textContent = data.error || "Registration failed. Please try again.";
       }

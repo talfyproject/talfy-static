@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("candidateProfileForm");
-  const message = document.getElementById("profileMessage");
+  const message = document.getElementById("saveMessage");
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -17,12 +17,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const job = document.getElementById("current_job").value.trim();
     const exp = parseInt(document.getElementById("experience_years").value);
     const salary = document.getElementById("salary_range").value.trim();
-    const sector = getCheckedValues("sector[]").join(", ");
-    const tools = getCheckedValues("tools[]").join(", ");
-    const avatar = document.querySelector('input[name="avatar"]:checked')?.value;
+    const sector = getCheckedValues("sector-group").join(", ");
+    const tools = getCheckedValues("tools-group").join(", ");
+    const avatar = document.querySelector('input[name="avatar_choice"]:checked')?.value;
 
     if (!name || !job || isNaN(exp) || !salary || !sector || !tools || !avatar) {
       message.textContent = "Please fill in all required fields.";
+      message.style.color = "red";
       return;
     }
 
@@ -59,10 +60,11 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (err) {
       console.error(err);
       message.textContent = "Network error. Try again later.";
+      message.style.color = "red";
     }
   });
 
-  function getCheckedValues(name) {
-    return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
+  function getCheckedValues(groupId) {
+    return Array.from(document.querySelectorAll(`#${groupId} input:checked`)).map(el => el.value);
   }
 });

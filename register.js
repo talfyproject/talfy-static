@@ -53,13 +53,15 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("user_id", data.user_id);
-        localStorage.setItem("user_type", user_type);
+  console.log("Raw response data:", data);  // << AGGIUNTA IMPORTANTE
+  localStorage.setItem("user_id", data.user_id);
+  localStorage.setItem("user_type", userType);
 
-        window.location.href =
-          user_type === "candidate"
-            ? "/complete-profile-candidate.html"
-            : "/complete-profile-company.html";
+  window.location.href =
+    userType === "candidate"
+      ? "/complete-profile-candidate.html"
+      : "/complete-profile-company.html";
+      
       } else {
         message.textContent = data.error || "Registration failed. Please try again.";
         message.className = "message error";

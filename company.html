@@ -143,131 +143,21 @@
               </div>
             </div>
           </div>
-
-          <div class="detail-card">
-            <h3>
-              <span class="detail-card-icon">💼</span>
-              Finance Opportunities
-            </h3>
-            <div class="detail-list">
-              <div class="detail-item">
-                <span class="detail-label">Status</span>
-                <span class="detail-value ${company.hiring ? 'highlight' : ''}">${company.hiring ? 'Actively Hiring' : 'Not Currently Hiring'}</span>
-              </div>
-              <div class="detail-item">
-                <span class="detail-label">Focus Areas</span>
-                <span class="detail-value">Financial Analysis, Accounting</span>
-              </div>
-              <div class="detail-item">
-                <span class="detail-label">Experience Levels</span>
-                <span class="detail-value">Junior to Senior</span>
-              </div>
-              <div class="detail-item">
-                <span class="detail-label">Work Type</span>
-                <span class="detail-value">Hybrid, Remote, On-site</span>
-              </div>
-              <div class="detail-item">
-                <span class="detail-label">Benefits</span>
-                <span class="detail-value highlight">Competitive Package</span>
-              </div>
-            </div>
-          </div>
         </div>
 
-        ${company.hiring ? `
-        <div class="positions-section">
-          <div class="positions-header">
-            <h3 class="positions-title">
-              <span>💼</span>
-              Open Finance Positions
-            </h3>
-            <div class="positions-count">3 positions</div>
-          </div>
-          
-          <div class="positions-grid">
-            <div class="position-card">
-              <h4 class="position-title">Senior Financial Analyst</h4>
-              <div class="position-details">
-                <div class="position-detail">
-                  <span>📍</span>
-                  <span>${company.location || 'Milano'}</span>
-                </div>
-                <div class="position-detail">
-                  <span>💰</span>
-                  <span>€45,000 - €65,000</span>
-                </div>
-                <div class="position-detail">
-                  <span>⏰</span>
-                  <span>Full-time</span>
-                </div>
-              </div>
-              <div class="position-tags">
-                <span class="position-tag">Excel</span>
-                <span class="position-tag">SAP</span>
-                <span class="position-tag">PowerBI</span>
-              </div>
-            </div>
-            
-            <div class="position-card">
-              <h4 class="position-title">Junior Controller</h4>
-              <div class="position-details">
-                <div class="position-detail">
-                  <span>📍</span>
-                  <span>${company.location || 'Milano'}</span>
-                </div>
-                <div class="position-detail">
-                  <span>💰</span>
-                  <span>€30,000 - €40,000</span>
-                </div>
-                <div class="position-detail">
-                  <span>⏰</span>
-                  <span>Full-time</span>
-                </div>
-              </div>
-              <div class="position-tags">
-                <span class="position-tag">Accounting</span>
-                <span class="position-tag">Excel</span>
-                <span class="position-tag">ERP</span>
-              </div>
-            </div>
-            
-            <div class="position-card">
-              <h4 class="position-title">Treasury Specialist</h4>
-              <div class="position-details">
-                <div class="position-detail">
-                  <span>📍</span>
-                  <span>${company.location || 'Milano'}</span>
-                </div>
-                <div class="position-detail">
-                  <span>💰</span>
-                  <span>€40,000 - €55,000</span>
-                </div>
-                <div class="position-detail">
-                  <span>⏰</span>
-                  <span>Full-time</span>
-                </div>
-              </div>
-              <div class="position-tags">
-                <span class="position-tag">Treasury</span>
-                <span class="position-tag">Risk Management</span>
-                <span class="position-tag">Bloomberg</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        ` : ''}
+
 
         <div class="contact-section">
-          <h3>Interested in ${company.company_name}?</h3>
-          <p>Connect with this company to learn more about their finance opportunities</p>
+          <h3>About ${company.company_name}</h3>
+          <p>This company is part of Talfy's network of finance-focused organizations</p>
           <div class="contact-buttons">
-            <a href="mailto:careers@${company.company_name.toLowerCase().replace(/\s+/g, '')}.com" class="contact-btn primary">
-              <span>📧</span>
-              <span>Contact HR</span>
-            </a>
-            <a href="${company.website || '#'}" target="_blank" class="contact-btn secondary">
+            <a href="${company.website || '#'}" target="_blank" class="contact-btn primary">
               <span>🌐</span>
               <span>Visit Website</span>
+            </a>
+            <a href="/candidates.html" class="contact-btn secondary">
+              <span>👥</span>
+              <span>Browse Candidates</span>
             </a>
           </div>
         </div>

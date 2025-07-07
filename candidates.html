@@ -2,118 +2,262 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Candidates | Talfy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Finance Candidates – Talfy</title>
   <link rel="stylesheet" href="style.css" />
-  <style>
-    .candidates-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      padding: 2rem;
-      justify-content: center;
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    function toggleMenu() {
+      document.getElementById("mobileMenu").classList.toggle("active");
     }
 
-    .candidate-box {
-      background-color: #d2ffcc;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      padding: 1rem;
-      width: 220px;
-      text-align: center;
-      transition: transform 0.2s ease-in-out;
-      cursor: pointer;
-      text-decoration: none;
-      color: inherit;
+    function toggleFilters() {
+      const filters = document.getElementById("filtersPanel");
+      filters.classList.toggle("active");
     }
 
-    .candidate-box:hover {
-      transform: translateY(-5px);
+    async function loadCandidates() {
+      const container = document.getElementById("candidatesContainer");
+      const loadingEl = document.getElementById("loadingState");
+      
+      try {
+        loadingEl.style.display = "block";
+        const response = await fetch("https://talfy-backend.onrender.com/api/candidates");
+        const data = await response.json();
+        
+        loadingEl.style.display = "none";
+
+        if (data.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-icon">👥</div>
+              <h3>No candidates found</h3>
+              <p>Try adjusting your search filters or check back later.</p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = "";
+        data.forEach(candidate => {
+          const candidateCard = createCandidateCard(candidate);
+          container.appendChild(candidateCard);
+        });
+        
+        // Update results count
+        document.getElementById("resultsCount").textContent = `${data.length} candidates found`;
+        
+      } catch (error) {
+        loadingEl.style.display = "none";
+        container.innerHTML = `
+          <div class="error-state">
+            <div class="error-icon">⚠️</div>
+            <h3>Unable to load candidates</h3>
+            <p>Please check your connection and try again.</p>
+            <button onclick="loadCandidates()" class="retry-button">Retry</button>
+          </div>
+        `;
+        console.error("Error loading candidates:", error);
+      }
     }
 
-    .candidate-box img {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 0.5rem;
+    function createCandidateCard(candidate) {
+      const card = document.createElement("a");
+      card.className = "candidate-card";
+      card.href = `candidate.html?id=${candidate.id}`;
+      
+      card.innerHTML = `
+        <div class="candidate-avatar">
+          <img src="${candidate.avatar || 'https://via.placeholder.com/80'}" alt="${candidate.display_name}" onerror="this.src='https://via.placeholder.com/80'">
+          <div class="availability-badge ${candidate.available ? 'available' : 'busy'}">
+            ${candidate.available ? '🟢' : '🔴'}
+          </div>
+        </div>
+        
+        <div class="candidate-info">
+          <h3 class="candidate-name">${candidate.display_name}</h3>
+          <p class="candidate-title">${candidate.current_job || 'Finance Professional'}</p>
+          
+          <div class="candidate-details">
+            <div class="detail-item">
+              <span class="detail-icon">💼</span>
+              <span>${candidate.experience_years || '0'} years experience</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-icon">🏢</span>
+              <span>${candidate.sector || 'Various sectors'}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-icon">🛠️</span>
+              <span>${candidate.tools || 'Multiple tools'}</span>
+            </div>
+          </div>
+          
+          <div class="candidate-skills">
+            ${(candidate.skills || ['Excel', 'SAP', 'PowerBI']).slice(0, 3).map(skill => 
+              `<span class="skill-tag">${skill}</span>`
+            ).join('')}
+          </div>
+        </div>
+        
+        <div class="candidate-actions">
+          <div class="view-profile">
+            <span>View Profile</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </div>
+        </div>
+      `;
+      
+      return card;
     }
 
-    .candidate-box h3 {
-      font-size: 1.1rem;
-      margin: 0.5rem 0;
-      color: #134e3a;
+    function handleSearch() {
+      const searchTerm = document.getElementById("searchInput").value;
+      console.log("Searching for:", searchTerm);
+      // In a real app, you would filter the candidates based on the search term
+      loadCandidates();
     }
 
-    .candidate-box p {
-      margin: 0.3rem 0;
-      font-size: 0.9rem;
-      color: #333;
-    }
-  </style>
+    window.onload = loadCandidates;
+  </script>
 </head>
 <body>
 
-<header class="header">
-  <a href="index.html" class="logo">talfy</a>
-  <nav class="nav">
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-    <a href="pricing.html">Pricing</a>
-    <a href="talfy-for-talent.html">For Talent</a>
-    <a href="talfy-for-company.html">For Company</a>
-    <a href="login.html">Login</a>
-  </nav>
-</header>
+  <header class="header">
+    <a href="/index.html" class="logo">talfy</a>
+    <nav class="nav">
+      <a href="/pricing.html">Pricing</a>
+      <a href="/about.html">About us</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/login.html">Login</a>
+      <a href="/register.html">Register</a>
+    </nav>
+    <button class="hamburger" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="/pricing.html">Pricing</a>
+      <a href="/about.html">About us</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/login.html">Login</a>
+      <a href="/register.html">Register</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+    </div>
+  </header>
 
-<main class="main">
-  <h2>Available Candidates</h2>
-  <div class="candidates-container" id="candidatesContainer">
-    <!-- Candidate boxes will be inserted here -->
-  </div>
-</main>
+  <main class="main candidates-page">
+    <div class="candidates-content">
+      <div class="candidates-hero">
+        <h1 class="candidates-title">Finance Candidates</h1>
+        <div class="candidates-underline"></div>
+        <p class="candidates-subtitle">Discover talented finance professionals ready for their next opportunity</p>
+      </div>
 
-<footer class="footer">
-  <div class="footer-center">&copy; 2025 Talfy. All rights reserved.</div>
-  <div class="footer-right">
-    <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a>
-  </div>
-</footer>
+      <div class="search-filters-section">
+        <div class="search-bar">
+          <div class="search-input-wrapper">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input type="text" id="searchInput" placeholder="Search by role, skills, or experience..." />
+            <button class="search-button" onclick="handleSearch()">
+              <span>Search</span>
+            </button>
+          </div>
+        </div>
 
-<script>
-  async function loadCandidates() {
-    const container = document.getElementById("candidatesContainer");
-    try {
-      const response = await fetch("https://talfy-backend.onrender.com/api/candidates");
-      const data = await response.json();
+        <div class="filters-toggle">
+          <button class="filters-button" onclick="toggleFilters()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46"/>
+            </svg>
+            <span>Filters</span>
+          </button>
+        </div>
+      </div>
 
-      if (data.length === 0) {
-        container.innerHTML = "<p>No candidates found yet.</p>";
-        return;
-      }
+      <div class="filters-panel" id="filtersPanel">
+        <div class="filter-group">
+          <label>Experience Level</label>
+          <select>
+            <option value="">All levels</option>
+            <option value="junior">Junior (0-3 years)</option>
+            <option value="mid">Mid-level (3-7 years)</option>
+            <option value="senior">Senior (7+ years)</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label>Sector</label>
+          <select>
+            <option value="">All sectors</option>
+            <option value="banking">Banking</option>
+            <option value="consulting">Consulting</option>
+            <option value="corporate">Corporate</option>
+            <option value="startup">Startup</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label>Availability</label>
+          <select>
+            <option value="">All candidates</option>
+            <option value="available">Available now</option>
+            <option value="passive">Open to opportunities</option>
+          </select>
+        </div>
+      </div>
 
-      data.forEach(c => {
-        const box = document.createElement("a");
-        box.className = "candidate-box";
-        box.href = `candidate.html?id=${c.id}`; // <-- ID dinamico
-        box.innerHTML = `
-          <img src="${c.avatar || 'https://via.placeholder.com/80'}" alt="Avatar">
-          <h3>${c.display_name}</h3>
-          <p><strong>Job:</strong> ${c.current_job || '—'}</p>
-          <p><strong>Experience:</strong> ${c.experience_years || '—'} years</p>
-          <p><strong>Sector:</strong> ${c.sector || '—'}</p>
-          <p><strong>Tools:</strong> ${c.tools || '—'}</p>
-        `;
-        container.appendChild(box);
-      });
-    } catch (error) {
-      container.innerHTML = "<p>Error loading candidates.</p>";
-      console.error(error);
-    }
-  }
+      <div class="results-header">
+        <div class="results-info">
+          <span id="resultsCount">Loading candidates...</span>
+        </div>
+        <div class="view-toggle">
+          <button class="view-button active">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7"/>
+              <rect x="14" y="3" width="7" height="7"/>
+              <rect x="14" y="14" width="7" height="7"/>
+              <rect x="3" y="14" width="7" height="7"/>
+            </svg>
+          </button>
+          <button class="view-button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="8" y1="6" x2="21" y2="6"/>
+              <line x1="8" y1="12" x2="21" y2="12"/>
+              <line x1="8" y1="18" x2="21" y2="18"/>
+              <line x1="3" y1="6" x2="3.01" y2="6"/>
+              <line x1="3" y1="12" x2="3.01" y2="12"/>
+              <line x1="3" y1="18" x2="3.01" y2="18"/>
+            </svg>
+          </button>
+        </div>
+      </div>
 
-  loadCandidates();
-</script>
+      <div id="loadingState" class="loading-state" style="display: none;">
+        <div class="loading-spinner"></div>
+        <p>Loading candidates...</p>
+      </div>
+
+      <div class="candidates-grid" id="candidatesContainer">
+        <!-- Candidates will be loaded here -->
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-center">&copy; 2025 Talfy. All rights reserved.</div>
+    <div class="footer-right">
+      <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a>
+    </div>
+  </footer>
 
 </body>
 </html>
+

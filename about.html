@@ -3,166 +3,98 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About us – Talfy</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #fff;
-      color: #0d1b2a;
+  <title>About Us – Talfy</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    function toggleMenu() {
+      document.getElementById("mobileMenu").classList.toggle("active");
     }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.2rem 2rem;
-      border-bottom: 1px solid #e5e5e5;
-      position: relative;
-    }
-    .logo {
-      font-size: 3rem;
-      font-weight: 700;
-      color: #134e3a;
-      text-transform: lowercase;
-      margin: 0;
-      text-decoration: none;
-    }
-    .nav {
-      display: flex;
-    }
-    .nav a {
-      margin-left: 1.5rem;
-      text-decoration: none;
-      color: #0d1b2a;
-      font-size: 0.95rem;
-      font-weight: 500;
-    }
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-    }
-    .hamburger div {
-      width: 25px;
-      height: 3px;
-      background-color: #0d1b2a;
-      margin: 4px 0;
-    }
-    .mobile-menu {
-      display: none;
-      flex-direction: column;
-      position: absolute;
-      top: 100%;
-      right: 2rem;
-      background-color: #fff;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      z-index: 1000;
-    }
-    .mobile-menu a {
-      padding: 1rem;
-      border-bottom: 1px solid #eee;
-      text-decoration: none;
-      color: #0d1b2a;
-    }
-
-    .main {
-      min-height: 60vh;
-      max-width: 900px;
-      margin: 3rem auto;
-      padding: 0 8vw;
-      background: #fff;
-      text-align: center;
-    }
-    .main h1 {
-      font-weight: 700;
-      font-size: 2.2rem;
-      margin-bottom: 2rem;
-    }
-    .main p {
-      font-size: 0.95rem;
-      line-height: 1.6;
-    }
-    .footer {
-      position: relative;
-      margin-top: 3rem;
-      padding: 1.2rem 2rem;
-      border-top: 1px solid #e5e5e5;
-      font-size: 0.85rem;
-      color: #0d1b2a;
-    }
-    .footer-center {
-      text-align: center;
-      font-weight: 400;
-    }
-    .footer-right {
-      position: absolute;
-      bottom: 1.2rem;
-      right: 2rem;
-    }
-    .footer-right a {
-      text-decoration: none;
-      color: #134e3a;
-      font-weight: 500;
-    }
-
-    @media (max-width: 768px) {
-      .nav {
-        display: none;
-      }
-      .hamburger {
-        display: flex;
-      }
-      .mobile-menu.show {
-        display: flex;
-        width: 200px;
-      }
-      .footer-right {
-        position: static;
-        text-align: center;
-        margin-top: 1rem;
-      }
-    }
-  </style>
+  </script>
 </head>
 <body>
+
   <header class="header">
     <a href="/index.html" class="logo">talfy</a>
     <nav class="nav">
-      <a href="/talfy-for-talent.html">Talfy for Talent</a>
-      <a href="/talfy-for-company.html">Talfy for Company</a>
       <a href="/pricing.html">Pricing</a>
-      <a href="/about.html">About us</a>
+      <a href="/about.html" class="nav-active">About us</a>
       <a href="/contact.html">Contact</a>
       <a href="/login.html">Login</a>
       <a href="/register.html">Register</a>
     </nav>
-    <div class="hamburger" onclick="toggleMenu()">
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
+    <button class="hamburger" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
     <div class="mobile-menu" id="mobileMenu">
-      <a href="/talfy-for-talent.html">Talfy for Talent</a>
-      <a href="/talfy-for-company.html">Talfy for Company</a>
       <a href="/pricing.html">Pricing</a>
       <a href="/about.html">About us</a>
       <a href="/contact.html">Contact</a>
       <a href="/login.html">Login</a>
       <a href="/register.html">Register</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
     </div>
   </header>
 
-  <main class="main">
-    <h1>About us</h1>
-    <p>
-      Talfy is an innovative platform focused on connecting companies with top finance talent.<br>
-      Through anonymous profiles and advanced filters, we make the recruitment process smarter and more effective.<br>
-      Our mission is to simplify hiring while ensuring full transparency and privacy.<br>
-      Talfy provides a secure and intuitive experience for both job seekers and recruiters.<br>
-      We help companies find the right candidates faster and enable professionals to promote their skills privately.<br>
-      Our platform evolves continuously to meet the changing needs of the finance job market.
-    </p>
+  <main class="main about-page">
+    <div class="about-content">
+      <div class="about-hero">
+        <h1 class="about-title">About Us</h1>
+        <div class="about-underline"></div>
+      </div>
+
+      <div class="about-section">
+        <div class="about-card">
+          <div class="about-icon">🎯</div>
+          <h3>Our Mission</h3>
+          <p>Talfy is an innovative platform focused on connecting companies with top finance talent. Through anonymous profiles and advanced filters, we make the recruitment process smarter and more effective.</p>
+        </div>
+
+        <div class="about-card">
+          <div class="about-icon">🔒</div>
+          <h3>Privacy First</h3>
+          <p>Our mission is to simplify hiring while ensuring full transparency and privacy. Talfy provides a secure and intuitive experience for both job seekers and recruiters.</p>
+        </div>
+
+        <div class="about-card">
+          <div class="about-icon">⚡</div>
+          <h3>Smart Matching</h3>
+          <p>We help companies find the right candidates faster and enable professionals to promote their skills privately. Our platform evolves continuously to meet the changing needs of the finance job market.</p>
+        </div>
+      </div>
+
+      <div class="about-stats">
+        <div class="about-stat">
+          <div class="stat-number">2025</div>
+          <div class="stat-text">Founded</div>
+        </div>
+        <div class="about-stat">
+          <div class="stat-number">100%</div>
+          <div class="stat-text">Privacy Focused</div>
+        </div>
+        <div class="about-stat">
+          <div class="stat-number">24/7</div>
+          <div class="stat-text">Support</div>
+        </div>
+      </div>
+
+      <div class="about-cta">
+        <h3>Ready to get started?</h3>
+        <p>Join thousands of finance professionals and companies already using Talfy</p>
+        <div class="cta-buttons">
+          <a href="/register.html" class="cta-primary">
+            <span>Join Now</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+          <a href="/contact.html" class="cta-secondary">Contact Us</a>
+        </div>
+      </div>
+    </div>
   </main>
 
   <footer class="footer">
@@ -172,11 +104,5 @@
     </div>
   </footer>
 
-  <script>
-    function toggleMenu() {
-      const menu = document.getElementById("mobileMenu");
-      menu.classList.toggle("show");
-    }
-  </script>
 </body>
 </html>

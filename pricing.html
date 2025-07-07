@@ -1,31 +1,14 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pricing – Talfy</title>
+  <title>Base Plan – Talfy</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script>
     function toggleMenu() {
       document.getElementById("mobileMenu").classList.toggle("active");
-    }
-
-    function togglePricing() {
-      const toggle = document.getElementById("pricingToggle");
-      const monthlyPrices = document.querySelectorAll(".monthly-price");
-      const annualPrices = document.querySelectorAll(".annual-price");
-      
-      toggle.classList.toggle("active");
-      
-      if (toggle.classList.contains("active")) {
-        monthlyPrices.forEach(el => el.style.display = "none");
-        annualPrices.forEach(el => el.style.display = "block");
-      } else {
-        monthlyPrices.forEach(el => el.style.display = "block");
-        annualPrices.forEach(el => el.style.display = "none");
-      }
     }
   </script>
 </head>
@@ -34,7 +17,7 @@
   <header class="header">
     <a href="/index.html" class="logo">talfy</a>
     <nav class="nav">
-      <a href="/pricing.html" class="nav-active">Pricing</a>
+      <a href="/pricing.html">Pricing</a>
       <a href="/about.html">About us</a>
       <a href="/contact.html">Contact</a>
       <a href="/login.html">Login</a>
@@ -56,109 +39,131 @@
     </div>
   </header>
 
-  <main class="main pricing-page">
-    <div class="pricing-content">
-      <div class="pricing-hero">
-        <h1 class="pricing-title">Pricing Plans</h1>
-        <div class="pricing-underline"></div>
-        <p class="pricing-subtitle">Choose the perfect plan for your hiring needs</p>
+  <main class="main plan-page">
+    <div class="plan-content">
+      <div class="plan-hero">
+        <h1 class="plan-title">Base Plan</h1>
+        <div class="plan-underline"></div>
+        <p class="plan-subtitle">Perfect for startups and small companies getting started</p>
       </div>
 
-      <div class="pricing-toggle">
-        <span class="toggle-label">Monthly</span>
-        <div class="toggle-switch" id="pricingToggle" onclick="togglePricing()">
-          <div class="toggle-slider"></div>
-        </div>
-        <span class="toggle-label">Annual <span style="color: var(--accent-color); font-weight: 600;">(Save 50%)</span></span>
-      </div>
-
-      <div class="pricing-plans">
-        <a href="/plan-base.html" class="pricing-card">
-          <div class="plan-name">Base</div>
-          <div class="plan-price monthly-price">
-            <span class="currency">€</span>39.99
+      <div class="plan-options">
+        <div class="plan-option">
+          <div class="plan-header">
+            <h2>Monthly Billing</h2>
+            <div class="plan-price">
+              <span class="currency">€</span>39.99
+              <span class="period">/month</span>
+            </div>
           </div>
-          <div class="plan-price annual-price" style="display: none;">
-            <span class="currency">€</span>19.99
+          
+          <div class="plan-features">
+            <div class="feature-item">
+              <span class="feature-icon">📊</span>
+              <span>Up to <strong>10 profile downloads</strong> per month</span>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">🔒</span>
+              <span>Profiles stay in your company archive <strong>forever</strong></span>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">📧</span>
+              <span>Email support</span>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">🔍</span>
+              <span>Basic search filters</span>
+            </div>
           </div>
-          <div class="plan-period monthly-price">per month</div>
-          <div class="plan-period annual-price" style="display: none;">per month (billed annually)</div>
-          <div class="plan-annual annual-price" style="display: none;">Save €240/year</div>
           
-          <ul class="plan-features">
-            <li>Up to 10 profiles</li>
-            <li>Full profile access</li>
-            <li>CV download if available</li>
-            <li>Email support</li>
-          </ul>
-          
-          <div class="plan-description">Ideal for startups and small companies</div>
-        </a>
-
-        <a href="/plan-pro.html" class="pricing-card featured">
-          <div class="plan-name">Pro</div>
-          <div class="plan-price monthly-price">
-            <span class="currency">€</span>59.99
-          </div>
-          <div class="plan-price annual-price" style="display: none;">
-            <span class="currency">€</span>29.99
-          </div>
-          <div class="plan-period monthly-price">per month</div>
-          <div class="plan-period annual-price" style="display: none;">per month (billed annually)</div>
-          <div class="plan-annual annual-price" style="display: none;">Save €360/year</div>
-          
-          <ul class="plan-features">
-            <li>Up to 25 profiles</li>
-            <li>Full profile access</li>
-            <li>CV download if available</li>
-            <li>Priority support</li>
-            <li>Advanced filters</li>
-          </ul>
-          
-          <div class="plan-description">Perfect for medium-sized businesses</div>
-        </a>
-
-        <a href="/plan-enterprise.html" class="pricing-card">
-          <div class="plan-name">Enterprise</div>
-          <div class="plan-price monthly-price">
-            <span class="currency">€</span>89.99
-          </div>
-          <div class="plan-price annual-price" style="display: none;">
-            <span class="currency">€</span>44.99
-          </div>
-          <div class="plan-period monthly-price">per month</div>
-          <div class="plan-period annual-price" style="display: none;">per month (billed annually)</div>
-          <div class="plan-annual annual-price" style="display: none;">Save €540/year</div>
-          
-          <ul class="plan-features">
-            <li>Up to 50 profiles</li>
-            <li>Full profile access</li>
-            <li>CV download if available</li>
-            <li>Multi-user access</li>
-            <li>Dedicated support</li>
-            <li>Custom integrations</li>
-          </ul>
-          
-          <div class="plan-description">Great for large companies and headhunters</div>
-        </a>
-      </div>
-
-      <div class="pricing-note">
-        <h3>🔒 Lifetime Access Guarantee</h3>
-        <p>Every selected or downloaded profile will remain available in your company archive – forever. Build your talent database with confidence.</p>
-      </div>
-
-      <div class="pricing-cta">
-        <h3>Ready to find your next finance hire?</h3>
-        <p>Start your free trial today and discover top finance talent</p>
-        <div class="cta-buttons">
-          <a href="/register.html" class="cta-primary">
-            <span>Start Free Trial</span>
+          <a href="/register.html" class="plan-cta">
+            <span>Get Started</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
           </a>
-          <a href="/contact.html" class="cta-secondary">Contact Sales</a>
+        </div>
+
+        <div class="plan-option featured">
+          <div class="discount-badge">Save 50%</div>
+          <div class="plan-header">
+            <h2>Annual Billing</h2>
+            <div class="plan-price">
+              <span class="currency">€</span>19.99
+              <span class="period">/month</span>
+            </div>
+            <div class="plan-savings">Billed annually (€239.88/year)</div>
+          </div>
+          
+          <div class="plan-features">
+            <div class="feature-item">
+              <span class="feature-icon">📊</span>
+              <span>Up to <strong>10 profile downloads</strong> per month</span>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">🔒</span>
+              <span>Profiles stay in your company archive <strong>forever</strong></span>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">📧</span>
+              <span>Email support</span>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">🔍</span>
+              <span>Basic search filters</span>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">💰</span>
+              <span><strong>Save €240</strong> per year</span>
+            </div>
+          </div>
+          
+          <a href="/register.html" class="plan-cta">
+            <span>Get Started - Save 50%</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="plan-info">
+        <div class="info-card">
+          <div class="info-icon">🎯</div>
+          <h3>Who is this for?</h3>
+          <p>The Base plan is perfect for startups, small businesses, and companies just getting started with finance recruitment. Ideal for hiring 1-2 finance professionals per month.</p>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon">🔄</div>
+          <h3>Flexible & Scalable</h3>
+          <p>Start with the Base plan and upgrade anytime as your hiring needs grow. No long-term commitments required for monthly billing.</p>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon">📈</div>
+          <h3>Build Your Archive</h3>
+          <p>Every profile you download becomes part of your permanent company archive. Build your talent database over time without losing access.</p>
+        </div>
+      </div>
+
+      <div class="plan-comparison">
+        <h3>Compare Plans</h3>
+        <div class="comparison-links">
+          <a href="/plan-pro.html" class="comparison-link">
+            <span>Pro Plan</span>
+            <span class="comparison-price">€59.99/month</span>
+          </a>
+          <a href="/plan-enterprise.html" class="comparison-link">
+            <span>Enterprise Plan</span>
+            <span class="comparison-price">€89.99/month</span>
+          </a>
+          <a href="/pricing.html" class="comparison-link primary">
+            <span>View All Plans</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
         </div>
       </div>
     </div>

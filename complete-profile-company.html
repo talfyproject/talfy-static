@@ -1,64 +1,62 @@
-<!-- complete-profile-company.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Complete Company Profile</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <header class="header">
-    <a href="index.html" class="logo">talfy</a>
-    <nav class="nav">
-      <a href="about.html">About us</a>
-      <a href="contact.html">Contact</a>
-      <a href="login.html">Login</a>
-      <a href="register.html">Register</a>
-    </nav>
-  </header>
+// complete-profile-company.js
 
-  <main class="main">
-    <h2>Complete Your Company Profile</h2>
-    <form id="companyProfileForm">
-      <label>Company Name</label>
-      <input type="text" id="company_name" required />
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("companyProfileForm");
+  const message = document.getElementById("companyProfileMessage");
 
-      <label>Sector</label>
-      <div class="checkbox-group" id="sector-group">
-        <label><input type="checkbox" value="Finance" /> Finance</label>
-        <label><input type="checkbox" value="Consulting" /> Consulting</label>
-        <label><input type="checkbox" value="Tech" /> Tech</label>
-        <label><input type="checkbox" value="Manufacturing" /> Manufacturing</label>
-      </div>
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    message.textContent = "";
 
-      <label>Number of Employees</label>
-      <input type="number" id="num_employees" min="1" required />
+    const userId = localStorage.getItem("user_id");
+    if (!userId) {
+      message.textContent = "User ID not found. Please register again.";
+      return;
+    }
 
-      <label>Headquarters (City or Country)</label>
-      <input type="text" id="headquarters" required />
+    const company_name = document.getElementById("company_name").value.trim();
+    const industry = document.getElementById("industry").value.trim();
+    const company_size = document.getElementById("company_size").value.trim();
+    const location = document.getElementById("location").value.trim();
+    const logo = document.querySelector('input[name="logo_choice"]:checked')?.value || "";
 
-      <label>Upload Logo or Choose Avatar</label>
-      <div class="avatar-group">
-        <label><input type="radio" name="logo_choice" value="img/company-default1.png" checked />
-          <img src="img/company-default1.png" width="60" style="vertical-align: middle;" /></label>
-        <label><input type="radio" name="logo_choice" value="img/company-default2.png" />
-          <img src="img/company-default2.png" width="60" style="vertical-align: middle;" /></label>
-        <label>
-          <input type="file" id="logo_upload" accept="image/*" />
-        </label>
-      </div>
+    if (!company_name || !industry || !company_size || !location || !logo) {
+      message.textContent = "Please fill in all required fields.";
+      return;
+    }
 
-      <button type="submit">Save Profile</button>
-    </form>
-    <p id="formMessage" class="message"></p>
-  </main>
+    const payload = {
+      user_id: userId,
+      company_name,
+      industry,
+      company_size,
+      location,
+      logo
+    };
 
-  <footer class="footer">
-    <div class="footer-center">&copy; 2025 Talfy</div>
-    <div class="footer-right"><a href="/privacy.html">Privacy</a></div>
-  </footer>
+    try {
+      const response = await fetch("https://talfy-backend.onrender.com/save-company-profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
 
-  <script src="complete-profile-company.js"></script>
-</body>
-</html>
+      const data = await response.json();
+
+      if (response.ok) {
+        message.textContent = "Profile saved successfully!";
+        message.style.color = "green";
+        setTimeout(() => {
+          window.location.href = "/companies.html";
+        }, 1500);
+      } else {
+        message.textContent = data.error || "Error saving profile.";
+        message.style.color = "red";
+      }
+    } catch (err) {
+      console.error(err);
+      message.textContent = "Network error. Try again later.";
+    }
+  });
+});
+

@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
       user_type: userType
     };
 
-    console.log("Registration data:", registrationData);  // Debug log
+    console.log("Registration data:", registrationData);
 
     try {
       const response = await fetch("https://talfy-backend.onrender.com/register", {
@@ -45,9 +45,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await response.json();
 
       if (response.ok) {
+        // Save user ID in localStorage
         localStorage.setItem("user_id", data.user_id);
         localStorage.setItem("user_type", userType);
 
+        // Redirect based on user type
         window.location.href =
           userType === "candidate"
             ? "/complete-profile-candidate.html"

@@ -8,72 +8,71 @@
 </head>
 <body>
   <header class="header">
-    <a href="/index.html" class="logo">talfy</a>
+    <a href="index.html" class="logo">talfy</a>
     <nav class="nav">
-      <a href="/about.html">About us</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/pricing.html">Pricing</a>
-      <a href="/talfy-for-talent.html">For Talent</a>
-      <a href="/talfy-for-company.html">For Company</a>
-      <a href="/login.html">Login</a>
+      <a href="about.html">About us</a>
+      <a href="contact.html">Contact</a>
+      <a href="login.html">Login</a>
+      <a href="register.html">Register</a>
     </nav>
   </header>
 
   <main class="main">
-    <div id="candidateProfile">
+    <div id="profileContent">
       <p>Loading...</p>
     </div>
   </main>
 
   <footer class="footer">
     <div class="footer-center">&copy; 2025 Talfy</div>
-    <div class="footer-right">
-      <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a>
-    </div>
+    <div class="footer-right"><a href="privacy.html">Privacy</a></div>
   </footer>
 
   <script>
-    async function loadCandidate() {
-      const container = document.getElementById("candidateProfile");
-      const urlParams = new URLSearchParams(window.location.search);
-      const candidateId = urlParams.get("id");
+    async function loadCandidateProfile() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get("id");
+      const container = document.getElementById("profileContent");
 
-      if (!candidateId) {
+      if (!id) {
         container.innerHTML = "<p>Invalid candidate ID.</p>";
         return;
       }
 
       try {
-        const response = await fetch(`https://talfy-backend.onrender.com/api/candidates/${candidateId}`);
-        if (!response.ok) throw new Error("Not found");
-        const c = await response.json();
+        const response = await fetch(`https://talfy-backend.onrender.com/api/candidates/${id}`);
+        const data = await response.json();
+
+        if (!response.ok) {
+          container.innerHTML = `<p>${data.error || "Candidate not found."}</p>`;
+          return;
+        }
 
         container.innerHTML = `
-          <h2 class="tagline">${c.display_name}</h2>
-          <img src="${c.avatar || 'https://via.placeholder.com/120'}" alt="Candidate photo" width="120" style="border-radius: 10px; margin-bottom: 20px;" />
-
+          <h2 class="tagline">${data.display_name}</h2>
+          <img src="${data.avatar || 'https://via.placeholder.com/120'}" alt="Candidate photo" width="120" style="border-radius: 10px; margin-bottom: 20px;" />
           <div class="profile-details">
-            <p><strong>Current job:</strong> ${c.current_job || '—'}</p>
-            <p><strong>Experience:</strong> ${c.experience_years || '—'} years</p>
-            <p><strong>Salary range:</strong> ${c.salary_range || '—'}</p>
-            <p><strong>Industry:</strong> ${c.sector || '—'}</p>
-            <p><strong>Tools:</strong> ${c.tools || '—'}</p>
+            <p><strong>Current job:</strong> ${data.current_job || "—"}</p>
+            <p><strong>Experience:</strong> ${data.experience_years || "—"} years</p>
+            <p><strong>Salary range:</strong> ${data.salary_range || "—"}</p>
+            <p><strong>Industry:</strong> ${data.sector || "—"}</p>
+            <p><strong>Tools:</strong> ${data.tools || "—"}</p>
             <hr style="margin: 2rem 0;" />
-            <p><strong>English level:</strong> ${c.english_level || '—'}</p>
-            <p><strong>Education:</strong> ${c.education_area || '—'}</p>
-            <p><strong>Work type:</strong> ${c.work_type || '—'}</p>
-            <p><strong>Willing to travel:</strong> ${c.willing_to_travel || '—'}</p>
-            <p><strong>Protected category:</strong> ${c.protected_category || '—'}</p>
-            <p><strong>Last update:</strong> ${c.updated_at || '—'}</p>
-            <p><strong>CV:</strong> ${c.cv_url ? `<a href="${c.cv_url}" target="_blank">Download</a>` : '—'}</p>
+            <p><strong>English level:</strong> ${data.english_level || "***"}</p>
+            <p><strong>Education:</strong> ${data.education || "***"}</p>
+            <p><strong>Work type:</strong> ${data.work_type || "***"}</p>
+            <p><strong>Willing to travel:</strong> ${data.travel || "***"}</p>
+            <p><strong>Protected category:</strong> ${data.protected || "***"}</p>
+            <p><strong>Last update:</strong> ${data.last_update || "***"}</p>
+            <p><strong>CV:</strong> ${data.cv || "***"}</p>
           </div>
         `;
-      } catch (error) {
-        container.innerHTML = "<p>Candidate not found or error loading profile.</p>";
+      } catch (err) {
+        container.innerHTML = "<p>Error loading candidate profile.</p>";
       }
     }
 
-    loadCandidate();
+    loadCandidateProfile();
   </script>
 </body>
 </html>

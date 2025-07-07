@@ -79,10 +79,14 @@
 
       <label>Upload Photo or Choose Avatar</label>
       <div class="avatar-group">
-        <label><input type="radio" name="avatar_choice" value="img/avatar-male.png" checked />
-          <img src="img/avatar-male.png" width="60" style="vertical-align: middle;" /></label>
-        <label><input type="radio" name="avatar_choice" value="img/avatar-female.png" />
-          <img src="img/avatar-female.png" width="60" style="vertical-align: middle;" /></label>
+        <label>
+          <input type="radio" name="avatar_choice" value="https://via.placeholder.com/60x60.png?text=M" checked />
+          <img src="https://via.placeholder.com/60x60.png?text=M" width="60" />
+        </label>
+        <label>
+          <input type="radio" name="avatar_choice" value="https://via.placeholder.com/60x60.png?text=F" />
+          <img src="https://via.placeholder.com/60x60.png?text=F" width="60" />
+        </label>
         <label>
           <input type="file" id="avatar_upload" accept="image/*" />
         </label>
@@ -90,7 +94,8 @@
 
       <button type="submit">Save Profile</button>
     </form>
-    <p id="formMessage" class="message"></p>
+
+    <p id="saveMessage" style="margin-top: 1rem; font-weight: bold;"></p>
   </main>
 
   <footer class="footer">
@@ -100,7 +105,6 @@
 
   <script src="complete-profile-candidate.js"></script>
   <script>
-    // Populate day/year dropdowns
     const daySelect = document.getElementById("dob_day");
     const yearSelect = document.getElementById("dob_year");
     daySelect.innerHTML = '<option value="">Day</option>';

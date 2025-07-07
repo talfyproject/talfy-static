@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!userId) {
       message.textContent = "User ID not found. Please register again.";
+      message.style.color = "red";
       return;
     }
 
@@ -17,9 +18,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const job = document.getElementById("current_job").value.trim();
     const exp = parseInt(document.getElementById("experience_years").value);
     const salary = document.getElementById("salary_range").value.trim();
-    const sector = getCheckedValues("sector-group").join(", ");
-    const tools = getCheckedValues("tools-group").join(", ");
-    const avatar = document.querySelector('input[name="avatar_choice"]:checked')?.value;
+    const sector = getCheckedValues("sector[]").join(", ");
+    const tools = getCheckedValues("tools[]").join(", ");
+    const avatar = document.querySelector('input[name="avatar"]:checked')?.value;
 
     if (!name || !job || isNaN(exp) || !salary || !sector || !tools || !avatar) {
       message.textContent = "Please fill in all required fields.";
@@ -51,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
         message.textContent = "Profile saved successfully!";
         message.style.color = "green";
         setTimeout(() => {
-          window.location.href = "/candidates.html";
+          window.location.href = "candidates.html";
         }, 1500);
       } else {
         message.textContent = data.error || "Error saving profile.";
@@ -64,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  function getCheckedValues(groupId) {
-    return Array.from(document.querySelectorAll(`#${groupId} input:checked`)).map(el => el.value);
+  function getCheckedValues(name) {
+    return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
   }
 });

@@ -3,112 +3,80 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Candidates | Talfy</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    .candidates-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      padding: 2rem;
-      justify-content: center;
-    }
-
-    .candidate-box {
-      background-color: #d2ffcc;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      padding: 1rem;
-      width: 220px;
-      text-align: center;
-      transition: transform 0.2s ease-in-out;
-    }
-
-    .candidate-box:hover {
-      transform: translateY(-5px);
-    }
-
-    .candidate-box img {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 0.5rem;
-    }
-
-    .candidate-box h3 {
-      font-size: 1.1rem;
-      margin: 0.5rem 0;
-      color: #134e3a;
-    }
-
-    .candidate-box p {
-      margin: 0.3rem 0;
-      font-size: 0.9rem;
-      color: #333;
-    }
-  </style>
+  <title>Candidate Profile | Talfy</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
+  <header class="header">
+    <a href="/index.html" class="logo">talfy</a>
+    <nav class="nav">
+      <a href="/about.html">About us</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/login.html">Login</a>
+      <a href="/register.html">Register</a>
+    </nav>
+  </header>
 
-<header class="header">
-  <a href="index.html" class="logo">talfy</a>
-  <nav class="nav">
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-    <a href="pricing.html">Pricing</a>
-    <a href="talfy-for-talent.html">For Talent</a>
-    <a href="talfy-for-company.html">For Company</a>
-    <a href="login.html">Login</a>
-  </nav>
-</header>
+  <main class="main">
+    <h2 class="tagline" id="candidateName">Loading...</h2>
+    <img id="candidateAvatar" src="https://via.placeholder.com/120" alt="Candidate photo" width="120" style="border-radius: 10px; margin-bottom: 20px;" />
 
-<main class="main">
-  <h2>Available Candidates</h2>
-  <div class="candidates-container" id="candidatesContainer">
-    <!-- Candidate boxes will be inserted here -->
-  </div>
-</main>
+    <div class="profile-details" id="candidateDetails">
+      <p>Loading profile...</p>
+    </div>
+  </main>
 
-<footer class="footer">
-  <div class="footer-center">&copy; 2025 Talfy. All rights reserved.</div>
-  <div class="footer-right">
-    <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a>
-  </div>
-</footer>
+  <footer class="footer">
+    <div class="footer-center">&copy; 2025 Talfy</div>
+    <div class="footer-right"><a href="/privacy.html">Privacy</a></div>
+  </footer>
 
-<script>
-  async function loadCandidates() {
-    const container = document.getElementById("candidatesContainer");
-    try {
-      const response = await fetch("https://talfy-backend.onrender.com/api/candidates");
-      const data = await response.json();
+  <script>
+    async function loadCandidateProfile() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get("id");
 
-      if (data.length === 0) {
-        container.innerHTML = "<p>No candidates found yet.</p>";
+      if (!id) {
+        document.getElementById("candidateDetails").innerHTML = "<p>Invalid candidate ID.</p>";
         return;
       }
 
-      data.forEach(c => {
-        const box = document.createElement("div");
-        box.className = "candidate-box";
-        box.innerHTML = `
-          <img src="${c.avatar || 'https://via.placeholder.com/80'}" alt="Avatar">
-          <h3>${c.display_name}</h3>
-          <p><strong>Job:</strong> ${c.current_job || '—'}</p>
-          <p><strong>Experience:</strong> ${c.experience_years || '—'} years</p>
-          <p><strong>Sector:</strong> ${c.sector || '—'}</p>
-          <p><strong>Tools:</strong> ${c.tools || '—'}</p>
+      try {
+        const response = await fetch(`https://talfy-backend.onrender.com/api/candidates`);
+        const data = await response.json();
+
+        const candidate = data[parseInt(id) - 1]; // TEMP: usa index fino a quando non hai id vero
+
+        if (!candidate) {
+          document.getElementById("candidateDetails").innerHTML = "<p>Candidate not found.</p>";
+          return;
+        }
+
+        document.getElementById("candidateName").textContent = candidate.display_name || "Unnamed";
+        document.getElementById("candidateAvatar").src = candidate.avatar || "https://via.placeholder.com/120";
+
+        document.getElementById("candidateDetails").innerHTML = `
+          <p><strong>Current job:</strong> ${candidate.current_job || '—'}</p>
+          <p><strong>Experience:</strong> ${candidate.experience_years || '—'} years</p>
+          <p><strong>Salary range:</strong> ${candidate.salary_range || '—'}</p>
+          <p><strong>Industry:</strong> ${candidate.sector || '—'}</p>
+          <p><strong>Tools:</strong> ${candidate.tools || '—'}</p>
+          <hr style="margin: 2rem 0;" />
+          <p><strong>English level:</strong> ***</p>
+          <p><strong>Education:</strong> ***</p>
+          <p><strong>Work type:</strong> ***</p>
+          <p><strong>Willing to travel:</strong> ***</p>
+          <p><strong>Protected category:</strong> ***</p>
+          <p><strong>Last update:</strong> ***</p>
+          <p><strong>CV:</strong> ***</p>
         `;
-        container.appendChild(box);
-      });
-    } catch (error) {
-      container.innerHTML = "<p>Error loading candidates.</p>";
+      } catch (error) {
+        document.getElementById("candidateDetails").innerHTML = "<p>Error loading candidate profile.</p>";
+        console.error(error);
+      }
     }
-  }
 
-  loadCandidates();
-</script>
-
+    document.addEventListener("DOMContentLoaded", loadCandidateProfile);
+  </script>
 </body>
 </html>

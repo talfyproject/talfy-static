@@ -63,6 +63,19 @@
       color: #134e3a;
       font-weight: 500;
     }
+    .company-card {
+      width: 200px;
+      background-color: #d2ffcc;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .company-card:hover {
+      transform: scale(1.03);
+    }
   </style>
 </head>
 <body>
@@ -93,18 +106,12 @@
       const container = document.getElementById('company-list');
       data.forEach(company => {
         const div = document.createElement('div');
-        div.style = `
-          width: 200px;
-          background-color: #d2ffcc;
-          border-radius: 12px;
-          padding: 20px;
-          text-align: center;
-          box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        `;
+        div.className = "company-card";
+        div.onclick = () => window.location.href = `company.html?id=${company.id}`;
         div.innerHTML = `
           <img src="${company.logo || 'img/company-default1.png'}" alt="Company Logo" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%; margin-bottom: 10px;">
           <h3 style="margin: 10px 0 5px; font-size: 1rem; color: #0d1b2a;">${company.company_name}</h3>
-          <p style="font-size: 0.85rem; color: #333;">${company.sector || 'Sector not specified'} – ${company.num_employees || 'Size unknown'} employees</p>
+          <p style="font-size: 0.85rem; color: #333;">${company.sector || 'Sector not specified'} – ${company.num_employees || 'N/A'} employees</p>
         `;
         container.appendChild(div);
       });

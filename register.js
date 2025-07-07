@@ -11,6 +11,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const confirmPassword = document.getElementById("confirm_password").value;
     const userType = document.querySelector('input[name="user_type"]:checked')?.value;
 
+    if (!email || !password || !confirmPassword || !userType) {
+      message.textContent = "Please fill in all fields.";
+      return;
+    }
+
     if (password !== confirmPassword) {
       message.textContent = "Passwords do not match.";
       return;
@@ -22,29 +27,33 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    const registrationData = {
+      email,
+      password,
+      user_type: userType
+    };
+
+    console.log("Registration data:", registrationData);
+
     try {
       const response = await fetch("https://talfy-backend.onrender.com/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          password,
-          user_type: userType,
-        }),
+        body: JSON.stringify(registrationData),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        // Salva user_id nel localStorage
+        // Save user ID in localStorage
         localStorage.setItem("user_id", data.user_id);
         localStorage.setItem("user_type", userType);
 
-        // Reindirizza in base al tipo di utente con user_id nella URL
+        // Redirect based on user type
         window.location.href =
           userType === "candidate"
-            ? `/complete-profile-candidate.html?id=${data.user_id}`
-            : `/complete-profile-company.html?id=${data.user_id}`;
+            ? "/complete-profile-candidate.html"
+            : "/complete-profile-company.html";
       } else {
         message.textContent = data.error || "Registration failed. Please try again.";
       }

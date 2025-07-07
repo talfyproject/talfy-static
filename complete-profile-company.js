@@ -1,8 +1,6 @@
-// complete-profile-company.js
-
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("companyProfileForm");
-  const message = document.getElementById("companyProfileMessage");
+  const message = document.getElementById("formMessage");
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -14,24 +12,36 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const company_name = document.getElementById("company_name").value.trim();
-    const industry = document.getElementById("industry").value.trim();
-    const company_size = document.getElementById("company_size").value.trim();
-    const location = document.getElementById("location").value.trim();
-    const logo = document.querySelector('input[name="logo_choice"]:checked')?.value || "";
+    const companyName = document.getElementById("company_name").value.trim();
+    const numEmployees = parseInt(document.getElementById("num_employees").value);
+    const headquarters = document.getElementById("headquarters").value.trim();
+    const sector = Array.from(document.querySelectorAll("#sector-group input:checked"))
+                        .map(el => el.value).join(", ");
 
-    if (!company_name || !industry || !company_size || !location || !logo) {
+    const logoChoice = document.querySelector('input[name="logo_choice"]:checked');
+    const logoUpload = document.getElementById("logo_upload").files[0];
+
+    let logoPath = "";
+
+    if (logoUpload) {
+      message.textContent = "Please use a default avatar for now. Upload coming soon.";
+      return;
+    } else if (logoChoice) {
+      logoPath = logoChoice.value;
+    }
+
+    if (!companyName || isNaN(numEmployees) || !headquarters || !sector || !logoPath) {
       message.textContent = "Please fill in all required fields.";
       return;
     }
 
     const payload = {
       user_id: userId,
-      company_name,
-      industry,
-      company_size,
-      location,
-      logo
+      company_name: companyName,
+      sector: sector,
+      num_employees: numEmployees,
+      headquarters: headquarters,
+      logo: logoPath
     };
 
     try {
@@ -44,13 +54,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await response.json();
 
       if (response.ok) {
-        message.textContent = "Profile saved successfully!";
+        message.textContent = "Company profile saved!";
         message.style.color = "green";
         setTimeout(() => {
           window.location.href = "/companies.html";
         }, 1500);
       } else {
-        message.textContent = data.error || "Error saving profile.";
+        message.textContent = data.error || "Error saving company profile.";
         message.style.color = "red";
       }
     } catch (err) {

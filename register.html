@@ -3,42 +3,175 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Register | Talfy</title>
+  <title>Register – Talfy</title>
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    function toggleMenu() {
+      document.getElementById("mobileMenu").classList.toggle("active");
+    }
+
+    function selectUserType(type) {
+      const candidateCard = document.getElementById('candidateCard');
+      const companyCard = document.getElementById('companyCard');
+      const userTypeInput = document.getElementById('userType');
+      
+      if (type === 'candidate') {
+        candidateCard.classList.add('selected');
+        companyCard.classList.remove('selected');
+        userTypeInput.value = 'candidate';
+      } else {
+        companyCard.classList.add('selected');
+        candidateCard.classList.remove('selected');
+        userTypeInput.value = 'company';
+      }
+    }
+
+    function handleRegister(event) {
+      event.preventDefault();
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const userType = document.getElementById('userType').value;
+      const messageEl = document.getElementById('registerMessage');
+      
+      // Basic validation
+      if (!email || !password || !confirmPassword || !userType) {
+        messageEl.textContent = 'Please fill in all fields';
+        messageEl.className = 'message error';
+        messageEl.style.display = 'block';
+        return;
+      }
+      
+      if (password !== confirmPassword) {
+        messageEl.textContent = 'Passwords do not match';
+        messageEl.className = 'message error';
+        messageEl.style.display = 'block';
+        return;
+      }
+      
+      if (password.length < 6) {
+        messageEl.textContent = 'Password must be at least 6 characters';
+        messageEl.className = 'message error';
+        messageEl.style.display = 'block';
+        return;
+      }
+      
+      // Demo success message
+      messageEl.textContent = 'Registration successful! Welcome to Talfy!';
+      messageEl.className = 'message success';
+      messageEl.style.display = 'block';
+      
+      // In a real app, you would send this data to your backend
+      console.log('Registration data:', { email, userType });
+    }
+  </script>
 </head>
 <body>
 
   <header class="header">
-    <a href="index.html" class="logo">talfy</a>
+    <a href="/index.html" class="logo">talfy</a>
     <nav class="nav">
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
-      <a href="login.html">Login</a>
+      <a href="/pricing.html">Pricing</a>
+      <a href="/about.html">About us</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/login.html">Login</a>
     </nav>
+    <button class="hamburger" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="/pricing.html">Pricing</a>
+      <a href="/about.html">About us</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/login.html">Login</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+    </div>
   </header>
 
-  <main class="main">
-    <h2>Register</h2>
-    <form id="registerForm">
-      <label>Email</label>
-      <input type="email" id="email" required />
-
-      <label>Password</label>
-      <input type="password" id="password" required />
-
-      <label>Confirm Password</label>
-      <input type="password" id="confirm_password" required />
-
-      <label>Role</label>
-      <div class="radio-group">
-        <label><input type="radio" name="user_type" value="candidate" required /> Candidate</label>
-        <label><input type="radio" name="user_type" value="company" required /> Company</label>
+  <main class="main register-page">
+    <div class="register-content">
+      <div class="register-hero">
+        <h1 class="register-title">Join Talfy</h1>
+        <div class="register-underline"></div>
+        <p class="register-subtitle">Create your account and start connecting with finance talent</p>
       </div>
 
-      <button type="submit">Register</button>
-    </form>
+      <div class="register-container">
+        <form class="register-form" onsubmit="handleRegister(event)">
+          <div class="form-section">
+            <h3>Choose Your Account Type</h3>
+            <div class="user-type-cards">
+              <div class="user-type-card" id="candidateCard" onclick="selectUserType('candidate')">
+                <div class="card-icon">👤</div>
+                <h4>I'm a Finance Professional</h4>
+                <p>Looking for new opportunities in finance</p>
+                <div class="card-features">
+                  <span>✓ Create anonymous profile</span>
+                  <span>✓ Get discovered by companies</span>
+                  <span>✓ Control your visibility</span>
+                </div>
+              </div>
+              
+              <div class="user-type-card" id="companyCard" onclick="selectUserType('company')">
+                <div class="card-icon">🏢</div>
+                <h4>I'm a Company</h4>
+                <p>Looking to hire finance professionals</p>
+                <div class="card-features">
+                  <span>✓ Browse candidate profiles</span>
+                  <span>✓ Download CVs</span>
+                  <span>✓ Build talent archive</span>
+                </div>
+              </div>
+            </div>
+            <input type="hidden" id="userType" name="userType" required>
+          </div>
 
-    <p id="registerMessage" class="message"></p>
+          <div class="form-section">
+            <h3>Account Details</h3>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" required placeholder="your@email.com">
+            </div>
+
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" required placeholder="At least 6 characters">
+            </div>
+
+            <div class="form-group">
+              <label for="confirmPassword">Confirm Password</label>
+              <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Repeat your password">
+            </div>
+
+            <div class="form-group checkbox-group">
+              <label class="checkbox-label">
+                <input type="checkbox" required>
+                <span class="checkmark"></span>
+                I agree to the <a href="/terms.html">Terms of Service</a> and <a href="/privacy.html">Privacy Policy</a>
+              </label>
+            </div>
+
+            <button type="submit" class="register-button">
+              <span>Create Account</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+        </form>
+
+        <div class="register-footer">
+          <p>Already have an account? <a href="/login.html">Sign in here</a></p>
+        </div>
+
+        <div id="registerMessage" class="message" style="display: none;"></div>
+      </div>
+    </div>
   </main>
 
   <footer class="footer">
@@ -48,6 +181,5 @@
     </div>
   </footer>
 
-  <script src="register.js"></script>
 </body>
 </html>

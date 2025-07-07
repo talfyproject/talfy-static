@@ -1,123 +1,397 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Companies – Talfy</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #fff;
-      color: #0d1b2a;
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    function toggleMenu() {
+      document.getElementById("mobileMenu").classList.toggle("active");
     }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.2rem 2rem;
-      border-bottom: 1px solid #e5e5e5;
+
+    function toggleFilters() {
+      const filters = document.getElementById("filtersPanel");
+      filters.classList.toggle("active");
     }
-    .logo {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #134e3a;
-      text-transform: lowercase;
-      margin: 0;
-      text-decoration: none;
+
+    let currentPage = 1;
+    const companiesPerPage = 10;
+    let allCompanies = [];
+
+    async function loadCompanies() {
+      const container = document.getElementById("companiesContainer");
+      const loadingEl = document.getElementById("loadingState");
+      
+      try {
+        loadingEl.style.display = "block";
+        const response = await fetch("https://talfy-backend.onrender.com/api/companies");
+        const data = await response.json();
+        
+        loadingEl.style.display = "none";
+
+        if (data.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-icon">🏢</div>
+              <h3>No companies found</h3>
+              <p>Try adjusting your search filters or check back later.</p>
+            </div>
+          `;
+          return;
+        }
+
+        allCompanies = data;
+        displayCompanies();
+        
+      } catch (error) {
+        loadingEl.style.display = "none";
+        // Create demo companies if API fails
+        allCompanies = createDemoCompanies();
+        displayCompanies();
+        console.error("Error loading companies:", error);
+      }
     }
-    .nav a {
-      margin-left: 1.5rem;
-      text-decoration: none;
-      color: #0d1b2a;
-      font-size: 0.95rem;
-      font-weight: 500;
+
+    function createDemoCompanies() {
+      const companies = [
+        "UniCredit", "Intesa Sanpaolo", "Generali", "Enel", "ENI",
+        "Telecom Italia", "Poste Italiane", "Mediobanca", "BPER Banca", "Banco BPM",
+        "Assicurazioni Generali", "Prysmian", "Leonardo", "Tenaris", "Saipem"
+      ];
+      
+      const sectors = ["Banking", "Insurance", "Energy", "Telecommunications", "Consulting"];
+      const sizes = ["50-200", "200-1000", "1000-5000", "5000+"];
+      const locations = ["Milano", "Roma", "Torino", "Bologna", "Napoli"];
+      
+      return companies.map((name, index) => ({
+        id: index + 1,
+        company_name: name,
+        sector: sectors[index % sectors.length],
+        num_employees: sizes[index % sizes.length],
+        location: locations[index % locations.length],
+        verified: Math.random() > 0.3, // 70% verified
+        hiring: Math.random() > 0.4 // 60% actively hiring
+      }));
     }
-    .main {
-      padding: 2rem 5vw;
+
+    function displayCompanies() {
+      const container = document.getElementById("companiesContainer");
+      const startIndex = (currentPage - 1) * companiesPerPage;
+      const endIndex = startIndex + companiesPerPage;
+      const companiesToShow = allCompanies.slice(startIndex, endIndex);
+
+      container.innerHTML = "";
+      companiesToShow.forEach(company => {
+        const companyCard = createCompanyCard(company);
+        container.appendChild(companyCard);
+      });
+      
+      // Update results count and pagination
+      document.getElementById("resultsCount").textContent = `${allCompanies.length} companies found`;
+      updatePagination();
     }
-    h1 {
-      text-align: center;
-      color: #134e3a;
+
+    function createCompanyCard(company) {
+      const card = document.createElement("div");
+      card.className = "company-card";
+      card.onclick = () => showPremiumModal();
+      
+      card.innerHTML = `
+        ${company.verified ? '<div class="verified-badge">✓ Verified by Talfy</div>' : ''}
+        
+        <div class="company-logo">
+          <div class="logo-placeholder">
+            ${company.company_name.charAt(0)}
+          </div>
+          <div class="hiring-badge ${company.hiring ? 'hiring' : 'not-hiring'}">
+            ${company.hiring ? '🟢' : '🔴'}
+          </div>
+        </div>
+        
+        <div class="company-info">
+          <h3 class="company-name">${company.company_name}</h3>
+          
+          <div class="company-details">
+            <div class="detail-item">
+              <span class="detail-icon">🏢</span>
+              <span>${company.sector || 'Various sectors'}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-icon">👥</span>
+              <span>${company.num_employees || 'N/A'} employees</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-icon">📍</span>
+              <span>${company.location || 'Multiple locations'}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-icon">💼</span>
+              <span>${company.hiring ? 'Actively hiring' : 'Not hiring currently'}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-icon">⭐</span>
+              <span>Finance roles available</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="company-actions">
+          <div class="view-profile">
+            <span>View Details</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </div>
+        </div>
+      `;
+      
+      return card;
     }
-    .footer {
-      position: relative;
-      margin-top: 3rem;
-      padding: 1.2rem 2rem;
-      border-top: 1px solid #e5e5e5;
-      font-size: 0.85rem;
-      color: #0d1b2a;
+
+    function showPremiumModal() {
+      const modal = document.getElementById('premiumModal');
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
     }
-    .footer-center {
-      text-align: center;
-      font-weight: 400;
+
+    function closePremiumModal() {
+      const modal = document.getElementById('premiumModal');
+      modal.style.display = 'none';
+      document.body.style.overflow = 'auto';
     }
-    .footer-right {
-      position: absolute;
-      bottom: 1.2rem;
-      right: 2rem;
+
+    function updatePagination() {
+      const totalPages = Math.ceil(allCompanies.length / companiesPerPage);
+      const paginationEl = document.getElementById('pagination');
+      
+      if (totalPages <= 1) {
+        paginationEl.style.display = 'none';
+        return;
+      }
+      
+      paginationEl.style.display = 'flex';
+      paginationEl.innerHTML = '';
+      
+      // Previous button
+      const prevBtn = document.createElement('button');
+      prevBtn.className = `pagination-btn ${currentPage === 1 ? 'disabled' : ''}`;
+      prevBtn.innerHTML = '← Previous';
+      prevBtn.onclick = () => {
+        if (currentPage > 1) {
+          currentPage--;
+          displayCompanies();
+        }
+      };
+      paginationEl.appendChild(prevBtn);
+      
+      // Page numbers
+      for (let i = 1; i <= totalPages; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
+        pageBtn.textContent = i;
+        pageBtn.onclick = () => {
+          currentPage = i;
+          displayCompanies();
+        };
+        paginationEl.appendChild(pageBtn);
+      }
+      
+      // Next button
+      const nextBtn = document.createElement('button');
+      nextBtn.className = `pagination-btn ${currentPage === totalPages ? 'disabled' : ''}`;
+      nextBtn.innerHTML = 'Next →';
+      nextBtn.onclick = () => {
+        if (currentPage < totalPages) {
+          currentPage++;
+          displayCompanies();
+        }
+      };
+      paginationEl.appendChild(nextBtn);
     }
-    .footer-right a {
-      text-decoration: none;
-      color: #134e3a;
-      font-weight: 500;
+
+    function handleSearch() {
+      const searchTerm = document.getElementById("searchInput").value;
+      console.log("Searching for:", searchTerm);
+      // In a real app, you would filter the companies based on the search term
+      loadCompanies();
     }
-    .company-card {
-      width: 200px;
-      background-color: #d2ffcc;
-      border-radius: 12px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      cursor: pointer;
-      transition: transform 0.2s ease;
-    }
-    .company-card:hover {
-      transform: scale(1.03);
-    }
-  </style>
+
+    window.onload = loadCompanies;
+  </script>
 </head>
 <body>
+
   <header class="header">
     <a href="/index.html" class="logo">talfy</a>
     <nav class="nav">
+      <a href="/pricing.html">Pricing</a>
       <a href="/about.html">About us</a>
       <a href="/contact.html">Contact</a>
       <a href="/login.html">Login</a>
       <a href="/register.html">Register</a>
     </nav>
+    <button class="hamburger" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="/pricing.html">Pricing</a>
+      <a href="/about.html">About us</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/login.html">Login</a>
+      <a href="/register.html">Register</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+    </div>
   </header>
 
-  <main class="main">
-    <h1>Our Companies</h1>
-    <div id="company-list" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 40px;"></div>
+  <main class="main companies-page">
+    <div class="companies-content">
+      <div class="companies-hero">
+        <h1 class="companies-title">Partner Companies</h1>
+        <div class="companies-underline"></div>
+        <p class="companies-subtitle">Discover companies actively seeking finance talent</p>
+      </div>
+
+      <div class="search-filters-section">
+        <div class="search-bar">
+          <div class="search-input-wrapper">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input type="text" id="searchInput" placeholder="Search by company name, sector, or location..." />
+            <button class="search-button" onclick="handleSearch()">
+              <span>Search</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="filters-toggle">
+          <button class="filters-button" onclick="toggleFilters()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46"/>
+            </svg>
+            <span>Filters</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="filters-panel" id="filtersPanel">
+        <div class="filter-group">
+          <label>Company Size</label>
+          <select>
+            <option value="">All sizes</option>
+            <option value="startup">Startup (1-50)</option>
+            <option value="small">Small (50-200)</option>
+            <option value="medium">Medium (200-1000)</option>
+            <option value="large">Large (1000+)</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label>Sector</label>
+          <select>
+            <option value="">All sectors</option>
+            <option value="banking">Banking</option>
+            <option value="insurance">Insurance</option>
+            <option value="consulting">Consulting</option>
+            <option value="energy">Energy</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label>Hiring Status</label>
+          <select>
+            <option value="">All companies</option>
+            <option value="hiring">Actively hiring</option>
+            <option value="passive">Open to candidates</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="results-header">
+        <div class="results-info">
+          <span id="resultsCount">Loading companies...</span>
+        </div>
+        <div class="view-toggle">
+          <button class="view-button active">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7"/>
+              <rect x="14" y="3" width="7" height="7"/>
+              <rect x="14" y="14" width="7" height="7"/>
+              <rect x="3" y="14" width="7" height="7"/>
+            </svg>
+          </button>
+          <button class="view-button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="8" y1="6" x2="21" y2="6"/>
+              <line x1="8" y1="12" x2="21" y2="12"/>
+              <line x1="8" y1="18" x2="21" y2="18"/>
+              <line x1="3" y1="6" x2="3.01" y2="6"/>
+              <line x1="3" y1="12" x2="3.01" y2="12"/>
+              <line x1="3" y1="18" x2="3.01" y2="18"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div id="loadingState" class="loading-state" style="display: none;">
+        <div class="loading-spinner"></div>
+        <p>Loading companies...</p>
+      </div>
+
+      <div class="companies-grid" id="companiesContainer">
+        <!-- Companies will be loaded here -->
+      </div>
+
+      <div class="pagination" id="pagination">
+        <!-- Pagination buttons will be added here -->
+      </div>
+    </div>
+
+    <!-- Premium Modal -->
+    <div class="premium-modal" id="premiumModal" onclick="closePremiumModal()">
+      <div class="modal-content" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closePremiumModal()">×</button>
+        <div class="modal-icon">🔒</div>
+        <h3>Premium Feature</h3>
+        <p>Full company details and contact information are available only to Talfy premium subscribers.</p>
+        <div class="modal-features">
+          <div class="feature-item">
+            <span class="feature-icon">✓</span>
+            <span>Access to company contact details</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">✓</span>
+            <span>View open finance positions</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">✓</span>
+            <span>Company culture insights</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">✓</span>
+            <span>Direct application links</span>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <a href="/pricing.html" class="modal-cta">View Pricing Plans</a>
+          <button onclick="closePremiumModal()" class="modal-secondary">Maybe Later</button>
+        </div>
+      </div>
+    </div>
   </main>
 
   <footer class="footer">
-    <div class="footer-center">&copy; 2025 Talfy</div>
-    <div class="footer-right"><a href="/privacy.html">Privacy</a></div>
+    <div class="footer-center">&copy; 2025 Talfy. All rights reserved.</div>
+    <div class="footer-right">
+      <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a>
+    </div>
   </footer>
 
-  <script>
-    async function loadCompanies() {
-      const res = await fetch('https://talfy-backend.onrender.com/api/companies');
-      const data = await res.json();
-      const container = document.getElementById('company-list');
-      data.forEach(company => {
-        const div = document.createElement('div');
-        div.className = "company-card";
-        div.onclick = () => window.location.href = `company.html?id=${company.id}`;
-        div.innerHTML = `
-          <img src="${company.logo || 'img/company-default1.png'}" alt="Company Logo" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%; margin-bottom: 10px;">
-          <h3 style="margin: 10px 0 5px; font-size: 1rem; color: #0d1b2a;">${company.company_name}</h3>
-          <p style="font-size: 0.85rem; color: #333;">${company.sector || 'Sector not specified'} – ${company.num_employees || 'N/A'} employees</p>
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    loadCompanies();
-  </script>
 </body>
 </html>

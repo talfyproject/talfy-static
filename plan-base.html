@@ -2,217 +2,169 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Plan – Base | Talfy</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #fff;
-      color: #0d1b2a;
-    }
-    .header {
-      padding: 1.2rem 2rem;
-      border-bottom: 1px solid #e5e5e5;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: relative;
-    }
-    .logo {
-      font-size: 3rem;
-      font-weight: 700;
-      color: #134e3a;
-      text-transform: lowercase;
-      text-decoration: none;
-    }
-    .nav {
-      display: flex;
-    }
-    .nav a {
-      margin-left: 1.5rem;
-      text-decoration: none;
-      color: #0d1b2a;
-      font-size: 0.95rem;
-      font-weight: 500;
-    }
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-    }
-    .hamburger div {
-      width: 25px;
-      height: 3px;
-      background-color: #0d1b2a;
-      margin: 4px 0;
-    }
-    .mobile-menu {
-      display: none;
-      flex-direction: column;
-      position: absolute;
-      top: 100%;
-      right: 2rem;
-      background-color: #fff;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      z-index: 1000;
-    }
-    .mobile-menu a {
-      padding: 1rem;
-      border-bottom: 1px solid #eee;
-      text-decoration: none;
-      color: #0d1b2a;
-    }
-    .main {
-      max-width: 900px;
-      margin: 3rem auto;
-      padding: 0 8vw;
-      text-align: center;
-    }
-    .main h1 {
-      font-size: 2.2rem;
-      margin-bottom: 2rem;
-    }
-    .plan-container {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      flex-wrap: wrap;
-    }
-    .plan-box {
-      background-color: #134e3a;
-      color: #fff;
-      padding: 2rem;
-      border-radius: 10px;
-      width: 300px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      position: relative;
-      text-align: center;
-    }
-    .plan-box h2 {
-      margin-top: 0;
-      font-size: 1.5rem;
-    }
-    .plan-box .price {
-      font-size: 2rem;
-      font-weight: bold;
-      margin: 1rem 0;
-    }
-    .plan-box p {
-      margin-bottom: 1.5rem;
-      font-size: 0.95rem;
-    }
-    .plan-box a {
-      display: inline-block;
-      background-color: #fff;
-      color: #134e3a;
-      padding: 0.75rem 1.5rem;
-      border-radius: 6px;
-      font-weight: bold;
-      text-decoration: none;
-    }
-    .discount-badge {
-      position: absolute;
-      top: -10px;
-      right: -10px;
-      background-color: gold;
-      color: #0d1b2a;
-      font-weight: bold;
-      padding: 4px 8px;
-      font-size: 0.8rem;
-      border-radius: 50px;
-      box-shadow: 0 0 4px rgba(0,0,0,0.2);
-    }
-    .footer {
-      margin-top: 3rem;
-      padding: 1.2rem 2rem;
-      border-top: 1px solid #e5e5e5;
-      font-size: 0.85rem;
-      color: #0d1b2a;
-      position: relative;
-    }
-    .footer-center {
-      text-align: center;
-      font-weight: 400;
-    }
-    .footer-right {
-      position: absolute;
-      bottom: 1.2rem;
-      right: 2rem;
-    }
-    .footer-right a {
-      text-decoration: none;
-      color: #134e3a;
-      font-weight: 500;
-    }
-    @media (max-width: 768px) {
-      .nav {
-        display: none;
-      }
-      .hamburger {
-        display: flex;
-      }
-      .mobile-menu.show {
-        display: flex;
-        width: 200px;
-      }
-      .footer-right {
-        position: static;
-        text-align: center;
-        margin-top: 1rem;
-      }
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Base Plan – Talfy</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script>
     function toggleMenu() {
-      const menu = document.getElementById("mobileMenu");
-      menu.classList.toggle("show");
+      document.getElementById("mobileMenu").classList.toggle("active");
     }
   </script>
 </head>
 <body>
+
   <header class="header">
     <a href="/index.html" class="logo">talfy</a>
     <nav class="nav">
-      <a href="/about.html">About us</a>
-      <a href="/talfy-for-talent.html">Talfy for Talent</a>
-      <a href="/talfy-for-company.html">Talfy for Company</a>
       <a href="/pricing.html">Pricing</a>
+      <a href="/about.html">About us</a>
       <a href="/contact.html">Contact</a>
       <a href="/login.html">Login</a>
       <a href="/register.html">Register</a>
     </nav>
-    <div class="hamburger" onclick="toggleMenu()">
-      <div></div><div></div><div></div>
-    </div>
+    <button class="hamburger" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
     <div class="mobile-menu" id="mobileMenu">
-      <a href="/about.html">About us</a>
-      <a href="/talfy-for-talent.html">Talfy for Talent</a>
-      <a href="/talfy-for-company.html">Talfy for Company</a>
       <a href="/pricing.html">Pricing</a>
+      <a href="/about.html">About us</a>
       <a href="/contact.html">Contact</a>
       <a href="/login.html">Login</a>
       <a href="/register.html">Register</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
     </div>
   </header>
 
-  <main class="main">
-    <h1>Base Plan</h1>
-    <div class="plan-container">
-      <div class="plan-box">
-        <h2>Monthly</h2>
-        <div class="price">€39,99/month</div>
-        <p>Includes up to <strong>10 profile downloads/month</strong>.<br>Profiles stay in your company archive forever.</p>
-        <a href="/register.html">Register to activate</a>
+  <main class="main plan-page">
+    <div class="plan-content">
+      <div class="plan-hero">
+        <h1 class="plan-title">Base Plan</h1>
+        <div class="plan-underline"></div>
+        <p class="plan-subtitle">Perfect for startups and small companies getting started</p>
       </div>
 
-      <div class="plan-box">
-        <span class="discount-badge">-50%</span>
-        <h2>Annual</h2>
-        <div class="price">€19,99/month</div>
-        <p>Includes up to <strong>10 profile downloads/month</strong>.<br>Profiles stay in your company archive forever.</p>
-        <a href="/register.html">Register to activate</a>
+      <div class="plan-options">
+        <div class="plan-option">
+          <div class="plan-header">
+            <h2>Monthly Billing</h2>
+            <div class="plan-price">
+              <span class="currency">€</span>39.99
+              <span class="period">/month</span>
+            </div>
+          </div>
+          
+          <div class="plan-features">
+            <div class="feature-item">
+              <span class="feature-icon">📊</span>
+              <span>Up to <strong>10 profile downloads</strong> per month</span>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">🔒</span>
+              <span>Profiles stay in your company archive <strong>forever</strong></span>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">📧</span>
+              <span>Email support</span>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">🔍</span>
+              <span>Basic search filters</span>
+            </div>
+          </div>
+          
+          <a href="/register.html" class="plan-cta">
+            <span>Get Started</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="plan-option featured">
+          <div class="discount-badge">Save 50%</div>
+          <div class="plan-header">
+            <h2>Annual Billing</h2>
+            <div class="plan-price">
+              <span class="currency">€</span>19.99
+              <span class="period">/month</span>
+            </div>
+            <div class="plan-savings">Billed annually (€239.88/year)</div>
+          </div>
+          
+          <div class="plan-features">
+            <div class="feature-item">
+              <span class="feature-icon">📊</span>
+              <span>Up to <strong>10 profile downloads</strong> per month</span>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">🔒</span>
+              <span>Profiles stay in your company archive <strong>forever</strong></span>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">📧</span>
+              <span>Email support</span>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">🔍</span>
+              <span>Basic search filters</span>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">💰</span>
+              <span><strong>Save €240</strong> per year</span>
+            </div>
+          </div>
+          
+          <a href="/register.html" class="plan-cta">
+            <span>Get Started - Save 50%</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="plan-info">
+        <div class="info-card">
+          <div class="info-icon">🎯</div>
+          <h3>Who is this for?</h3>
+          <p>The Base plan is perfect for startups, small businesses, and companies just getting started with finance recruitment. Ideal for hiring 1-2 finance professionals per month.</p>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon">🔄</div>
+          <h3>Flexible & Scalable</h3>
+          <p>Start with the Base plan and upgrade anytime as your hiring needs grow. No long-term commitments required for monthly billing.</p>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon">📈</div>
+          <h3>Build Your Archive</h3>
+          <p>Every profile you download becomes part of your permanent company archive. Build your talent database over time without losing access.</p>
+        </div>
+      </div>
+
+      <div class="plan-comparison">
+        <h3>Compare Plans</h3>
+        <div class="comparison-links">
+          <a href="/plan-pro.html" class="comparison-link">
+            <span>Pro Plan</span>
+            <span class="comparison-price">€59.99/month</span>
+          </a>
+          <a href="/plan-enterprise.html" class="comparison-link">
+            <span>Enterprise Plan</span>
+            <span class="comparison-price">€89.99/month</span>
+          </a>
+          <a href="/pricing.html" class="comparison-link primary">
+            <span>View All Plans</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
       </div>
     </div>
   </main>
@@ -223,5 +175,6 @@
       <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a>
     </div>
   </footer>
+
 </body>
 </html>

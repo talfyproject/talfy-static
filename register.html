@@ -8,21 +8,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script>
   function selectUserType(type) {
-    const candidateCard = document.getElementById('candidateCard');
-    const companyCard = document.getElementById('companyCard');
-    const userTypeInput = document.getElementById('userType');
+  const candidateCard = document.getElementById('candidateCard');
+  const companyCard = document.getElementById('companyCard');
+  const userTypeInput = document.getElementById('userType');
 
-    console.log("User type selected:", type); // <-- DEBUG
+  if (type === 'candidate') {
+    candidateCard.classList.add('selected');
+    companyCard.classList.remove('selected');
+  } else {
+    companyCard.classList.add('selected');
+    candidateCard.classList.remove('selected');
+  }
 
-    if (type === 'candidate') {
-      candidateCard.classList.add('selected');
-      companyCard.classList.remove('selected');
-      userTypeInput.value = 'candidate';
-    } else {
-      companyCard.classList.add('selected');
-      candidateCard.classList.remove('selected');
-      userTypeInput.value = 'company';
-    }
+  userTypeInput.value = type;
+}
   }
 </script>
 </head>

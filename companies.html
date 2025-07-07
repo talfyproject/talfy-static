@@ -94,9 +94,10 @@
     }
 
     function createCompanyCard(company) {
-      const card = document.createElement("div");
+      const card = document.createElement("a");
       card.className = "company-card";
-      card.onclick = () => showPremiumModal();
+      card.href = `company.html?id=${company.id}`;
+      card.style.textDecoration = "none";
       
       card.innerHTML = `
         ${company.verified ? '<div class="verified-badge">✓ Verified by Talfy</div>' : ''}
@@ -150,17 +151,7 @@
       return card;
     }
 
-    function showPremiumModal() {
-      const modal = document.getElementById('premiumModal');
-      modal.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-    }
 
-    function closePremiumModal() {
-      const modal = document.getElementById('premiumModal');
-      modal.style.display = 'none';
-      document.body.style.overflow = 'auto';
-    }
 
     function updatePagination() {
       const totalPages = Math.ceil(allCompanies.length / companiesPerPage);
@@ -353,37 +344,7 @@
       </div>
     </div>
 
-    <!-- Premium Modal -->
-    <div class="premium-modal" id="premiumModal" onclick="closePremiumModal()">
-      <div class="modal-content" onclick="event.stopPropagation()">
-        <button class="modal-close" onclick="closePremiumModal()">×</button>
-        <div class="modal-icon">🔒</div>
-        <h3>Premium Feature</h3>
-        <p>Full company details and contact information are available only to Talfy premium subscribers.</p>
-        <div class="modal-features">
-          <div class="feature-item">
-            <span class="feature-icon">✓</span>
-            <span>Access to company contact details</span>
-          </div>
-          <div class="feature-item">
-            <span class="feature-icon">✓</span>
-            <span>View open finance positions</span>
-          </div>
-          <div class="feature-item">
-            <span class="feature-icon">✓</span>
-            <span>Company culture insights</span>
-          </div>
-          <div class="feature-item">
-            <span class="feature-icon">✓</span>
-            <span>Direct application links</span>
-          </div>
-        </div>
-        <div class="modal-actions">
-          <a href="/pricing.html" class="modal-cta">View Pricing Plans</a>
-          <button onclick="closePremiumModal()" class="modal-secondary">Maybe Later</button>
-        </div>
-      </div>
-    </div>
+
   </main>
 
   <footer class="footer">

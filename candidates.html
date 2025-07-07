@@ -16,6 +16,10 @@
       filters.classList.toggle("active");
     }
 
+    let currentPage = 1;
+    const candidatesPerPage = 10;
+    let allCandidates = [];
+
     async function loadCandidates() {
       const container = document.getElementById("candidatesContainer");
       const loadingEl = document.getElementById("loadingState");
@@ -38,37 +42,70 @@
           return;
         }
 
-        container.innerHTML = "";
-        data.forEach(candidate => {
-          const candidateCard = createCandidateCard(candidate);
-          container.appendChild(candidateCard);
-        });
-        
-        // Update results count
-        document.getElementById("resultsCount").textContent = `${data.length} candidates found`;
+        allCandidates = data;
+        displayCandidates();
         
       } catch (error) {
         loadingEl.style.display = "none";
-        container.innerHTML = `
-          <div class="error-state">
-            <div class="error-icon">⚠️</div>
-            <h3>Unable to load candidates</h3>
-            <p>Please check your connection and try again.</p>
-            <button onclick="loadCandidates()" class="retry-button">Retry</button>
-          </div>
-        `;
+        // Create demo candidates if API fails
+        allCandidates = createDemoCandidates();
+        displayCandidates();
         console.error("Error loading candidates:", error);
       }
     }
 
+    function createDemoCandidates() {
+      const names = [
+        "Marco R.", "Giulia S.", "Alessandro T.", "Francesca M.", "Davide L.",
+        "Chiara B.", "Matteo C.", "Valentina P.", "Luca F.", "Sara G.",
+        "Andrea V.", "Elena R.", "Simone D.", "Martina K.", "Federico N."
+      ];
+      
+      const roles = ["Financial Analyst", "Controller", "CFO", "Accountant", "Treasury Specialist"];
+      const sectors = ["Banking", "Consulting", "Corporate", "Startup", "Insurance"];
+      const tools = ["Excel", "SAP", "PowerBI", "Tableau", "QuickBooks"];
+      
+      return names.map((name, index) => ({
+        id: index + 1,
+        display_name: name,
+        current_job: roles[index % roles.length],
+        experience_years: Math.floor(Math.random() * 15) + 1,
+        sector: sectors[index % sectors.length],
+        tools: tools[index % tools.length],
+        verified: Math.random() > 0.4, // 60% verified
+        available: Math.random() > 0.3 // 70% available
+      }));
+    }
+
+    function displayCandidates() {
+      const container = document.getElementById("candidatesContainer");
+      const startIndex = (currentPage - 1) * candidatesPerPage;
+      const endIndex = startIndex + candidatesPerPage;
+      const candidatesToShow = allCandidates.slice(startIndex, endIndex);
+
+      container.innerHTML = "";
+      candidatesToShow.forEach(candidate => {
+        const candidateCard = createCandidateCard(candidate);
+        container.appendChild(candidateCard);
+      });
+      
+      // Update results count and pagination
+      document.getElementById("resultsCount").textContent = `${allCandidates.length} candidates found`;
+      updatePagination();
+    }
+
     function createCandidateCard(candidate) {
-      const card = document.createElement("a");
+      const card = document.createElement("div");
       card.className = "candidate-card";
-      card.href = `candidate.html?id=${candidate.id}`;
+      card.onclick = () => showPremiumModal();
       
       card.innerHTML = `
+        ${candidate.verified ? '<div class="verified-badge">✓ Verified by Talfy</div>' : ''}
+        
         <div class="candidate-avatar">
-          <img src="${candidate.avatar || 'https://via.placeholder.com/80'}" alt="${candidate.display_name}" onerror="this.src='https://via.placeholder.com/80'">
+          <div class="avatar-placeholder">
+            ${candidate.display_name.charAt(0)}
+          </div>
           <div class="availability-badge ${candidate.available ? 'available' : 'busy'}">
             ${candidate.available ? '🟢' : '🔴'}
           </div>
@@ -76,11 +113,14 @@
         
         <div class="candidate-info">
           <h3 class="candidate-name">${candidate.display_name}</h3>
-          <p class="candidate-title">${candidate.current_job || 'Finance Professional'}</p>
           
           <div class="candidate-details">
             <div class="detail-item">
               <span class="detail-icon">💼</span>
+              <span>${candidate.current_job || 'Finance Professional'}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-icon">📊</span>
               <span>${candidate.experience_years || '0'} years experience</span>
             </div>
             <div class="detail-item">
@@ -91,18 +131,16 @@
               <span class="detail-icon">🛠️</span>
               <span>${candidate.tools || 'Multiple tools'}</span>
             </div>
-          </div>
-          
-          <div class="candidate-skills">
-            ${(candidate.skills || ['Excel', 'SAP', 'PowerBI']).slice(0, 3).map(skill => 
-              `<span class="skill-tag">${skill}</span>`
-            ).join('')}
+            <div class="detail-item">
+              <span class="detail-icon">📍</span>
+              <span>${candidate.available ? 'Available now' : 'Open to opportunities'}</span>
+            </div>
           </div>
         </div>
         
         <div class="candidate-actions">
           <div class="view-profile">
-            <span>View Profile</span>
+            <span>View Details</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
@@ -111,6 +149,67 @@
       `;
       
       return card;
+    }
+
+    function showPremiumModal() {
+      const modal = document.getElementById('premiumModal');
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePremiumModal() {
+      const modal = document.getElementById('premiumModal');
+      modal.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+
+    function updatePagination() {
+      const totalPages = Math.ceil(allCandidates.length / candidatesPerPage);
+      const paginationEl = document.getElementById('pagination');
+      
+      if (totalPages <= 1) {
+        paginationEl.style.display = 'none';
+        return;
+      }
+      
+      paginationEl.style.display = 'flex';
+      paginationEl.innerHTML = '';
+      
+      // Previous button
+      const prevBtn = document.createElement('button');
+      prevBtn.className = `pagination-btn ${currentPage === 1 ? 'disabled' : ''}`;
+      prevBtn.innerHTML = '← Previous';
+      prevBtn.onclick = () => {
+        if (currentPage > 1) {
+          currentPage--;
+          displayCandidates();
+        }
+      };
+      paginationEl.appendChild(prevBtn);
+      
+      // Page numbers
+      for (let i = 1; i <= totalPages; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
+        pageBtn.textContent = i;
+        pageBtn.onclick = () => {
+          currentPage = i;
+          displayCandidates();
+        };
+        paginationEl.appendChild(pageBtn);
+      }
+      
+      // Next button
+      const nextBtn = document.createElement('button');
+      nextBtn.className = `pagination-btn ${currentPage === totalPages ? 'disabled' : ''}`;
+      nextBtn.innerHTML = 'Next →';
+      nextBtn.onclick = () => {
+        if (currentPage < totalPages) {
+          currentPage++;
+          displayCandidates();
+        }
+      };
+      paginationEl.appendChild(nextBtn);
     }
 
     function handleSearch() {
@@ -248,6 +347,42 @@
       <div class="candidates-grid" id="candidatesContainer">
         <!-- Candidates will be loaded here -->
       </div>
+
+      <div class="pagination" id="pagination">
+        <!-- Pagination buttons will be added here -->
+      </div>
+    </div>
+
+    <!-- Premium Modal -->
+    <div class="premium-modal" id="premiumModal" onclick="closePremiumModal()">
+      <div class="modal-content" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closePremiumModal()">×</button>
+        <div class="modal-icon">🔒</div>
+        <h3>Premium Feature</h3>
+        <p>Full candidate details are available only to Talfy premium subscribers.</p>
+        <div class="modal-features">
+          <div class="feature-item">
+            <span class="feature-icon">✓</span>
+            <span>Access to full candidate profiles</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">✓</span>
+            <span>Download CVs when available</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">✓</span>
+            <span>Contact information</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">✓</span>
+            <span>Build your talent archive</span>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <a href="/pricing.html" class="modal-cta">View Pricing Plans</a>
+          <button onclick="closePremiumModal()" class="modal-secondary">Maybe Later</button>
+        </div>
+      </div>
     </div>
   </main>
 
@@ -260,4 +395,3 @@
 
 </body>
 </html>
-

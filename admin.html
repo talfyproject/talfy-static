@@ -1,84 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard – Talfy</title>
-  <link rel="stylesheet" href="/static/style.css" />
+  <meta charset="UTF-8">
+  <title>Admin – Talfy</title>
   <style>
-    body { font-family: Inter, sans-serif; background: #f4f4f4; padding: 2rem; }
-    h2 { margin-top: 3rem; }
-    table { width: 100%; border-collapse: collapse; background: white; margin-top: 1rem; }
-    th, td { padding: 0.5rem; border: 1px solid #ddd; text-align: left; font-size: 14px; }
-    th { background: #d2ffcc; }
+    body { font-family: Arial, sans-serif; padding: 30px; background: #f7f7f7; color: #333; }
+    h1 { color: #2c7744; }
+    h2 { margin-top: 40px; color: #555; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; background: white; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #2c7744; color: white; }
+    pre { background: #eee; padding: 10px; }
   </style>
 </head>
 <body>
-  <h1>Admin Dashboard – Talfy</h1>
-  <div id="protected">
-    <p>🔐 You must provide a valid admin code in the URL (e.g. <code>?admin=xxx123</code>)</p>
-  </div>
+  <h1>Admin Panel – Talfy</h1>
+  <p><strong>Accesso riservato</strong></p>
 
-  <div id="content" style="display:none">
-    <h2>✅ Completed Candidates</h2>
-    <table id="candidatesTable">
-      <thead>
-        <tr><th>ID</th><th>Name</th><th>Job</th><th>Experience</th><th>Sector</th><th>Tools</th></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-
-    <h2>🏢 Completed Companies</h2>
-    <table id="companiesTable">
-      <thead>
-        <tr><th>ID</th><th>Name</th><th>Sector</th><th>Employees</th><th>Headquarters</th></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-
-    <h2>⚠️ Incomplete Registrations</h2>
-    <table id="incompleteTable">
-      <thead>
-        <tr><th>ID</th><th>Email</th><th>Type</th></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
+  <div id="content">Loading...</div>
 
   <script>
-    const ADMIN_KEY = "FEDE21"; // Sostituisci con la tua parola segreta
+    const urlParams = new URLSearchParams(window.location.search);
+    const key = urlParams.get('admin');
 
-    const params = new URLSearchParams(window.location.search);
-    const admin = params.get("admin");
+    if (key !== "FEDE21") {
+      document.getElementById("content").innerHTML = "<p><strong>Accesso negato</strong></p>";
+    } else {
+      fetch("/admin-data")
+        .then(res => res.json())
+        .then(data => {
+          let html = "";
 
-    if (admin === ADMIN_KEY) {
-      document.getElementById("protected").style.display = "none";
-      document.getElementById("content").style.display = "block";
-      loadData();
-    }
+          html += "<h2>👤 Utenti registrati</h2>";
+          html += "<table><tr><th>ID</th><th>Email</th><th>Tipo</th></tr>";
+          data.users.forEach(u => {
+            html += `<tr><td>${u.id}</td><td>${u.email}</td><td>${u.type}</td></tr>`;
+          });
+          html += "</table>";
 
-    async function loadData() {
-      const res = await fetch("/admin-data");
-      const data = await res.json();
+          html += "<h2>📄 Profili Candidati</h2>";
+          html += "<table><tr><th>ID</th><th>User ID</th><th>Nome</th><th>Job</th><th>Anni</th></tr>";
+          data.candidates.forEach(c => {
+            html += `<tr><td>${c.id}</td><td>${c.user_id}</td><td>${c.name}</td><td>${c.job}</td><td>${c.years}</td></tr>`;
+          });
+          html += "</table>";
 
-      const candidates = data.candidates;
-      const companies = data.companies;
-      const incomplete = data.incomplete;
+          html += "<h2>🏢 Profili Aziende</h2>";
+          html += "<table><tr><th>ID</th><th>User ID</th><th>Nome</th><th>Settore</th><th>Sede</th></tr>";
+          data.companies.forEach(c => {
+            html += `<tr><td>${c.id}</td><td>${c.user_id}</td><td>${c.name}</td><td>${c.sector}</td><td>${c.hq}</td></tr>`;
+          });
+          html += "</table>";
 
-      const candTable = document.querySelector("#candidatesTable tbody");
-      candidates.forEach(c => {
-        candTable.innerHTML += `<tr><td>${c.id}</td><td>${c.display_name}</td><td>${c.current_job}</td><td>${c.experience_years}</td><td>${c.sector}</td><td>${c.tools}</td></tr>`;
-      });
-
-      const compTable = document.querySelector("#companiesTable tbody");
-      companies.forEach(c => {
-        compTable.innerHTML += `<tr><td>${c.id}</td><td>${c.company_name}</td><td>${c.sector}</td><td>${c.num_employees}</td><td>${c.headquarters}</td></tr>`;
-      });
-
-      const incTable = document.querySelector("#incompleteTable tbody");
-      incomplete.forEach(u => {
-        incTable.innerHTML += `<tr><td>${u.id}</td><td>${u.email}</td><td>${u.user_type}</td></tr>`;
-      });
+          document.getElementById("content").innerHTML = html;
+        })
+        .catch(err => {
+          document.getElementById("content").innerHTML = "<p>Errore nel caricamento dati</p><pre>" + err + "</pre>";
+        });
     }
   </script>
 </body>

@@ -78,15 +78,15 @@
       <p class="subtitle">Connect talented finance professionals with forward-thinking companies through our intelligent matching platform</p>
 
       <div class="search-container">
-        <div class="search-wrapper">
-          <input type="text" placeholder="Search for a role, skill, or company..." />
-          <button>
+        <form id="searchForm" class="search-wrapper">
+          <input type="text" id="searchInput" placeholder="Search for a role, skill, or company..." required />
+          <button type="submit">
             <span>Search</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
           </button>
-        </div>
+        </form>
       </div>
 
       <div class="stats">
@@ -113,6 +113,16 @@
     </div>
   </footer>
 
+  <script>
+    document.getElementById("searchForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const query = document.getElementById("searchInput").value.trim();
+      if (query) {
+        localStorage.setItem("search_query", query);
+        window.location.href = "/candidates.html";
+      }
+    });
+  </script>
+
 </body>
 </html>
-

@@ -58,7 +58,7 @@
     }
 
     async function loadData() {
-      const res = await fetch("/admin-data");
+      const res = await fetch("https://talfy-backend.onrender.com/admin-data");
       const data = await res.json();
 
       const candidates = data.candidates;

@@ -14,14 +14,14 @@
     async function loadCompany() {
       const params = new URLSearchParams(window.location.search);
       const id = params.get("id");
-      
+
       if (!id) {
         showError("Company ID not found.");
         return;
       }
 
       try {
-        const response = await fetch(`https://talfy-backend.onrender.com/api/companies/${id}`);
+        const response = await fetch(`https://www.talfy.eu/api/companies/${id}`); // Usa il dominio ufficiale
         const data = await response.json();
 
         if (!response.ok) {
@@ -31,7 +31,6 @@
 
         displayCompany(data);
       } catch (error) {
-        // Create demo company if API fails
         const demoCompany = createDemoCompany(id);
         displayCompany(demoCompany);
         console.error("Error loading company:", error);
@@ -65,7 +64,7 @@
           founded: "2007"
         }
       };
-      
+
       return companies[id] || {
         company_name: "Sample Company",
         sector: "Finance",
@@ -82,7 +81,7 @@
 
     function displayCompany(company) {
       document.title = `${company.company_name} – Talfy`;
-      
+
       const container = document.getElementById("companyContent");
       container.innerHTML = `
         <a href="/companies.html" class="back-link">
@@ -95,17 +94,17 @@
         <div class="company-hero">
           <div class="company-logo-section">
             <div class="company-logo">
-              ${company.company_name.charAt(0)}
+              ${company.company_name?.charAt(0) || "C"}
             </div>
           </div>
-          
+
           <div class="company-badges">
             ${company.verified ? '<div class="badge verified">✓ Verified by Talfy</div>' : ''}
             <div class="badge ${company.hiring ? 'hiring' : 'not-hiring'}">
               ${company.hiring ? '🟢 Actively Hiring' : '🔴 Not Hiring'}
             </div>
           </div>
-          
+
           <h1 class="company-name">${company.company_name}</h1>
           <p class="company-tagline">${company.description || 'Leading finance company'}</p>
         </div>
@@ -136,7 +135,7 @@
               <div class="detail-item">
                 <span class="detail-label">Website</span>
                 <span class="detail-value highlight">
-                  <a href="${company.website || '#'}" target="_blank" style="color: inherit; text-decoration: none;">
+                  <a href="${company.website || '#'}" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">
                     Visit Website →
                   </a>
                 </span>
@@ -145,13 +144,11 @@
           </div>
         </div>
 
-
-
         <div class="contact-section">
           <h3>About ${company.company_name}</h3>
           <p>This company is part of Talfy's network of finance-focused organizations</p>
           <div class="contact-buttons">
-            <a href="${company.website || '#'}" target="_blank" class="contact-btn primary">
+            <a href="${company.website || '#'}" target="_blank" rel="noopener noreferrer" class="contact-btn primary">
               <span>🌐</span>
               <span>Visit Website</span>
             </a>
@@ -191,9 +188,7 @@
       <a href="/register.html">Register</a>
     </nav>
     <button class="hamburger" onclick="toggleMenu()">
-      <span></span>
-      <span></span>
-      <span></span>
+      <span></span><span></span><span></span>
     </button>
     <div class="mobile-menu" id="mobileMenu">
       <a href="/pricing.html">Pricing</a>

@@ -12,7 +12,6 @@
       const type = localStorage.getItem("user_type");
       const currentPage = window.location.pathname;
 
-      // Evita il redirect automatico su login e register
       if (currentPage.includes("login.html") || currentPage.includes("register.html")) return;
 
       if (id && type) {
@@ -43,9 +42,10 @@
       }
 
       try {
-      const res = await fetch("https://www.talfy.eu/login", {
+        const res = await fetch("https://talfy-backend.onrender.com/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: 'include',
           body: JSON.stringify({ email, password })
         });
 

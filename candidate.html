@@ -29,6 +29,7 @@
       }
 
       document.getElementById("logoutBtn").style.display = "inline-block";
+      document.getElementById("editBtn").style.display = "inline-block";
 
       try {
         const res = await fetch("https://talfy-backend.onrender.com/api/candidates");
@@ -53,6 +54,15 @@
 
     window.onload = loadCandidateProfile;
   </script>
+  <style>
+    .edit-profile-button {
+      display: none;
+      margin-top: 10px;
+      font-size: 14px;
+      color: #007c5f;
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
 
@@ -62,8 +72,6 @@
       <a href="/pricing.html">Pricing</a>
       <a href="/about.html">About us</a>
       <a href="/contact.html">Contact</a>
-      <a href="/candidates.html">Candidates</a>
-      <a href="/companies.html">Companies</a>
       <a href="#" id="logoutBtn" onclick="logout()" style="display:none;">Logout</a>
     </nav>
     <button class="hamburger" onclick="toggleMenu()">
@@ -73,8 +81,6 @@
       <a href="/pricing.html">Pricing</a>
       <a href="/about.html">About us</a>
       <a href="/contact.html">Contact</a>
-      <a href="/candidates.html">Candidates</a>
-      <a href="/companies.html">Companies</a>
       <a href="#" onclick="logout()">Logout</a>
     </div>
   </header>
@@ -89,6 +95,7 @@
           <div class="preview-info">
             <h3 class="preview-name">Loading...</h3>
             <p class="preview-role"></p>
+            <a href="/edit-profile-candidate.html" class="edit-profile-button" id="editBtn">Edit Profile</a>
           </div>
           <div class="verified-badge">✓ Verified by Talfy</div>
         </div>

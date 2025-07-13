@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Edit Candidate Profile – Talfy</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>Edit Your Profile – Talfy</title>
+
   <script>
     function toggleMenu() {
       document.getElementById("mobileMenu").classList.toggle("active");
@@ -14,118 +13,848 @@
     function logout() {
       localStorage.removeItem("user_id");
       localStorage.removeItem("user_type");
-      window.location.href = "/login.html";
+      alert("Logged out successfully!");
     }
 
-    async function loadCandidateData() {
-      const userId = localStorage.getItem("user_id");
-      const userType = localStorage.getItem("user_type");
-
-      if (!userId || userType !== "candidate") {
-        window.location.href = "/login.html";
-        return;
-      }
-
-      document.getElementById("logoutBtn").style.display = "inline-block";
-
-      try {
-        const res = await fetch("https://talfy-backend.onrender.com/api/candidates");
-        const data = await res.json();
-        const candidate = data.find(c => String(c.id) === userId);
-        if (!candidate) throw new Error();
-
-        document.getElementById("display_name").value = candidate.display_name || "";
-        document.getElementById("current_job").value = candidate.current_job || "";
-        document.getElementById("experience_years").value = candidate.experience_years || "";
-        document.getElementById("sector").value = candidate.sector || "";
-        document.getElementById("tools").value = candidate.tools || "";
-      } catch (err) {
-        alert("Error loading data.");
-      }
-    }
-
-    async function saveProfile(event) {
-      event.preventDefault();
-      const userId = localStorage.getItem("user_id");
-
-      const payload = {
-        display_name: document.getElementById("display_name").value,
-        current_job: document.getElementById("current_job").value,
-        experience_years: document.getElementById("experience_years").value,
-        sector: document.getElementById("sector").value,
-        tools: document.getElementById("tools").value,
-      };
-
-      try {
-        const res = await fetch(`https://talfy-backend.onrender.com/api/candidate/${userId}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-
-        if (res.ok) {
-          alert("✅ Dati salvati con successo!");
-          window.location.href = `/candidate.html?id=${userId}`;
-        } else {
-          alert("❌ Errore durante il salvataggio.");
+    function updateProgress() {
+      const form = document.getElementById('candidateProfileForm');
+      const requiredFields = form.querySelectorAll('[required]');
+      let filledFields = 0;
+      
+      requiredFields.forEach(field => {
+        if (field.type === 'checkbox' || field.type === 'radio') {
+          const group = form.querySelectorAll(`[name="${field.name}"]`);
+          if (Array.from(group).some(input => input.checked)) {
+            filledFields++;
+          }
+        } else if (field.value.trim() !== '') {
+          filledFields++;
         }
-      } catch (err) {
-        alert("❌ Connessione fallita.");
+      });
+      
+      const progress = (filledFields / requiredFields.length) * 100;
+      document.getElementById('progressFill').style.width = progress + '%';
+    }
+
+    function handleCheckboxChange(checkbox) {
+      const item = checkbox.closest('.checkbox-item');
+      if (checkbox.checked) {
+        item.classList.add('checked');
+      } else {
+        item.classList.remove('checked');
+      }
+      updateProgress();
+    }
+
+    function handleRadioChange(radio) {
+      const group = document.querySelectorAll(`[name="${radio.name}"]`);
+      group.forEach(r => {
+        const item = r.closest('.radio-item');
+        if (r.checked) {
+          item.classList.add('checked');
+        } else {
+          item.classList.remove('checked');
+        }
+      });
+      updateProgress();
+    }
+
+    function updateCityOptions(country) {
+      const citySelect = document.getElementById('citySelect');
+      citySelect.innerHTML = '<option value="">Select city/province</option>';
+      
+      const cities = {
+        'Italy': ['Milano', 'Roma', 'Napoli', 'Torino', 'Palermo', 'Genova', 'Bologna', 'Firenze', 'Bari', 'Catania', 'Venezia', 'Verona'],
+        'Germany': ['Berlin', 'Hamburg', 'Munich', 'Cologne', 'Frankfurt am Main', 'Stuttgart', 'Düsseldorf', 'Dortmund'],
+        'France': ['Paris', 'Marseille', 'Lyon', 'Toulouse', 'Nice', 'Nantes', 'Strasbourg', 'Montpellier'],
+        'Spain': ['Madrid', 'Barcelona', 'Valencia', 'Seville', 'Zaragoza', 'Málaga', 'Murcia', 'Palma'],
+        'United Kingdom': ['London', 'Birmingham', 'Manchester', 'Glasgow', 'Liverpool', 'Leeds', 'Sheffield', 'Edinburgh'],
+        'Switzerland': ['Zurich', 'Geneva', 'Basel', 'Lausanne', 'Bern', 'Winterthur', 'Lucerne', 'St. Gallen'],
+        'Netherlands': ['Amsterdam', 'Rotterdam', 'The Hague', 'Utrecht', 'Eindhoven', 'Tilburg', 'Groningen', 'Almere'],
+        'United States': ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'Philadelphia', 'San Antonio', 'San Diego'],
+        'Canada': ['Toronto', 'Montreal', 'Vancouver', 'Calgary', 'Edmonton', 'Ottawa', 'Winnipeg', 'Quebec City']
+      };
+      
+      if (cities[country]) {
+        cities[country].forEach(city => {
+          const option = document.createElement('option');
+          option.value = city;
+          option.textContent = city;
+          citySelect.appendChild(option);
+        });
+      }
+      
+      updateProgress();
+    }
+
+    function populateDateSelectors() {
+      const daySelect = document.getElementById('dob_day');
+      const yearSelect = document.getElementById('dob_year');
+      
+      for (let i = 1; i <= 31; i++) {
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = i;
+        daySelect.appendChild(option);
+      }
+      
+      const currentYear = new Date().getFullYear();
+      for (let i = currentYear - 16; i >= 1950; i--) {
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = i;
+        yearSelect.appendChild(option);
       }
     }
 
-    window.onload = loadCandidateData;
+    function loadSampleData() {
+      // Carica dati di esempio per Marco Rossi
+      document.getElementById("first_name").value = "Marco";
+      document.getElementById("last_name").value = "Rossi";
+      document.getElementById("email").value = "marco.rossi@email.com";
+      document.getElementById("phone").value = "+39 333 123 4567";
+      document.getElementById("country").value = "Italy";
+      
+      updateCityOptions("Italy");
+      setTimeout(() => {
+        document.getElementById("citySelect").value = "Milano";
+      }, 100);
+      
+      document.getElementById("dob_day").value = "15";
+      document.getElementById("dob_month").value = "6";
+      document.getElementById("dob_year").value = "1990";
+      
+      // Avatar
+      document.querySelector('input[name="avatar_choice"][value="male"]').checked = true;
+      handleRadioChange(document.querySelector('input[name="avatar_choice"][value="male"]'));
+      
+      // Professional info
+      document.getElementById("current_job").value = "Senior Financial Analyst";
+      document.getElementById("experience_years").value = "4-5";
+      document.getElementById("current_company").value = "UniCredit";
+      document.getElementById("employment_status").value = "employed";
+      document.getElementById("salary_min").value = "45000";
+      document.getElementById("salary_max").value = "65000";
+      
+      // Skills
+      ['Excel', 'PowerBI', 'SAP'].forEach(tool => {
+        const checkbox = document.querySelector(`input[name="tools[]"][value="${tool}"]`);
+        if (checkbox) {
+          checkbox.checked = true;
+          handleCheckboxChange(checkbox);
+        }
+      });
+      
+      // Education
+      document.getElementById("education_level").value = "master";
+      document.getElementById("education_field").value = "finance";
+      document.getElementById("university").value = "Università Bocconi";
+      document.getElementById("graduation_year").value = "2019";
+      
+      // Certifications
+      const cfaCheckbox = document.querySelector('input[name="certifications[]"][value="CFA"]');
+      if (cfaCheckbox) {
+        cfaCheckbox.checked = true;
+        handleCheckboxChange(cfaCheckbox);
+      }
+      
+      // Sectors
+      ['Banking', 'Investment'].forEach(sector => {
+        const checkbox = document.querySelector(`input[name="sectors[]"][value="${sector}"]`);
+        if (checkbox) {
+          checkbox.checked = true;
+          handleCheckboxChange(checkbox);
+        }
+      });
+      
+      // Languages
+      document.getElementById("native_language").value = "Italian";
+      document.getElementById("second_language").value = "English";
+      document.getElementById("second_language_level").value = "advanced";
+      
+      const frenchCheckbox = document.querySelector('input[name="other_languages[]"][value="French"]');
+      if (frenchCheckbox) {
+        frenchCheckbox.checked = true;
+        handleCheckboxChange(frenchCheckbox);
+      }
+      
+      // Work preferences
+      document.querySelector('input[name="work_type"][value="hybrid"]').checked = true;
+      handleRadioChange(document.querySelector('input[name="work_type"][value="hybrid"]'));
+      
+      document.querySelector('input[name="travel_willingness"][value="occasional"]').checked = true;
+      handleRadioChange(document.querySelector('input[name="travel_willingness"][value="occasional"]'));
+      
+      document.getElementById("availability").value = "1month";
+      
+      document.querySelector('input[name="relocation"][value="depends"]').checked = true;
+      handleRadioChange(document.querySelector('input[name="relocation"][value="depends"]'));
+      
+      // Additional info
+      document.getElementById("summary").value = "Experienced financial analyst with strong analytical skills and expertise in investment banking. Looking for senior roles in asset management or corporate finance.";
+      document.getElementById("linkedin").value = "https://linkedin.com/in/marcorossi";
+      
+      setTimeout(updateProgress, 500);
+    }
+
+    function handleSubmit(event) {
+      event.preventDefault();
+      
+      const submitBtn = event.target.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<span>⏳</span><span>Updating Profile...</span>';
+      submitBtn.disabled = true;
+      
+      // Simula salvataggio
+      setTimeout(() => {
+        alert("✅ Profile updated successfully! (Demo Mode)");
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }, 2000);
+    }
+
+    window.onload = function() {
+      populateDateSelectors();
+      loadSampleData();
+      
+      document.getElementById('candidateProfileForm').addEventListener('input', updateProgress);
+      document.getElementById('candidateProfileForm').addEventListener('change', updateProgress);
+    };
   </script>
 </head>
 <body>
+
   <header class="header">
-    <a href="/index.html" class="logo">talfy</a>
+    <a href="#" class="logo">talfy</a>
     <nav class="nav">
-      <a href="/pricing.html">Pricing</a>
-      <a href="/about.html">About us</a>
-      <a href="/contact.html">Contact</a>
-      <a href="#" id="logoutBtn" onclick="logout()" style="display:none;">Logout</a>
+      <a href="#">Pricing</a>
+      <a href="#">About us</a>
+      <a href="#">Contact</a>
+      <a href="#" class="logout-btn" onclick="logout()">
+        <span>🚪</span>
+        <span>Logout</span>
+      </a>
     </nav>
     <button class="hamburger" onclick="toggleMenu()">
-      <span></span><span></span><span></span>
+      <span></span>
+      <span></span>
+      <span></span>
     </button>
     <div class="mobile-menu" id="mobileMenu">
-      <a href="/pricing.html">Pricing</a>
-      <a href="/about.html">About us</a>
-      <a href="/contact.html">Contact</a>
-      <a href="#" onclick="logout()">Logout</a>
+      <a href="#">Pricing</a>
+      <a href="#">About us</a>
+      <a href="#">Contact</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#" class="logout-btn" onclick="logout()">
+        <span>🚪</span>
+        <span>Logout</span>
+      </a>
     </div>
   </header>
 
-  <main class="main">
-    <section class="form-section">
-      <h1>Edit Your Profile</h1>
-      <form onsubmit="saveProfile(event)">
-        <label for="display_name">Full Name</label>
-        <input type="text" id="display_name" required>
+  <main class="main candidate-form-page">
+    <div class="form-content">
+      <div class="form-hero">
+        <h1 class="form-title">Edit Your Profile</h1>
+        <div class="form-underline"></div>
+        <p class="form-subtitle">Update your professional profile information</p>
+        
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
 
-        <label for="current_job">Current Job</label>
-        <input type="text" id="current_job" required>
+      <form id="candidateProfileForm" onsubmit="handleSubmit(event)">
+        <div class="form-sections">
+          
+          <!-- Personal Information -->
+          <div class="form-section">
+            <div class="section-header">
+              <span class="section-icon">👤</span>
+              <h3 class="section-title">Personal Information</h3>
+            </div>
+            
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label required">First Name</label>
+                <input type="text" name="first_name" id="first_name" class="form-input" placeholder="Marco" required />
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label required">Last Name</label>
+                <input type="text" name="last_name" id="last_name" class="form-input" placeholder="Rossi" required />
+                <div class="form-help">Your full name will be visible to companies</div>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label required">Email</label>
+                <input type="email" name="email" id="email" class="form-input" placeholder="marco@example.com" required />
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Phone</label>
+                <input type="tel" name="phone" id="phone" class="form-input" placeholder="+39 123 456 7890" />
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label required">Country</label>
+                <select name="country" id="country" class="form-select" required onchange="updateCityOptions(this.value)">
+                  <option value="">Select your country</option>
+                  <option value="Italy">Italy</option>
+                  <option value="Germany">Germany</option>
+                  <option value="France">France</option>
+                  <option value="Spain">Spain</option>
+                  <option value="United Kingdom">United Kingdom</option>
+                  <option value="Switzerland">Switzerland</option>
+                  <option value="Netherlands">Netherlands</option>
+                  <option value="United States">United States</option>
+                  <option value="Canada">Canada</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label required">City/Province</label>
+                <select name="city" class="form-select" required id="citySelect">
+                  <option value="">First select a country</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Date of Birth</label>
+                <div class="date-grid">
+                  <select id="dob_day" name="dob_day" class="form-select">
+                    <option value="">Day</option>
+                  </select>
+                  <select name="dob_month" id="dob_month" class="form-select">
+                    <option value="">Month</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                  </select>
+                  <select id="dob_year" name="dob_year" class="form-select">
+                    <option value="">Year</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div class="avatar-section">
+              <label class="form-label">Profile Avatar</label>
+              <div class="avatar-options">
+                <div class="avatar-option">
+                  <input type="radio" name="avatar_choice" value="male" onchange="handleRadioChange(this)" />
+                  <div class="avatar-preview">👨</div>
+                </div>
+                <div class="avatar-option">
+                  <input type="radio" name="avatar_choice" value="female" onchange="handleRadioChange(this)" />
+                  <div class="avatar-preview">👩</div>
+                </div>
+                <div class="avatar-option">
+                  <input type="radio" name="avatar_choice" value="neutral" onchange="handleRadioChange(this)" />
+                  <div class="avatar-preview">👤</div>
+                </div>
+              </div>
+              <div class="file-upload">
+                <input type="file" name="avatar_upload" accept="image/*" />
+                <div class="file-upload-label">
+                  <span>📷</span>
+                  <span>Upload Custom Photo</span>
+                </div>
+              </div>
+            </div>
+          </div>
 
-        <label for="experience_years">Experience (years)</label>
-        <input type="number" id="experience_years" min="0" required>
+          <!-- Professional Information -->
+          <div class="form-section">
+            <div class="section-header">
+              <span class="section-icon">💼</span>
+              <h3 class="section-title">Professional Information</h3>
+            </div>
+            
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label required">Current Job Title</label>
+                <input type="text" name="current_job" id="current_job" class="form-input" placeholder="Financial Analyst" required />
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label required">Years of Experience</label>
+                <select name="experience_years" id="experience_years" class="form-select" required>
+                  <option value="">Select experience</option>
+                  <option value="0-1">0-1 years</option>
+                  <option value="2-3">2-3 years</option>
+                  <option value="4-5">4-5 years</option>
+                  <option value="6-8">6-8 years</option>
+                  <option value="9-12">9-12 years</option>
+                  <option value="13-15">13-15 years</option>
+                  <option value="15+">15+ years</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Current Company</label>
+                <input type="text" name="current_company" id="current_company" class="form-input" placeholder="Company name" />
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label required">Employment Status</label>
+                <select name="employment_status" id="employment_status" class="form-select" required>
+                  <option value="">Select status</option>
+                  <option value="employed">Currently Employed</option>
+                  <option value="unemployed">Unemployed</option>
+                  <option value="student">Student</option>
+                  <option value="freelance">Freelancer</option>
+                </select>
+              </div>
+              
+              <div class="form-group full-width">
+                <label class="form-label">Salary Expectations</label>
+                <div class="salary-range">
+                  <input type="number" name="salary_min" id="salary_min" class="form-input" placeholder="30,000" />
+                  <span>to</span>
+                  <input type="number" name="salary_max" id="salary_max" class="form-input" placeholder="50,000" />
+                </div>
+                <div class="form-help">Annual gross salary in EUR</div>
+              </div>
+            </div>
+          </div>
 
-        <label for="sector">Sector</label>
-        <input type="text" id="sector" required>
+          <!-- Skills & Tools -->
+          <div class="form-section">
+            <div class="section-header">
+              <span class="section-icon">🛠️</span>
+              <h3 class="section-title">Skills & Tools</h3>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label required">Technical Skills</label>
+              <div class="checkbox-grid">
+                <div class="checkbox-item">
+                  <input type="checkbox" name="tools[]" value="Excel" onchange="handleCheckboxChange(this)" required />
+                  <span>Microsoft Excel</span>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" name="tools[]" value="SAP" onchange="handleCheckboxChange(this)" />
+                  <span>SAP</span>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" name="tools[]" value="PowerBI" onchange="handleCheckboxChange(this)" />
+                  <span>Power BI</span>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" name="tools[]" value="Tableau" onchange="handleCheckboxChange(this)" />
+                  <span>Tableau</span>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" name="tools[]" value="Oracle" onchange="handleCheckboxChange(this)" />
+                  <span>Oracle</span>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" name="tools[]" value="QuickBooks" onchange="handleCheckboxChange(this)" />
+                  <span>QuickBooks</span>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" name="tools[]" value="Bloomberg" onchange="handleCheckboxChange(this)" />
+                  <span>Bloomberg Terminal</span>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" name="tools[]" value="Python" onchange="handleCheckboxChange(this)" />
+                  <span>Python</span>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" name="tools[]" value="SQL" onchange="handleCheckboxChange(this)" />
+                  <span>SQL</span>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" name="tools[]" value="R" onchange="handleCheckboxChange(this)" />
+                  <span>R</span>
+                </div>
+              </div>
+            </div>
+          </div>
 
-        <label for="tools">Tools</label>
-        <input type="text" id="tools" required>
+          <!-- Education -->
+          <div class="form-section">
+            <div class="section-header">
+              <span class="section-icon">🎓</span>
+              <h3 class="section-title">Education</h3>
+            </div>
+            
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label required">Highest Degree</label>
+                <select name="education_level" id="education_level" class="form-select" required>
+                  <option value="">Select degree</option>
+                  <option value="high_school">High School</option>
+                  <option value="bachelor">Bachelor's Degree</option>
+                  <option value="master">Master's Degree</option>
+                  <option value="phd">PhD</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Field of Study</label>
+                <select name="education_field" id="education_field" class="form-select">
+                  <option value="">Select field</option>
+                  <option value="economics">Economics</option>
+                  <option value="finance">Finance</option>
+                  <option value="accounting">Accounting</option>
+                  <option value="business">Business Administration</option>
+                  <option value="engineering">Engineering</option>
+                  <option value="mathematics">Mathematics</option>
+                  <option value="statistics">Statistics</option>
+                  <option value="law">Law</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">University/Institution</label>
+                <input type="text" name="university" id="university" class="form-input" placeholder="University name" />
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Graduation Year</label>
+                <select name="graduation_year" id="graduation_year" class="form-select">
+                  <option value="">Select year</option>
+                  <option value="2024">2024</option>
+                  <option value="2023">2023</option>
+                  <option value="2022">2022</option>
+                  <option value="2021">2021</option>
+                  <option value="2020">2020</option>
+                  <option value="2019">2019</option>
+                  <option value="2018">2018</option>
+                  <option value="2017">2017</option>
+                  <option value="2016">2016</option>
+                  <option value="2015">2015</option>
+                  <option value="older">Before 2015</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Certifications</label>
+              <div class="checkbox-grid">
+                <div class="checkbox-item">
+                  <input type="checkbox" name="certifications[]" value="CFA" onchange="handleCheckboxChange(this)" />
+                  <span>CFA (Chartered Financial Analyst)</span>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" name="certifications[]" value="CPA" onchange="handleCheckboxChange(this)" />
+                  <span>CPA (Certified Public Accountant)</span>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" name="certifications[]" value="FRM" onchange="handleCheckboxChange(this)" />
+                  <span>FRM (Financial Risk Manager)</span>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" name="certifications[]" value="ACCA" onchange="handleCheckboxChange(this)" />
+                  <span>ACCA</span>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" name="certifications[]" value="CIA" onchange="handleCheckboxChange(this)" />
+                  <span>CIA (Certified Internal Auditor)</span>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" name="certifications[]" value="PMP" onchange="handleCheckboxChange(this)" />
+                  <span>PMP (Project Management)</span>
+                </div>
+              </div>
+            </div>
+          </div>
 
-        <button type="submit" class="save-button">Save Changes</button>
+          <!-- Industry Experience -->
+          <div class="form-section">
+            <div class="section-header">
+              <span class="section-icon">🏢</span>
+              <h3 class="section-title">Industry Experience</h3>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label required">Sectors</label>
+              <div class="checkbox-grid">
+                <div class="checkbox-item">
+                  <input type="checkbox" name="sectors[]" value="Banking" onchange="handleCheckboxChange(this)" required />
+                  <span>Banking</span>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" name="sectors[]" value="Insurance" onchange="handleCheckboxChange(this)" />
+                  <span>Insurance</span>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" name="sectors[]" value="Consulting" onchange="handleCheckboxChange(this)" />
+                  <span>Consulting</span>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" name="sectors[]" value="Corporate" onchange="handleCheckboxChange(this)" />
+                  <span>Corporate Finance</span>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" name="sectors[]" value="Investment" onchange="handleCheckboxChange(this)" />
+                  <span>Investment Management</span>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" name="sectors[]" value="Retail" onchange="handleCheckboxChange(this)" />
+                  <span>Retail</span>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" name="sectors[]" value="Manufacturing" onchange="handleCheckboxChange(this)" />
+                  <span>Manufacturing</span>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" name="sectors[]" value="Technology" onchange="handleCheckboxChange(this)" />
+                  <span>Technology</span>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" name="sectors[]" value="Healthcare" onchange="handleCheckboxChange(this)" />
+                  <span>Healthcare</span>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" name="sectors[]" value="Energy" onchange="handleCheckboxChange(this)" />
+                  <span>Energy</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Languages -->
+          <div class="form-section">
+            <div class="section-header">
+              <span class="section-icon">🌍</span>
+              <h3 class="section-title">Languages</h3>
+            </div>
+            
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label required">Native Language</label>
+                <select name="native_language" id="native_language" class="form-select" required>
+                  <option value="">Select your native language</option>
+                  <option value="Italian">Italian</option>
+                  <option value="English">English</option>
+                  <option value="French">French</option>
+                  <option value="German">German</option>
+                  <option value="Spanish">Spanish</option>
+                  <option value="Portuguese">Portuguese</option>
+                  <option value="Russian">Russian</option>
+                  <option value="Chinese">Chinese (Mandarin)</option>
+                  <option value="Japanese">Japanese</option>
+                  <option value="Arabic">Arabic</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Second Language</label>
+                <select name="second_language" id="second_language" class="form-select">
+                  <option value="">Select second language</option>
+                  <option value="Italian">Italian</option>
+                  <option value="English">English</option>
+                  <option value="French">French</option>
+                  <option value="German">German</option>
+                  <option value="Spanish">Spanish</option>
+                  <option value="Portuguese">Portuguese</option>
+                  <option value="Russian">Russian</option>
+                  <option value="Chinese">Chinese (Mandarin)</option>
+                  <option value="Japanese">Japanese</option>
+                  <option value="Arabic">Arabic</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Second Language Level</label>
+                <select name="second_language_level" id="second_language_level" class="form-select">
+                  <option value="">Select level</option>
+                  <option value="native">Native</option>
+                  <option value="fluent">Fluent (C2)</option>
+                  <option value="advanced">Advanced (C1)</option>
+                  <option value="intermediate">Intermediate (B2)</option>
+                  <option value="basic">Basic (A1-B1)</option>
+                </select>
+              </div>
+              
+              <div class="form-group full-width">
+                <label class="form-label">Other Languages</label>
+                <div class="checkbox-grid">
+                  <div class="checkbox-item">
+                    <input type="checkbox" name="other_languages[]" value="French" onchange="handleCheckboxChange(this)" />
+                    <span>French</span>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" name="other_languages[]" value="German" onchange="handleCheckboxChange(this)" />
+                    <span>German</span>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" name="other_languages[]" value="Spanish" onchange="handleCheckboxChange(this)" />
+                    <span>Spanish</span>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" name="other_languages[]" value="Portuguese" onchange="handleCheckboxChange(this)" />
+                    <span>Portuguese</span>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" name="other_languages[]" value="Russian" onchange="handleCheckboxChange(this)" />
+                    <span>Russian</span>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" name="other_languages[]" value="Chinese" onchange="handleCheckboxChange(this)" />
+                    <span>Chinese (Mandarin)</span>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" name="other_languages[]" value="Japanese" onchange="handleCheckboxChange(this)" />
+                    <span>Japanese</span>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" name="other_languages[]" value="Arabic" onchange="handleCheckboxChange(this)" />
+                    <span>Arabic</span>
+                  </div>
+                </div>
+                <div class="form-help">Select any additional languages you speak (basic level or above)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Work Preferences -->
+          <div class="form-section">
+            <div class="section-header">
+              <span class="section-icon">⚙️</span>
+              <h3 class="section-title">Work Preferences</h3>
+            </div>
+            
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label required">Work Type Preference</label>
+                <div class="radio-grid">
+                  <div class="radio-item">
+                    <input type="radio" name="work_type" value="office" onchange="handleRadioChange(this)" required />
+                    <span>Office Only</span>
+                  </div>
+                  <div class="radio-item">
+                    <input type="radio" name="work_type" value="remote" onchange="handleRadioChange(this)" />
+                    <span>Remote Only</span>
+                  </div>
+                  <div class="radio-item">
+                    <input type="radio" name="work_type" value="hybrid" onchange="handleRadioChange(this)" />
+                    <span>Hybrid</span>
+                  </div>
+                  <div class="radio-item">
+                    <input type="radio" name="work_type" value="flexible" onchange="handleRadioChange(this)" />
+                    <span>Flexible</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Willing to Travel</label>
+                <div class="radio-grid">
+                  <div class="radio-item">
+                    <input type="radio" name="travel_willingness" value="no" onchange="handleRadioChange(this)" />
+                    <span>No Travel</span>
+                  </div>
+                  <div class="radio-item">
+                    <input type="radio" name="travel_willingness" value="occasional" onchange="handleRadioChange(this)" />
+                    <span>Occasional</span>
+                  </div>
+                  <div class="radio-item">
+                    <input type="radio" name="travel_willingness" value="frequent" onchange="handleRadioChange(this)" />
+                    <span>Frequent</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label required">Availability</label>
+                <select name="availability" id="availability" class="form-select" required>
+                  <option value="">Select availability</option>
+                  <option value="immediate">Available Immediately</option>
+                  <option value="2weeks">2 weeks notice</option>
+                  <option value="1month">1 month notice</option>
+                  <option value="3months">3 months notice</option>
+                  <option value="passive">Open to opportunities</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Willing to Relocate</label>
+                <div class="radio-grid">
+                  <div class="radio-item">
+                    <input type="radio" name="relocation" value="yes" onchange="handleRadioChange(this)" />
+                    <span>Yes</span>
+                  </div>
+                  <div class="radio-item">
+                    <input type="radio" name="relocation" value="no" onchange="handleRadioChange(this)" />
+                    <span>No</span>
+                  </div>
+                  <div class="radio-item">
+                    <input type="radio" name="relocation" value="depends" onchange="handleRadioChange(this)" />
+                    <span>Depends on offer</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Additional Information -->
+          <div class="form-section">
+            <div class="section-header">
+              <span class="section-icon">📝</span>
+              <h3 class="section-title">Additional Information</h3>
+            </div>
+            
+            <div class="form-group full-width">
+              <label class="form-label">Professional Summary</label>
+              <textarea name="summary" id="summary" class="form-textarea" placeholder="Brief description of your professional background and career goals..."></textarea>
+              <div class="form-help">Optional: Tell companies about your experience and what you're looking for</div>
+            </div>
+            
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">LinkedIn Profile</label>
+                <input type="url" name="linkedin" id="linkedin" class="form-input" placeholder="https://linkedin.com/in/yourprofile" />
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Portfolio/Website</label>
+                <input type="url" name="portfolio" id="portfolio" class="form-input" placeholder="https://yourportfolio.com" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary">
+            <span>💾</span>
+            <span>Save Draft</span>
+          </button>
+          <button type="submit" class="btn btn-primary">
+            <span>✅</span>
+            <span>Update Profile</span>
+          </button>
+        </div>
       </form>
-    </section>
+    </div>
   </main>
 
   <footer class="footer">
     <div class="footer-center">&copy; 2025 Talfy. All rights reserved.</div>
     <div class="footer-right">
-      <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a>
+      <a href="#">Privacy</a> · <a href="#">Terms</a>
     </div>
+
+
+    
   </footer>
-</body>
+  </body>
 </html>

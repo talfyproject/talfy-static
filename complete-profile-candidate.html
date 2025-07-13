@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,6 +56,74 @@
       updateProgress();
     }
 
+    function updateCityOptions(country) {
+      const citySelect = document.getElementById('citySelect');
+      citySelect.innerHTML = '<option value="">Select city/province</option>';
+      
+      const cities = {
+        'Italy': [
+          'Milano', 'Roma', 'Napoli', 'Torino', 'Palermo', 'Genova', 'Bologna', 'Firenze', 'Bari', 'Catania',
+          'Venezia', 'Verona', 'Messina', 'Padova', 'Trieste', 'Brescia', 'Taranto', 'Prato', 'Reggio Calabria',
+          'Modena', 'Reggio Emilia', 'Perugia', 'Livorno', 'Ravenna', 'Cagliari', 'Foggia', 'Rimini', 'Salerno',
+          'Ferrara', 'Sassari', 'Latina', 'Giugliano in Campania', 'Monza', 'Bergamo', 'Forlì', 'Trento', 'Vicenza',
+          'Terni', 'Bolzano', 'Novara', 'Piacenza', 'Ancona', 'Andria', 'Arezzo', 'Udine', 'Cesena', 'Lecce',
+          'Pesaro', 'Barletta', 'Alessandria', 'La Spezia', 'Pistoia', 'Catanzaro', 'Brindisi', 'Treviso', 'Pisa'
+        ],
+        'Germany': [
+          'Berlin', 'Hamburg', 'Munich', 'Cologne', 'Frankfurt am Main', 'Stuttgart', 'Düsseldorf', 'Dortmund',
+          'Essen', 'Leipzig', 'Bremen', 'Dresden', 'Hanover', 'Nuremberg', 'Duisburg', 'Bochum', 'Wuppertal',
+          'Bielefeld', 'Bonn', 'Münster', 'Karlsruhe', 'Mannheim', 'Augsburg', 'Wiesbaden', 'Gelsenkirchen'
+        ],
+        'France': [
+          'Paris', 'Marseille', 'Lyon', 'Toulouse', 'Nice', 'Nantes', 'Strasbourg', 'Montpellier', 'Bordeaux',
+          'Lille', 'Rennes', 'Reims', 'Le Havre', 'Saint-Étienne', 'Toulon', 'Grenoble', 'Dijon', 'Angers',
+          'Nîmes', 'Villeurbanne', 'Saint-Denis', 'Le Mans', 'Aix-en-Provence', 'Clermont-Ferrand', 'Brest'
+        ],
+        'Spain': [
+          'Madrid', 'Barcelona', 'Valencia', 'Seville', 'Zaragoza', 'Málaga', 'Murcia', 'Palma', 'Las Palmas',
+          'Bilbao', 'Alicante', 'Córdoba', 'Valladolid', 'Vigo', 'Gijón', 'Hospitalet de Llobregat', 'A Coruña',
+          'Vitoria-Gasteiz', 'Granada', 'Elche', 'Oviedo', 'Badalona', 'Cartagena', 'Terrassa', 'Jerez de la Frontera'
+        ],
+        'United Kingdom': [
+          'London', 'Birmingham', 'Manchester', 'Glasgow', 'Liverpool', 'Leeds', 'Sheffield', 'Edinburgh',
+          'Bristol', 'Cardiff', 'Leicester', 'Wakefield', 'Coventry', 'Nottingham', 'Newcastle upon Tyne',
+          'Belfast', 'Brighton', 'Hull', 'Plymouth', 'Stoke-on-Trent', 'Wolverhampton', 'Derby', 'Swansea',
+          'Southampton', 'Salford', 'Aberdeen', 'Westminster', 'Portsmouth', 'York', 'Peterborough'
+        ],
+        'Switzerland': [
+          'Zurich', 'Geneva', 'Basel', 'Lausanne', 'Bern', 'Winterthur', 'Lucerne', 'St. Gallen', 'Lugano',
+          'Biel/Bienne', 'Thun', 'Köniz', 'La Chaux-de-Fonds', 'Schaffhausen', 'Fribourg', 'Chur', 'Vernier',
+          'Neuchâtel', 'Uster', 'Sion', 'Emmen', 'Zug', 'Yverdon-les-Bains', 'Dübendorf', 'Dietikon'
+        ],
+        'Netherlands': [
+          'Amsterdam', 'Rotterdam', 'The Hague', 'Utrecht', 'Eindhoven', 'Tilburg', 'Groningen', 'Almere',
+          'Breda', 'Nijmegen', 'Enschede', 'Haarlem', 'Arnhem', 'Zaanstad', 'Amersfoort', 'Apeldoorn',
+          'Hertogenbosch', 'Hoofddorp', 'Maastricht', 'Leiden', 'Dordrecht', 'Zoetermeer', 'Zwolle', 'Deventer'
+        ],
+        'United States': [
+          'New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'Philadelphia', 'San Antonio', 'San Diego',
+          'Dallas', 'San Jose', 'Austin', 'Jacksonville', 'Fort Worth', 'Columbus', 'Charlotte', 'San Francisco',
+          'Indianapolis', 'Seattle', 'Denver', 'Washington DC', 'Boston', 'El Paso', 'Nashville', 'Detroit', 'Oklahoma City'
+        ],
+        'Canada': [
+          'Toronto', 'Montreal', 'Vancouver', 'Calgary', 'Edmonton', 'Ottawa', 'Winnipeg', 'Quebec City',
+          'Hamilton', 'Kitchener', 'London', 'Victoria', 'Halifax', 'Oshawa', 'Windsor', 'Saskatoon',
+          'St. Catharines', 'Regina', 'Sherbrooke', 'Barrie', 'Kelowna', 'Abbotsford', 'Kingston', 'Sudbury'
+        ]
+      };
+      
+      if (cities[country]) {
+        cities[country].forEach(city => {
+          const option = document.createElement('option');
+          option.value = city;
+          option.textContent = city;
+          citySelect.appendChild(option);
+        });
+      }
+      
+      updateProgress();
+    }
+
     function populateDateSelectors() {
       const daySelect = document.getElementById('dob_day');
       const yearSelect = document.getElementById('dob_year');
@@ -79,6 +149,12 @@
     function handleSubmit(event) {
       event.preventDefault();
       
+      // Show loading state
+      const submitBtn = event.target.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<span>⏳</span><span>Saving Profile...</span>';
+      submitBtn.disabled = true;
+      
       // Collect form data
       const formData = new FormData(event.target);
       const data = {};
@@ -97,7 +173,7 @@
       }
       
       // Handle checkboxes
-      const checkboxGroups = ['sectors', 'tools', 'education_areas', 'languages', 'certifications'];
+      const checkboxGroups = ['sectors', 'tools', 'certifications', 'other_languages'];
       checkboxGroups.forEach(group => {
         const checkboxes = document.querySelectorAll(`input[name="${group}[]"]:checked`);
         data[group] = Array.from(checkboxes).map(cb => cb.value);
@@ -105,11 +181,11 @@
       
       console.log('Profile data:', data);
       
-      // Show success message
-      alert('Profile completed successfully! You can now browse companies and connect with recruiters.');
-      
-      // Redirect to candidates page or dashboard
-      window.location.href = '/candidates.html';
+      // Simulate save process
+      setTimeout(() => {
+        alert('Profile completed successfully! You can now browse companies and connect with recruiters.');
+        window.location.href = '/candidates.html';
+      }, 2000);
     }
 
     window.onload = function() {
@@ -132,8 +208,10 @@
       <a href="/pricing.html">Pricing</a>
       <a href="/about.html">About us</a>
       <a href="/contact.html">Contact</a>
-      <a href="/login.html">Login</a>
-      <a href="/register.html">Register</a>
+      <a href="/index.html" class="logout-btn">
+        <span>🚪</span>
+        <span>Logout</span>
+      </a>
     </nav>
     <button class="hamburger" onclick="toggleMenu()">
       <span></span>
@@ -144,10 +222,12 @@
       <a href="/pricing.html">Pricing</a>
       <a href="/about.html">About us</a>
       <a href="/contact.html">Contact</a>
-      <a href="/login.html">Login</a>
-      <a href="/register.html">Register</a>
       <a href="/privacy.html">Privacy</a>
       <a href="/terms.html">Terms</a>
+      <a href="/index.html" class="logout-btn">
+        <span>🚪</span>
+        <span>Logout</span>
+      </a>
     </div>
   </header>
 
@@ -175,9 +255,14 @@
             
             <div class="form-grid">
               <div class="form-group">
-                <label class="form-label required">Display Name</label>
-                <input type="text" name="display_name" class="form-input" placeholder="Marco R." required />
-                <div class="form-help">This is how your name will appear to companies</div>
+                <label class="form-label required">First Name</label>
+                <input type="text" name="first_name" class="form-input" placeholder="Marco" required />
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label required">Last Name</label>
+                <input type="text" name="last_name" class="form-input" placeholder="Rossi" required />
+                <div class="form-help">Your full name will be visible to companies</div>
               </div>
               
               <div class="form-group">
@@ -191,16 +276,29 @@
               </div>
               
               <div class="form-group">
-                <label class="form-label required">Location</label>
-                <select name="location" class="form-select" required>
-                  <option value="">Select your location</option>
-                  <option value="Milano">Milano</option>
-                  <option value="Roma">Roma</option>
-                  <option value="Torino">Torino</option>
-                  <option value="Bologna">Bologna</option>
-                  <option value="Napoli">Napoli</option>
-                  <option value="Firenze">Firenze</option>
+                <label class="form-label required">Country</label>
+                <select name="country" class="form-select" required onchange="updateCityOptions(this.value)">
+                  <option value="">Select your country</option>
+                  <option value="Italy">Italy</option>
+                  <option value="Germany">Germany</option>
+                  <option value="France">France</option>
+                  <option value="Spain">Spain</option>
+                  <option value="United Kingdom">United Kingdom</option>
+                  <option value="Switzerland">Switzerland</option>
+                  <option value="Netherlands">Netherlands</option>
+                  <option value="Austria">Austria</option>
+                  <option value="Belgium">Belgium</option>
+                  <option value="Luxembourg">Luxembourg</option>
+                  <option value="United States">United States</option>
+                  <option value="Canada">Canada</option>
                   <option value="Other">Other</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label required">City/Province</label>
+                <select name="city" class="form-select" required id="citySelect">
+                  <option value="">First select a country</option>
                 </select>
               </div>
               
@@ -521,8 +619,68 @@
             
             <div class="form-grid">
               <div class="form-group">
-                <label class="form-label required">Italian Level</label>
-                <select name="italian_level" class="form-select" required>
+                <label class="form-label required">Native Language</label>
+                <select name="native_language" class="form-select" required>
+                  <option value="">Select your native language</option>
+                  <option value="Italian">Italian</option>
+                  <option value="English">English</option>
+                  <option value="French">French</option>
+                  <option value="German">German</option>
+                  <option value="Spanish">Spanish</option>
+                  <option value="Portuguese">Portuguese</option>
+                  <option value="Russian">Russian</option>
+                  <option value="Chinese">Chinese (Mandarin)</option>
+                  <option value="Japanese">Japanese</option>
+                  <option value="Arabic">Arabic</option>
+                  <option value="Hindi">Hindi</option>
+                  <option value="Dutch">Dutch</option>
+                  <option value="Swedish">Swedish</option>
+                  <option value="Norwegian">Norwegian</option>
+                  <option value="Danish">Danish</option>
+                  <option value="Polish">Polish</option>
+                  <option value="Czech">Czech</option>
+                  <option value="Hungarian">Hungarian</option>
+                  <option value="Romanian">Romanian</option>
+                  <option value="Greek">Greek</option>
+                  <option value="Turkish">Turkish</option>
+                  <option value="Korean">Korean</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Second Language</label>
+                <select name="second_language" class="form-select">
+                  <option value="">Select second language</option>
+                  <option value="Italian">Italian</option>
+                  <option value="English">English</option>
+                  <option value="French">French</option>
+                  <option value="German">German</option>
+                  <option value="Spanish">Spanish</option>
+                  <option value="Portuguese">Portuguese</option>
+                  <option value="Russian">Russian</option>
+                  <option value="Chinese">Chinese (Mandarin)</option>
+                  <option value="Japanese">Japanese</option>
+                  <option value="Arabic">Arabic</option>
+                  <option value="Hindi">Hindi</option>
+                  <option value="Dutch">Dutch</option>
+                  <option value="Swedish">Swedish</option>
+                  <option value="Norwegian">Norwegian</option>
+                  <option value="Danish">Danish</option>
+                  <option value="Polish">Polish</option>
+                  <option value="Czech">Czech</option>
+                  <option value="Hungarian">Hungarian</option>
+                  <option value="Romanian">Romanian</option>
+                  <option value="Greek">Greek</option>
+                  <option value="Turkish">Turkish</option>
+                  <option value="Korean">Korean</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Second Language Level</label>
+                <select name="second_language_level" class="form-select">
                   <option value="">Select level</option>
                   <option value="native">Native</option>
                   <option value="fluent">Fluent (C2)</option>
@@ -532,38 +690,59 @@
                 </select>
               </div>
               
-              <div class="form-group">
-                <label class="form-label required">English Level</label>
-                <select name="english_level" class="form-select" required>
-                  <option value="">Select level</option>
-                  <option value="native">Native</option>
-                  <option value="fluent">Fluent (C2)</option>
-                  <option value="advanced">Advanced (C1)</option>
-                  <option value="intermediate">Intermediate (B2)</option>
-                  <option value="basic">Basic (A1-B1)</option>
-                </select>
-              </div>
-              
-              <div class="form-group">
+              <div class="form-group full-width">
                 <label class="form-label">Other Languages</label>
                 <div class="checkbox-grid">
                   <div class="checkbox-item">
-                    <input type="checkbox" name="languages[]" value="French" onchange="handleCheckboxChange(this)" />
+                    <input type="checkbox" name="other_languages[]" value="French" onchange="handleCheckboxChange(this)" />
                     <span>French</span>
                   </div>
                   <div class="checkbox-item">
-                    <input type="checkbox" name="languages[]" value="German" onchange="handleCheckboxChange(this)" />
+                    <input type="checkbox" name="other_languages[]" value="German" onchange="handleCheckboxChange(this)" />
                     <span>German</span>
                   </div>
                   <div class="checkbox-item">
-                    <input type="checkbox" name="languages[]" value="Spanish" onchange="handleCheckboxChange(this)" />
+                    <input type="checkbox" name="other_languages[]" value="Spanish" onchange="handleCheckboxChange(this)" />
                     <span>Spanish</span>
                   </div>
                   <div class="checkbox-item">
-                    <input type="checkbox" name="languages[]" value="Chinese" onchange="handleCheckboxChange(this)" />
-                    <span>Chinese</span>
+                    <input type="checkbox" name="other_languages[]" value="Portuguese" onchange="handleCheckboxChange(this)" />
+                    <span>Portuguese</span>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" name="other_languages[]" value="Russian" onchange="handleCheckboxChange(this)" />
+                    <span>Russian</span>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" name="other_languages[]" value="Chinese" onchange="handleCheckboxChange(this)" />
+                    <span>Chinese (Mandarin)</span>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" name="other_languages[]" value="Japanese" onchange="handleCheckboxChange(this)" />
+                    <span>Japanese</span>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" name="other_languages[]" value="Arabic" onchange="handleCheckboxChange(this)" />
+                    <span>Arabic</span>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" name="other_languages[]" value="Dutch" onchange="handleCheckboxChange(this)" />
+                    <span>Dutch</span>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" name="other_languages[]" value="Swedish" onchange="handleCheckboxChange(this)" />
+                    <span>Swedish</span>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" name="other_languages[]" value="Polish" onchange="handleCheckboxChange(this)" />
+                    <span>Polish</span>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" name="other_languages[]" value="Korean" onchange="handleCheckboxChange(this)" />
+                    <span>Korean</span>
                   </div>
                 </div>
+                <div class="form-help">Select any additional languages you speak (basic level or above)</div>
               </div>
             </div>
           </div>
@@ -696,5 +875,5 @@
     </div>
   </footer>
 
-</body>
+  </body>
 </html>

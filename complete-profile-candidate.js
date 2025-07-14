@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const payload = {
+      user_id: userId,
       display_name: name,
       current_job: job,
       experience_years: exp,
@@ -36,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     try {
-      const response = await fetch(`https://talfy-backend.onrender.com/api/update-candidate/${userId}`, {
+      const response = await fetch("https://talfy-backend.onrender.com/api/save-candidate-profile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

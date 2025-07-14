@@ -11,35 +11,9 @@
       document.getElementById("mobileMenu").classList.toggle("active");
     }
 
-    async function loadProfileData() {
-      const userId = localStorage.getItem("user_id");
-      const userType = localStorage.getItem("user_type");
-      if (!userId || userType !== "candidate") {
-        window.location.href = "/login.html";
-        return;
-      }
-
-      try {
-        const res = await fetch("https://talfy-backend.onrender.com/api/candidate/" + userId);
-        const data = await res.json();
-
-        document.getElementById("first_name").value = data.first_name || "";
-        document.getElementById("last_name").value = data.last_name || "";
-        document.getElementById("display_name").value = data.display_name || "";
-        document.getElementById("current_job").value = data.current_job || "";
-        document.getElementById("experience_years").value = data.experience_years || "";
-        document.getElementById("salary_range").value = data.salary_range || "";
-        document.getElementById("native_language").val<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Edit Candidate Profile – Talfy</title>
-  <link rel="stylesheet" href="style.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <script>
-    function toggleMenu() {
-      document.getElementById("mobileMenu").classList.toggle("active");
+    function logout() {
+      localStorage.clear();
+      window.location.href = "/login.html";
     }
 
     async function loadProfileData() {
@@ -59,32 +33,33 @@
           return;
         }
 
-        document.getElementById("display_name").value = data.display_name || "";
-        document.getElementById("current_job").value = data.current_job || "";
-        document.getElementById("experience_years").value = data.experience_years || "";
-        document.getElementById("salary_range").value = data.salary_range || "";
+        // Campi semplici
+        const fields = ["display_name", "current_job", "experience_years", "salary_range", "first_name", "last_name", "native_language", "birth_day", "birth_month", "birth_year"];
+        fields.forEach(f => {
+          if (data[f] !== undefined && document.getElementById(f)) {
+            document.getElementById(f).value = data[f];
+          }
+        });
 
-        if (data.tools) {
-          const toolsArray = data.tools.split(",").map(t => t.trim());
-          toolsArray.forEach(tool => {
-            const checkbox = document.querySelector(`input[name="tools[]"][value="${tool}"]`);
-            if (checkbox) checkbox.checked = true;
+        // Checkbox e radio
+        function checkboxes(name, values) {
+          if (!values) return;
+          values.split(",").forEach(val => {
+            const el = document.querySelector(`input[name="${name}[]"][value="${val.trim()}"]`);
+            if (el) el.checked = true;
           });
         }
 
-        if (data.sector) {
-          const sectorArray = data.sector.split(",").map(s => s.trim());
-          sectorArray.forEach(sector => {
-            const checkbox = document.querySelector(`input[name="sector[]"][value="${sector}"]`);
-            if (checkbox) checkbox.checked = true;
-          });
-        }
+        checkboxes("sector", data.sector);
+        checkboxes("tools", data.tools);
+        checkboxes("other_languages", data.other_languages);
+        checkboxes("job_title", data.job_title);
+        checkboxes("education_area", data.education_area);
 
         if (data.avatar) {
           const radio = document.querySelector(`input[name="avatar"][value="${data.avatar}"]`);
           if (radio) radio.checked = true;
         }
-
       } catch (err) {
         alert("Error loading profile data.");
         console.error(err);
@@ -120,7 +95,8 @@
           alert("Profile updated successfully!");
           window.location.href = "/candidate.html?id=" + userId;
         } else {
-          alert("Failed to update profile.");
+          const errData = await res.json();
+          alert("Failed to update profile: " + (errData.error || "Unknown error"));
         }
       } catch (err) {
         alert("Server error.");
@@ -151,10 +127,53 @@
   <main class="main">
     <h1>Edit Your Candidate Profile</h1>
     <form id="profileForm" onsubmit="submitForm(event)">
+      <label>First Name: <input type="text" id="first_name" name="first_name"/></label>
+      <label>Last Name: <input type="text" id="last_name" name="last_name"/></label>
       <label>Display Name: <input type="text" id="display_name" name="display_name"/></label>
       <label>Current Job: <input type="text" id="current_job" name="current_job"/></label>
       <label>Years of Experience: <input type="number" id="experience_years" name="experience_years"/></label>
       <label>Salary Range: <input type="text" id="salary_range" name="salary_range"/></label>
+      <label>Native Language: <input type="text" id="native_language" name="native_language"/></label>
+
+      <fieldset>
+        <legend>Other Languages:</legend>
+        <label><input type="checkbox" name="other_languages[]" value="English"/> English</label>
+        <label><input type="checkbox" name="other_languages[]" value="French"/> French</label>
+        <label><input type="checkbox" name="other_languages[]" value="German"/> German</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Job Titles:</legend>
+        <label><input type="checkbox" name="job_title[]" value="Accountant"/> Accountant</label>
+        <label><input type="checkbox" name="job_title[]" value="Controller"/> Controller</label>
+        <label><input type="checkbox" name="job_title[]" value="Treasury Specialist"/> Treasury Specialist</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Education Area:</legend>
+        <label><input type="checkbox" name="education_area[]" value="Economics"/> Economics</label>
+        <label><input type="checkbox" name="education_area[]" value="Engineering"/> Engineering</label>
+        <label><input type="checkbox" name="education_area[]" value="Linguistics"/> Linguistics</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Birth Date:</legend>
+        <select id="birth_day" name="birth_day">
+          <option value="">Day</option>
+          ${[...Array(31)].map((_, i) => `<option value="${i+1}">${i+1}</option>`).join('')}
+        </select>
+        <select id="birth_month" name="birth_month">
+          <option value="">Month</option>
+          ${[...Array(12)].map((_, i) => `<option value="${i+1}">${i+1}</option>`).join('')}
+        </select>
+        <select id="birth_year" name="birth_year">
+          <option value="">Year</option>
+          ${[...Array(60)].map((_, i) => {
+            const y = new Date().getFullYear() - i;
+            return `<option value="${y}">${y}</option>`;
+          }).join('')}
+        </select>
+      </fieldset>
 
       <fieldset>
         <legend>Sectors:</legend>

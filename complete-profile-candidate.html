@@ -5,876 +5,305 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Complete Your Profile – Talfy</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script>
-    function toggleMenu() {
-      document.getElementById("mobileMenu").classList.toggle("active");
+  <title>Complete Profile - Talfy</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      color: #2d5016;
+      background: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
-
-    function updateProgress() {
-      const form = document.getElementById('candidateProfileForm');
-      const requiredFields = form.querySelectorAll('[required]');
-      let filledFields = 0;
-      
-      requiredFields.forEach(field => {
-        if (field.type === 'checkbox' || field.type === 'radio') {
-          const group = form.querySelectorAll(`[name="${field.name}"]`);
-          if (Array.from(group).some(input => input.checked)) {
-            filledFields++;
-          }
-        } else if (field.value.trim() !== '') {
-          filledFields++;
-        }
-      });
-      
-      const progress = (filledFields / requiredFields.length) * 100;
-      document.getElementById('progressFill').style.width = progress + '%';
+    
+    .header {
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
-
-    function handleCheckboxChange(checkbox) {
-      const item = checkbox.closest('.checkbox-item');
-      if (checkbox.checked) {
-        item.classList.add('checked');
-      } else {
-        item.classList.remove('checked');
+    
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2d5016;
+      text-decoration: none;
+    }
+    
+    .nav { 
+      display: flex; 
+      gap: 1.5rem; 
+      align-items: center; 
+    }
+    
+    .nav a {
+      color: #2d5016;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.3s;
+    }
+    
+    .nav a:hover { 
+      opacity: 0.7; 
+    }
+    
+    .main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem 8rem;
+    }
+    
+    .profile-container {
+      background: white;
+      padding: 3rem;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 450px;
+      text-align: center;
+    }
+    
+    .profile-header {
+      margin-bottom: 2rem;
+    }
+    
+    .welcome-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+    
+    .profile-title {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #2d5016;
+      margin-bottom: 0.5rem;
+    }
+    
+    .profile-subtitle {
+      color: #2d5016;
+      opacity: 0.7;
+      font-size: 0.95rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #2d5016;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 0.8rem;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+      outline: none;
+    }
+    
+    .form-input:focus {
+      border-color: #2d5016;
+    }
+    
+    .complete-btn {
+      width: 100%;
+      background: #2d5016;
+      color: white;
+      padding: 1rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 1rem;
+    }
+    
+    .complete-btn:hover {
+      background: #1f3610;
+    }
+    
+    .complete-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    
+    .footer {
+      background: white;
+      color: #2d5016;
+      padding: 1.5rem 0;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      border-top: 1px solid #e9ecef;
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      text-align: center;
+    }
+    
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    
+    .footer-links a {
+      color: #2d5016;
+      text-decoration: none;
+      opacity: 0.8;
+      font-size: 0.9rem;
+      transition: opacity 0.3s;
+    }
+    
+    .footer-links a:hover { 
+      opacity: 1; 
+    }
+    
+    .footer-copyright {
+      color: #2d5016;
+      opacity: 0.8;
+      font-size: 0.8rem;
+    }
+    
+    @media (max-width: 768px) {
+      .header { 
+        padding: 1rem; 
       }
-      updateProgress();
-    }
-
-    function handleRadioChange(radio) {
-      const group = document.querySelectorAll(`[name="${radio.name}"]`);
-      group.forEach(r => {
-        const item = r.closest('.radio-item');
-        if (r.checked) {
-          item.classList.add('checked');
-        } else {
-          item.classList.remove('checked');
-        }
-      });
-      updateProgress();
-    }
-
-    function updateCityOptions(country) {
-      const citySelect = document.getElementById('citySelect');
-      citySelect.innerHTML = '<option value="">Select city/province</option>';
       
-      const cities = {
-        'Italy': [
-          'Milano', 'Roma', 'Napoli', 'Torino', 'Palermo', 'Genova', 'Bologna', 'Firenze', 'Bari', 'Catania',
-          'Venezia', 'Verona', 'Messina', 'Padova', 'Trieste', 'Brescia', 'Taranto', 'Prato', 'Reggio Calabria',
-          'Modena', 'Reggio Emilia', 'Perugia', 'Livorno', 'Ravenna', 'Cagliari', 'Foggia', 'Rimini', 'Salerno',
-          'Ferrara', 'Sassari', 'Latina', 'Giugliano in Campania', 'Monza', 'Bergamo', 'Forlì', 'Trento', 'Vicenza',
-          'Terni', 'Bolzano', 'Novara', 'Piacenza', 'Ancona', 'Andria', 'Arezzo', 'Udine', 'Cesena', 'Lecce',
-          'Pesaro', 'Barletta', 'Alessandria', 'La Spezia', 'Pistoia', 'Catanzaro', 'Brindisi', 'Treviso', 'Pisa'
-        ],
-        'Germany': [
-          'Berlin', 'Hamburg', 'Munich', 'Cologne', 'Frankfurt am Main', 'Stuttgart', 'Düsseldorf', 'Dortmund',
-          'Essen', 'Leipzig', 'Bremen', 'Dresden', 'Hanover', 'Nuremberg', 'Duisburg', 'Bochum', 'Wuppertal',
-          'Bielefeld', 'Bonn', 'Münster', 'Karlsruhe', 'Mannheim', 'Augsburg', 'Wiesbaden', 'Gelsenkirchen'
-        ],
-        'France': [
-          'Paris', 'Marseille', 'Lyon', 'Toulouse', 'Nice', 'Nantes', 'Strasbourg', 'Montpellier', 'Bordeaux',
-          'Lille', 'Rennes', 'Reims', 'Le Havre', 'Saint-Étienne', 'Toulon', 'Grenoble', 'Dijon', 'Angers',
-          'Nîmes', 'Villeurbanne', 'Saint-Denis', 'Le Mans', 'Aix-en-Provence', 'Clermont-Ferrand', 'Brest'
-        ],
-        'Spain': [
-          'Madrid', 'Barcelona', 'Valencia', 'Seville', 'Zaragoza', 'Málaga', 'Murcia', 'Palma', 'Las Palmas',
-          'Bilbao', 'Alicante', 'Córdoba', 'Valladolid', 'Vigo', 'Gijón', 'Hospitalet de Llobregat', 'A Coruña',
-          'Vitoria-Gasteiz', 'Granada', 'Elche', 'Oviedo', 'Badalona', 'Cartagena', 'Terrassa', 'Jerez de la Frontera'
-        ],
-        'United Kingdom': [
-          'London', 'Birmingham', 'Manchester', 'Glasgow', 'Liverpool', 'Leeds', 'Sheffield', 'Edinburgh',
-          'Bristol', 'Cardiff', 'Leicester', 'Wakefield', 'Coventry', 'Nottingham', 'Newcastle upon Tyne',
-          'Belfast', 'Brighton', 'Hull', 'Plymouth', 'Stoke-on-Trent', 'Wolverhampton', 'Derby', 'Swansea',
-          'Southampton', 'Salford', 'Aberdeen', 'Westminster', 'Portsmouth', 'York', 'Peterborough'
-        ],
-        'Switzerland': [
-          'Zurich', 'Geneva', 'Basel', 'Lausanne', 'Bern', 'Winterthur', 'Lucerne', 'St. Gallen', 'Lugano',
-          'Biel/Bienne', 'Thun', 'Köniz', 'La Chaux-de-Fonds', 'Schaffhausen', 'Fribourg', 'Chur', 'Vernier',
-          'Neuchâtel', 'Uster', 'Sion', 'Emmen', 'Zug', 'Yverdon-les-Bains', 'Dübendorf', 'Dietikon'
-        ],
-        'Netherlands': [
-          'Amsterdam', 'Rotterdam', 'The Hague', 'Utrecht', 'Eindhoven', 'Tilburg', 'Groningen', 'Almere',
-          'Breda', 'Nijmegen', 'Enschede', 'Haarlem', 'Arnhem', 'Zaanstad', 'Amersfoort', 'Apeldoorn',
-          'Hertogenbosch', 'Hoofddorp', 'Maastricht', 'Leiden', 'Dordrecht', 'Zoetermeer', 'Zwolle', 'Deventer'
-        ],
-        'United States': [
-          'New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'Philadelphia', 'San Antonio', 'San Diego',
-          'Dallas', 'San Jose', 'Austin', 'Jacksonville', 'Fort Worth', 'Columbus', 'Charlotte', 'San Francisco',
-          'Indianapolis', 'Seattle', 'Denver', 'Washington DC', 'Boston', 'El Paso', 'Nashville', 'Detroit', 'Oklahoma City'
-        ],
-        'Canada': [
-          'Toronto', 'Montreal', 'Vancouver', 'Calgary', 'Edmonton', 'Ottawa', 'Winnipeg', 'Quebec City',
-          'Hamilton', 'Kitchener', 'London', 'Victoria', 'Halifax', 'Oshawa', 'Windsor', 'Saskatoon',
-          'St. Catharines', 'Regina', 'Sherbrooke', 'Barrie', 'Kelowna', 'Abbotsford', 'Kingston', 'Sudbury'
-        ]
-      };
-      
-      if (cities[country]) {
-        cities[country].forEach(city => {
-          const option = document.createElement('option');
-          option.value = city;
-          option.textContent = city;
-          citySelect.appendChild(option);
-        });
+      .nav { 
+        gap: 1rem; 
       }
       
-      updateProgress();
-    }
-
-    function populateDateSelectors() {
-      const daySelect = document.getElementById('dob_day');
-      const yearSelect = document.getElementById('dob_year');
-      
-      // Populate days
-      for (let i = 1; i <= 31; i++) {
-        const option = document.createElement('option');
-        option.value = i;
-        option.textContent = i;
-        daySelect.appendChild(option);
+      .main {
+        padding: 2rem 1rem;
       }
       
-      // Populate years (from 1950 to current year - 16)
-      const currentYear = new Date().getFullYear();
-      for (let i = currentYear - 16; i >= 1950; i--) {
-        const option = document.createElement('option');
-        option.value = i;
-        option.textContent = i;
-        yearSelect.appendChild(option);
-      }
-    }
-
-    function handleSubmit(event) {
-      event.preventDefault();
-      
-      // Show loading state
-      const submitBtn = event.target.querySelector('button[type="submit"]');
-      const originalText = submitBtn.innerHTML;
-      submitBtn.innerHTML = '<span>⏳</span><span>Saving Profile...</span>';
-      submitBtn.disabled = true;
-      
-      // Collect form data
-      const formData = new FormData(event.target);
-      const data = {};
-      
-      // Handle regular fields
-      for (let [key, value] of formData.entries()) {
-        if (data[key]) {
-          if (Array.isArray(data[key])) {
-            data[key].push(value);
-          } else {
-            data[key] = [data[key], value];
-          }
-        } else {
-          data[key] = value;
-        }
+      .profile-container { 
+        padding: 2rem; 
       }
       
-      // Handle checkboxes
-      const checkboxGroups = ['sectors', 'tools', 'certifications', 'other_languages'];
-      checkboxGroups.forEach(group => {
-        const checkboxes = document.querySelectorAll(`input[name="${group}[]"]:checked`);
-        data[group] = Array.from(checkboxes).map(cb => cb.value);
-      });
-      
-      console.log('Profile data:', data);
-      
-      // Simulate save process
-      setTimeout(() => {
-        alert('Profile completed successfully! You can now browse companies and connect with recruiters.');
-        window.location.href = '/candidates.html';
-      }, 2000);
+      .footer-links { 
+        flex-wrap: wrap; 
+        gap: 1rem; 
+      }
     }
-
-    window.onload = function() {
-      populateDateSelectors();
-      
-      // Add event listeners
-      document.getElementById('candidateProfileForm').addEventListener('input', updateProgress);
-      document.getElementById('candidateProfileForm').addEventListener('change', updateProgress);
-      
-      // Initial progress update
-      updateProgress();
-    };
-  </script>
+  </style>
 </head>
 <body>
 
   <header class="header">
-    <a href="/index.html" class="logo">talfy</a>
+    <a href="/" class="logo">talfy</a>
     <nav class="nav">
-      <a href="/pricing.html">Pricing</a>
-      <a href="/about.html">About us</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/index.html" class="logout-btn">
-        <span>🚪</span>
-        <span>Logout</span>
-      </a>
+      <a href="/dashboard.html">Dashboard</a>
     </nav>
-    <button class="hamburger" onclick="toggleMenu()">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-    <div class="mobile-menu" id="mobileMenu">
-      <a href="/pricing.html">Pricing</a>
-      <a href="/about.html">About us</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/privacy.html">Privacy</a>
-      <a href="/terms.html">Terms</a>
-      <a href="/index.html" class="logout-btn">
-        <span>🚪</span>
-        <span>Logout</span>
-      </a>
-    </div>
   </header>
 
-  <main class="main candidate-form-page">
-    <div class="form-content">
-      <div class="form-hero">
-        <h1 class="form-title">Complete Your Profile</h1>
-        <div class="form-underline"></div>
-        <p class="form-subtitle">Build your professional profile to connect with top finance companies</p>
-        
-        <div class="progress-bar">
-          <div class="progress-fill" id="progressFill"></div>
-        </div>
+  <main class="main">
+    <div class="profile-container">
+      <div class="profile-header">
+        <div class="welcome-icon">🎉</div>
+        <h1 class="profile-title">Welcome to Talfy!</h1>
+        <p class="profile-subtitle">Let's complete your profile</p>
       </div>
 
-      <form id="candidateProfileForm" onsubmit="handleSubmit(event)">
-        <div class="form-sections">
-          
-          <!-- Personal Information -->
-          <div class="form-section">
-            <div class="section-header">
-              <span class="section-icon">👤</span>
-              <h3 class="section-title">Personal Information</h3>
-            </div>
-            
-            <div class="form-grid">
-              <div class="form-group">
-                <label class="form-label required">First Name</label>
-                <input type="text" name="first_name" class="form-input" placeholder="Marco" required />
-              </div>
-              
-              <div class="form-group">
-                <label class="form-label required">Last Name</label>
-                <input type="text" name="last_name" class="form-input" placeholder="Rossi" required />
-                <div class="form-help">Your full name will be visible to companies</div>
-              </div>
-              
-              <div class="form-group">
-                <label class="form-label required">Email</label>
-                <input type="email" name="email" class="form-input" placeholder="marco@example.com" required />
-              </div>
-              
-              <div class="form-group">
-                <label class="form-label">Phone</label>
-                <input type="tel" name="phone" class="form-input" placeholder="+39 123 456 7890" />
-              </div>
-              
-              <div class="form-group">
-                <label class="form-label required">Country</label>
-                <select name="country" class="form-select" required onchange="updateCityOptions(this.value)">
-                  <option value="">Select your country</option>
-                  <option value="Italy">Italy</option>
-                  <option value="Germany">Germany</option>
-                  <option value="France">France</option>
-                  <option value="Spain">Spain</option>
-                  <option value="United Kingdom">United Kingdom</option>
-                  <option value="Switzerland">Switzerland</option>
-                  <option value="Netherlands">Netherlands</option>
-                  <option value="Austria">Austria</option>
-                  <option value="Belgium">Belgium</option>
-                  <option value="Luxembourg">Luxembourg</option>
-                  <option value="United States">United States</option>
-                  <option value="Canada">Canada</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-              
-              <div class="form-group">
-                <label class="form-label required">City/Province</label>
-                <select name="city" class="form-select" required id="citySelect">
-                  <option value="">First select a country</option>
-                </select>
-              </div>
-              
-              <div class="form-group">
-                <label class="form-label">Date of Birth</label>
-                <div class="date-grid">
-                  <select id="dob_day" name="dob_day" class="form-select">
-                    <option value="">Day</option>
-                  </select>
-                  <select name="dob_month" class="form-select">
-                    <option value="">Month</option>
-                    <option value="1">January</option>
-                    <option value="2">February</option>
-                    <option value="3">March</option>
-                    <option value="4">April</option>
-                    <option value="5">May</option>
-                    <option value="6">June</option>
-                    <option value="7">July</option>
-                    <option value="8">August</option>
-                    <option value="9">September</option>
-                    <option value="10">October</option>
-                    <option value="11">November</option>
-                    <option value="12">December</option>
-                  </select>
-                  <select id="dob_year" name="dob_year" class="form-select">
-                    <option value="">Year</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            
-            <div class="avatar-section">
-              <label class="form-label">Profile Avatar</label>
-              <div class="avatar-options">
-                <div class="avatar-option">
-                  <input type="radio" name="avatar_choice" value="male" checked onchange="handleRadioChange(this)" />
-                  <div class="avatar-preview">👨</div>
-                </div>
-                <div class="avatar-option">
-                  <input type="radio" name="avatar_choice" value="female" onchange="handleRadioChange(this)" />
-                  <div class="avatar-preview">👩</div>
-                </div>
-                <div class="avatar-option">
-                  <input type="radio" name="avatar_choice" value="neutral" onchange="handleRadioChange(this)" />
-                  <div class="avatar-preview">👤</div>
-                </div>
-              </div>
-              <div class="file-upload">
-                <input type="file" name="avatar_upload" accept="image/*" />
-                <div class="file-upload-label">
-                  <span>📷</span>
-                  <span>Upload Custom Photo</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Professional Information -->
-          <div class="form-section">
-            <div class="section-header">
-              <span class="section-icon">💼</span>
-              <h3 class="section-title">Professional Information</h3>
-            </div>
-            
-            <div class="form-grid">
-              <div class="form-group">
-                <label class="form-label required">Current Job Title</label>
-                <input type="text" name="current_job" class="form-input" placeholder="Financial Analyst" required />
-              </div>
-              
-              <div class="form-group">
-                <label class="form-label required">Years of Experience</label>
-                <select name="experience_years" class="form-select" required>
-                  <option value="">Select experience</option>
-                  <option value="0-1">0-1 years</option>
-                  <option value="2-3">2-3 years</option>
-                  <option value="4-5">4-5 years</option>
-                  <option value="6-8">6-8 years</option>
-                  <option value="9-12">9-12 years</option>
-                  <option value="13-15">13-15 years</option>
-                  <option value="15+">15+ years</option>
-                </select>
-              </div>
-              
-              <div class="form-group">
-                <label class="form-label">Current Company</label>
-                <input type="text" name="current_company" class="form-input" placeholder="Company name" />
-              </div>
-              
-              <div class="form-group">
-                <label class="form-label required">Employment Status</label>
-                <select name="employment_status" class="form-select" required>
-                  <option value="">Select status</option>
-                  <option value="employed">Currently Employed</option>
-                  <option value="unemployed">Unemployed</option>
-                  <option value="student">Student</option>
-                  <option value="freelance">Freelancer</option>
-                </select>
-              </div>
-              
-              <div class="form-group full-width">
-                <label class="form-label">Salary Expectations</label>
-                <div class="salary-range">
-                  <input type="number" name="salary_min" class="form-input" placeholder="30,000" />
-                  <span>to</span>
-                  <input type="number" name="salary_max" class="form-input" placeholder="50,000" />
-                </div>
-                <div class="form-help">Annual gross salary in EUR</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Skills & Tools -->
-          <div class="form-section">
-            <div class="section-header">
-              <span class="section-icon">🛠️</span>
-              <h3 class="section-title">Skills & Tools</h3>
-            </div>
-            
-            <div class="form-group">
-              <label class="form-label required">Technical Skills</label>
-              <div class="checkbox-grid">
-                <div class="checkbox-item">
-                  <input type="checkbox" name="tools[]" value="Excel" onchange="handleCheckboxChange(this)" required />
-                  <span>Microsoft Excel</span>
-                </div>
-                <div class="checkbox-item">
-                  <input type="checkbox" name="tools[]" value="SAP" onchange="handleCheckboxChange(this)" />
-                  <span>SAP</span>
-                </div>
-                <div class="checkbox-item">
-                  <input type="checkbox" name="tools[]" value="PowerBI" onchange="handleCheckboxChange(this)" />
-                  <span>Power BI</span>
-                </div>
-                <div class="checkbox-item">
-                  <input type="checkbox" name="tools[]" value="Tableau" onchange="handleCheckboxChange(this)" />
-                  <span>Tableau</span>
-                </div>
-                <div class="checkbox-item">
-                  <input type="checkbox" name="tools[]" value="Oracle" onchange="handleCheckboxChange(this)" />
-                  <span>Oracle</span>
-                </div>
-                <div class="checkbox-item">
-                  <input type="checkbox" name="tools[]" value="QuickBooks" onchange="handleCheckboxChange(this)" />
-                  <span>QuickBooks</span>
-                </div>
-                <div class="checkbox-item">
-                  <input type="checkbox" name="tools[]" value="Bloomberg" onchange="handleCheckboxChange(this)" />
-                  <span>Bloomberg Terminal</span>
-                </div>
-                <div class="checkbox-item">
-                  <input type="checkbox" name="tools[]" value="Python" onchange="handleCheckboxChange(this)" />
-                  <span>Python</span>
-                </div>
-                <div class="checkbox-item">
-                  <input type="checkbox" name="tools[]" value="SQL" onchange="handleCheckboxChange(this)" />
-                  <span>SQL</span>
-                </div>
-                <div class="checkbox-item">
-                  <input type="checkbox" name="tools[]" value="R" onchange="handleCheckboxChange(this)" />
-                  <span>R</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Education -->
-          <div class="form-section">
-            <div class="section-header">
-              <span class="section-icon">🎓</span>
-              <h3 class="section-title">Education</h3>
-            </div>
-            
-            <div class="form-grid">
-              <div class="form-group">
-                <label class="form-label required">Highest Degree</label>
-                <select name="education_level" class="form-select" required>
-                  <option value="">Select degree</option>
-                  <option value="high_school">High School</option>
-                  <option value="bachelor">Bachelor's Degree</option>
-                  <option value="master">Master's Degree</option>
-                  <option value="phd">PhD</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-              
-              <div class="form-group">
-                <label class="form-label">Field of Study</label>
-                <select name="education_field" class="form-select">
-                  <option value="">Select field</option>
-                  <option value="economics">Economics</option>
-                  <option value="finance">Finance</option>
-                  <option value="accounting">Accounting</option>
-                  <option value="business">Business Administration</option>
-                  <option value="engineering">Engineering</option>
-                  <option value="mathematics">Mathematics</option>
-                  <option value="statistics">Statistics</option>
-                  <option value="law">Law</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-              
-              <div class="form-group">
-                <label class="form-label">University/Institution</label>
-                <input type="text" name="university" class="form-input" placeholder="University name" />
-              </div>
-              
-              <div class="form-group">
-                <label class="form-label">Graduation Year</label>
-                <select name="graduation_year" class="form-select">
-                  <option value="">Select year</option>
-                  <option value="2024">2024</option>
-                  <option value="2023">2023</option>
-                  <option value="2022">2022</option>
-                  <option value="2021">2021</option>
-                  <option value="2020">2020</option>
-                  <option value="2019">2019</option>
-                  <option value="2018">2018</option>
-                  <option value="2017">2017</option>
-                  <option value="2016">2016</option>
-                  <option value="2015">2015</option>
-                  <option value="older">Before 2015</option>
-                </select>
-              </div>
-            </div>
-            
-            <div class="form-group">
-              <label class="form-label">Certifications</label>
-              <div class="checkbox-grid">
-                <div class="checkbox-item">
-                  <input type="checkbox" name="certifications[]" value="CFA" onchange="handleCheckboxChange(this)" />
-                  <span>CFA (Chartered Financial Analyst)</span>
-                </div>
-                <div class="checkbox-item">
-                  <input type="checkbox" name="certifications[]" value="CPA" onchange="handleCheckboxChange(this)" />
-                  <span>CPA (Certified Public Accountant)</span>
-                </div>
-                <div class="checkbox-item">
-                  <input type="checkbox" name="certifications[]" value="FRM" onchange="handleCheckboxChange(this)" />
-                  <span>FRM (Financial Risk Manager)</span>
-                </div>
-                <div class="checkbox-item">
-                  <input type="checkbox" name="certifications[]" value="ACCA" onchange="handleCheckboxChange(this)" />
-                  <span>ACCA</span>
-                </div>
-                <div class="checkbox-item">
-                  <input type="checkbox" name="certifications[]" value="CIA" onchange="handleCheckboxChange(this)" />
-                  <span>CIA (Certified Internal Auditor)</span>
-                </div>
-                <div class="checkbox-item">
-                  <input type="checkbox" name="certifications[]" value="PMP" onchange="handleCheckboxChange(this)" />
-                  <span>PMP (Project Management)</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Industry Experience -->
-          <div class="form-section">
-            <div class="section-header">
-              <span class="section-icon">🏢</span>
-              <h3 class="section-title">Industry Experience</h3>
-            </div>
-            
-            <div class="form-group">
-              <label class="form-label required">Sectors</label>
-              <div class="checkbox-grid">
-                <div class="checkbox-item">
-                  <input type="checkbox" name="sectors[]" value="Banking" onchange="handleCheckboxChange(this)" required />
-                  <span>Banking</span>
-                </div>
-                <div class="checkbox-item">
-                  <input type="checkbox" name="sectors[]" value="Insurance" onchange="handleCheckboxChange(this)" />
-                  <span>Insurance</span>
-                </div>
-                <div class="checkbox-item">
-                  <input type="checkbox" name="sectors[]" value="Consulting" onchange="handleCheckboxChange(this)" />
-                  <span>Consulting</span>
-                </div>
-                <div class="checkbox-item">
-                  <input type="checkbox" name="sectors[]" value="Corporate" onchange="handleCheckboxChange(this)" />
-                  <span>Corporate Finance</span>
-                </div>
-                <div class="checkbox-item">
-                  <input type="checkbox" name="sectors[]" value="Investment" onchange="handleCheckboxChange(this)" />
-                  <span>Investment Management</span>
-                </div>
-                <div class="checkbox-item">
-                  <input type="checkbox" name="sectors[]" value="Retail" onchange="handleCheckboxChange(this)" />
-                  <span>Retail</span>
-                </div>
-                <div class="checkbox-item">
-                  <input type="checkbox" name="sectors[]" value="Manufacturing" onchange="handleCheckboxChange(this)" />
-                  <span>Manufacturing</span>
-                </div>
-                <div class="checkbox-item">
-                  <input type="checkbox" name="sectors[]" value="Technology" onchange="handleCheckboxChange(this)" />
-                  <span>Technology</span>
-                </div>
-                <div class="checkbox-item">
-                  <input type="checkbox" name="sectors[]" value="Healthcare" onchange="handleCheckboxChange(this)" />
-                  <span>Healthcare</span>
-                </div>
-                <div class="checkbox-item">
-                  <input type="checkbox" name="sectors[]" value="Energy" onchange="handleCheckboxChange(this)" />
-                  <span>Energy</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Languages -->
-          <div class="form-section">
-            <div class="section-header">
-              <span class="section-icon">🌍</span>
-              <h3 class="section-title">Languages</h3>
-            </div>
-            
-            <div class="form-grid">
-              <div class="form-group">
-                <label class="form-label required">Native Language</label>
-                <select name="native_language" class="form-select" required>
-                  <option value="">Select your native language</option>
-                  <option value="Italian">Italian</option>
-                  <option value="English">English</option>
-                  <option value="French">French</option>
-                  <option value="German">German</option>
-                  <option value="Spanish">Spanish</option>
-                  <option value="Portuguese">Portuguese</option>
-                  <option value="Russian">Russian</option>
-                  <option value="Chinese">Chinese (Mandarin)</option>
-                  <option value="Japanese">Japanese</option>
-                  <option value="Arabic">Arabic</option>
-                  <option value="Hindi">Hindi</option>
-                  <option value="Dutch">Dutch</option>
-                  <option value="Swedish">Swedish</option>
-                  <option value="Norwegian">Norwegian</option>
-                  <option value="Danish">Danish</option>
-                  <option value="Polish">Polish</option>
-                  <option value="Czech">Czech</option>
-                  <option value="Hungarian">Hungarian</option>
-                  <option value="Romanian">Romanian</option>
-                  <option value="Greek">Greek</option>
-                  <option value="Turkish">Turkish</option>
-                  <option value="Korean">Korean</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-              
-              <div class="form-group">
-                <label class="form-label">Second Language</label>
-                <select name="second_language" class="form-select">
-                  <option value="">Select second language</option>
-                  <option value="Italian">Italian</option>
-                  <option value="English">English</option>
-                  <option value="French">French</option>
-                  <option value="German">German</option>
-                  <option value="Spanish">Spanish</option>
-                  <option value="Portuguese">Portuguese</option>
-                  <option value="Russian">Russian</option>
-                  <option value="Chinese">Chinese (Mandarin)</option>
-                  <option value="Japanese">Japanese</option>
-                  <option value="Arabic">Arabic</option>
-                  <option value="Hindi">Hindi</option>
-                  <option value="Dutch">Dutch</option>
-                  <option value="Swedish">Swedish</option>
-                  <option value="Norwegian">Norwegian</option>
-                  <option value="Danish">Danish</option>
-                  <option value="Polish">Polish</option>
-                  <option value="Czech">Czech</option>
-                  <option value="Hungarian">Hungarian</option>
-                  <option value="Romanian">Romanian</option>
-                  <option value="Greek">Greek</option>
-                  <option value="Turkish">Turkish</option>
-                  <option value="Korean">Korean</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-              
-              <div class="form-group">
-                <label class="form-label">Second Language Level</label>
-                <select name="second_language_level" class="form-select">
-                  <option value="">Select level</option>
-                  <option value="native">Native</option>
-                  <option value="fluent">Fluent (C2)</option>
-                  <option value="advanced">Advanced (C1)</option>
-                  <option value="intermediate">Intermediate (B2)</option>
-                  <option value="basic">Basic (A1-B1)</option>
-                </select>
-              </div>
-              
-              <div class="form-group full-width">
-                <label class="form-label">Other Languages</label>
-                <div class="checkbox-grid">
-                  <div class="checkbox-item">
-                    <input type="checkbox" name="other_languages[]" value="French" onchange="handleCheckboxChange(this)" />
-                    <span>French</span>
-                  </div>
-                  <div class="checkbox-item">
-                    <input type="checkbox" name="other_languages[]" value="German" onchange="handleCheckboxChange(this)" />
-                    <span>German</span>
-                  </div>
-                  <div class="checkbox-item">
-                    <input type="checkbox" name="other_languages[]" value="Spanish" onchange="handleCheckboxChange(this)" />
-                    <span>Spanish</span>
-                  </div>
-                  <div class="checkbox-item">
-                    <input type="checkbox" name="other_languages[]" value="Portuguese" onchange="handleCheckboxChange(this)" />
-                    <span>Portuguese</span>
-                  </div>
-                  <div class="checkbox-item">
-                    <input type="checkbox" name="other_languages[]" value="Russian" onchange="handleCheckboxChange(this)" />
-                    <span>Russian</span>
-                  </div>
-                  <div class="checkbox-item">
-                    <input type="checkbox" name="other_languages[]" value="Chinese" onchange="handleCheckboxChange(this)" />
-                    <span>Chinese (Mandarin)</span>
-                  </div>
-                  <div class="checkbox-item">
-                    <input type="checkbox" name="other_languages[]" value="Japanese" onchange="handleCheckboxChange(this)" />
-                    <span>Japanese</span>
-                  </div>
-                  <div class="checkbox-item">
-                    <input type="checkbox" name="other_languages[]" value="Arabic" onchange="handleCheckboxChange(this)" />
-                    <span>Arabic</span>
-                  </div>
-                  <div class="checkbox-item">
-                    <input type="checkbox" name="other_languages[]" value="Dutch" onchange="handleCheckboxChange(this)" />
-                    <span>Dutch</span>
-                  </div>
-                  <div class="checkbox-item">
-                    <input type="checkbox" name="other_languages[]" value="Swedish" onchange="handleCheckboxChange(this)" />
-                    <span>Swedish</span>
-                  </div>
-                  <div class="checkbox-item">
-                    <input type="checkbox" name="other_languages[]" value="Polish" onchange="handleCheckboxChange(this)" />
-                    <span>Polish</span>
-                  </div>
-                  <div class="checkbox-item">
-                    <input type="checkbox" name="other_languages[]" value="Korean" onchange="handleCheckboxChange(this)" />
-                    <span>Korean</span>
-                  </div>
-                </div>
-                <div class="form-help">Select any additional languages you speak (basic level or above)</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Work Preferences -->
-          <div class="form-section">
-            <div class="section-header">
-              <span class="section-icon">⚙️</span>
-              <h3 class="section-title">Work Preferences</h3>
-            </div>
-            
-            <div class="form-grid">
-              <div class="form-group">
-                <label class="form-label required">Work Type Preference</label>
-                <div class="radio-grid">
-                  <div class="radio-item">
-                    <input type="radio" name="work_type" value="office" onchange="handleRadioChange(this)" required />
-                    <span>Office Only</span>
-                  </div>
-                  <div class="radio-item">
-                    <input type="radio" name="work_type" value="remote" onchange="handleRadioChange(this)" />
-                    <span>Remote Only</span>
-                  </div>
-                  <div class="radio-item">
-                    <input type="radio" name="work_type" value="hybrid" onchange="handleRadioChange(this)" />
-                    <span>Hybrid</span>
-                  </div>
-                  <div class="radio-item">
-                    <input type="radio" name="work_type" value="flexible" onchange="handleRadioChange(this)" />
-                    <span>Flexible</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="form-group">
-                <label class="form-label">Willing to Travel</label>
-                <div class="radio-grid">
-                  <div class="radio-item">
-                    <input type="radio" name="travel_willingness" value="no" onchange="handleRadioChange(this)" />
-                    <span>No Travel</span>
-                  </div>
-                  <div class="radio-item">
-                    <input type="radio" name="travel_willingness" value="occasional" onchange="handleRadioChange(this)" />
-                    <span>Occasional</span>
-                  </div>
-                  <div class="radio-item">
-                    <input type="radio" name="travel_willingness" value="frequent" onchange="handleRadioChange(this)" />
-                    <span>Frequent</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="form-group">
-                <label class="form-label required">Availability</label>
-                <select name="availability" class="form-select" required>
-                  <option value="">Select availability</option>
-                  <option value="immediate">Available Immediately</option>
-                  <option value="2weeks">2 weeks notice</option>
-                  <option value="1month">1 month notice</option>
-                  <option value="3months">3 months notice</option>
-                  <option value="passive">Open to opportunities</option>
-                </select>
-              </div>
-              
-              <div class="form-group">
-                <label class="form-label">Willing to Relocate</label>
-                <div class="radio-grid">
-                  <div class="radio-item">
-                    <input type="radio" name="relocation" value="yes" onchange="handleRadioChange(this)" />
-                    <span>Yes</span>
-                  </div>
-                  <div class="radio-item">
-                    <input type="radio" name="relocation" value="no" onchange="handleRadioChange(this)" />
-                    <span>No</span>
-                  </div>
-                  <div class="radio-item">
-                    <input type="radio" name="relocation" value="depends" onchange="handleRadioChange(this)" />
-                    <span>Depends on offer</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Additional Information -->
-          <div class="form-section">
-            <div class="section-header">
-              <span class="section-icon">📝</span>
-              <h3 class="section-title">Additional Information</h3>
-            </div>
-            
-            <div class="form-group full-width">
-              <label class="form-label">Professional Summary</label>
-              <textarea name="summary" class="form-textarea" placeholder="Brief description of your professional background and career goals..."></textarea>
-              <div class="form-help">Optional: Tell companies about your experience and what you're looking for</div>
-            </div>
-            
-            <div class="form-grid">
-              <div class="form-group">
-                <label class="form-label">LinkedIn Profile</label>
-                <input type="url" name="linkedin" class="form-input" placeholder="https://linkedin.com/in/yourprofile" />
-              </div>
-              
-              <div class="form-group">
-                <label class="form-label">Portfolio/Website</label>
-                <input type="url" name="portfolio" class="form-input" placeholder="https://yourportfolio.com" />
-              </div>
-            </div>
-          </div>
+      <form id="profileForm">
+        <div class="form-group">
+          <label for="fullName" class="form-label">Full Name</label>
+          <input type="text" id="fullName" class="form-input" placeholder="Enter your full name" required>
         </div>
 
-        <div class="form-actions">
-          <button type="button" class="btn btn-secondary">
-            <span>💾</span>
-            <span>Save Draft</span>
-          </button>
-          <button type="submit" class="btn btn-primary">
-            <span>✅</span>
-            <span>Complete Profile</span>
-          </button>
-        </div>
+        <button type="submit" class="complete-btn" id="completeBtn" disabled>Complete Profile</button>
       </form>
     </div>
   </main>
 
   <footer class="footer">
-    <div class="footer-center">&copy; 2025 Talfy. All rights reserved.</div>
-    <div class="footer-right">
-      <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a>
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="/about.html">About Us</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+      </div>
+      <div class="footer-copyright">
+        <p>&copy; 2024 Talfy. All rights reserved.</p>
+      </div>
     </div>
   </footer>
-<script type="module" src="/static/firebase-config.js"></script>
-<script type="module" src="/static/complete-profile-candidate.js"></script>
+
+  <script>
+    // Get user data from URL parameters or localStorage
+    const urlParams = new URLSearchParams(window.location.search);
+    const userType = urlParams.get('type') || 'candidate';
+    const userEmail = urlParams.get('email') || '';
+    
+    // Profile completion logic
+    const fullNameInput = document.getElementById('fullName');
+    const completeBtn = document.getElementById('completeBtn');
+    
+    // Enable button only when name is entered
+    fullNameInput.addEventListener('input', () => {
+      if (fullNameInput.value.trim()) {
+        completeBtn.disabled = false;
+      } else {
+        completeBtn.disabled = true;
+      }
+    });
+    
+    // Handle form submission
+    document.getElementById('profileForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const fullName = fullNameInput.value.trim();
+      
+      if (!fullName) {
+        alert('Please enter your full name');
+        return;
+      }
+      
+      // Simulate profile completion
+      completeBtn.textContent = 'Completing...';
+      completeBtn.disabled = true;
+      
+      setTimeout(() => {
+        alert(`Profile completed successfully!\nWelcome ${fullName}!\nType: ${userType}\nEmail: ${userEmail}`);
+        
+        // In a real app, you would redirect to dashboard
+        // window.location.href = '/dashboard.html';
+        
+        // Reset for demo purposes
+        completeBtn.textContent = 'Complete Profile';
+        fullNameInput.value = '';
+        completeBtn.disabled = true;
+      }, 1500);
+    });
+    
+    // Focus on name input when page loads
+    window.addEventListener('load', () => {
+      fullNameInput.focus();
+    });
+  </script>
   </body>
 </html>

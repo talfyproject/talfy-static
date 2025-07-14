@@ -33,22 +33,20 @@
           return;
         }
 
-        // Campi semplici
-        const fields = ["display_name", "current_job", "experience_years", "salary_range", "first_name", "last_name", "native_language", "birth_day", "birth_month", "birth_year"];
+        const fields = ["first_name", "last_name", "display_name", "current_job", "experience_years", "salary_range", "native_language", "birth_day", "birth_month", "birth_year"];
         fields.forEach(f => {
           if (data[f] !== undefined && document.getElementById(f)) {
             document.getElementById(f).value = data[f];
           }
         });
 
-        // Checkbox e radio
-        function checkboxes(name, values) {
+        const checkboxes = (name, values) => {
           if (!values) return;
           values.split(",").forEach(val => {
             const el = document.querySelector(`input[name="${name}[]"][value="${val.trim()}"]`);
             if (el) el.checked = true;
           });
-        }
+        };
 
         checkboxes("sector", data.sector);
         checkboxes("tools", data.tools);
@@ -103,7 +101,35 @@
       }
     }
 
-    window.onload = loadProfileData;
+    window.onload = function() {
+      loadProfileData();
+
+      const daySelect = document.getElementById("birth_day");
+      for (let i = 1; i <= 31; i++) {
+        const opt = document.createElement("option");
+        opt.value = i;
+        opt.textContent = i;
+        daySelect.appendChild(opt);
+      }
+
+      const monthSelect = document.getElementById("birth_month");
+      for (let i = 1; i <= 12; i++) {
+        const opt = document.createElement("option");
+        opt.value = i;
+        opt.textContent = i;
+        monthSelect.appendChild(opt);
+      }
+
+      const yearSelect = document.getElementById("birth_year");
+      const currentYear = new Date().getFullYear();
+      for (let i = 0; i <= 60; i++) {
+        const y = currentYear - i;
+        const opt = document.createElement("option");
+        opt.value = y;
+        opt.textContent = y;
+        yearSelect.appendChild(opt);
+      }
+    };
   </script>
 </head>
 <body>
@@ -160,18 +186,12 @@
         <legend>Birth Date:</legend>
         <select id="birth_day" name="birth_day">
           <option value="">Day</option>
-          ${[...Array(31)].map((_, i) => `<option value="${i+1}">${i+1}</option>`).join('')}
         </select>
         <select id="birth_month" name="birth_month">
           <option value="">Month</option>
-          ${[...Array(12)].map((_, i) => `<option value="${i+1}">${i+1}</option>`).join('')}
         </select>
         <select id="birth_year" name="birth_year">
           <option value="">Year</option>
-          ${[...Array(60)].map((_, i) => {
-            const y = new Date().getFullYear() - i;
-            return `<option value="${y}">${y}</option>`;
-          }).join('')}
         </select>
       </fieldset>
 

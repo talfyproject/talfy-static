@@ -1,146 +1,495 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Register – Talfy</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script>
-  function selectUserType(type) {
-    const candidateCard = document.getElementById('candidateCard');
-    const companyCard = document.getElementById('companyCard');
-    const userTypeInput = document.getElementById('userType');
-
-    if (type === 'candidate') {
-      candidateCard.classList.add('selected');
-      companyCard.classList.remove('selected');
-    } else {
-      companyCard.classList.add('selected');
-      candidateCard.classList.remove('selected');
+  <title>Register - Talfy</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      color: #2d5016;
+      background: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
-
-    userTypeInput.value = type;
-    console.log("User type selected:", type);
-  }
-</script>
+    
+    .header {
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2d5016;
+      text-decoration: none;
+    }
+    
+    .nav { 
+      display: flex; 
+      gap: 1.5rem; 
+      align-items: center; 
+    }
+    
+    .nav a {
+      color: #2d5016;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.3s;
+    }
+    
+    .nav a:hover { 
+      opacity: 0.7; 
+    }
+    
+    .main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem 8rem;
+    }
+    
+    .register-container {
+      background: white;
+      padding: 3rem;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 450px;
+    }
+    
+    .register-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .register-title {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #2d5016;
+      margin-bottom: 0.5rem;
+    }
+    
+    .register-subtitle {
+      color: #2d5016;
+      opacity: 0.7;
+      font-size: 0.95rem;
+    }
+    
+    .user-type-selector {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .user-type {
+      flex: 1;
+      padding: 1rem;
+      border: 2px solid #e9ecef;
+      border-radius: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: white;
+    }
+    
+    .user-type.active {
+      border-color: #2d5016;
+      background: #2d5016;
+      color: white;
+    }
+    
+    .user-type-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .user-type-title {
+      font-weight: 600;
+      color: #2d5016;
+      font-size: 1rem;
+    }
+    
+    .user-type.active .user-type-title {
+      color: white;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #2d5016;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 0.8rem;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+      outline: none;
+    }
+    
+    .form-input:focus {
+      border-color: #2d5016;
+    }
+    
+    .password-rules {
+      margin-top: 0.5rem;
+      padding: 1rem;
+      background: linear-gradient(135deg, #f8f9fa, #e8f5e8);
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      font-size: 0.85rem;
+    }
+    
+    .rule {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.3rem;
+      color: #2d5016;
+      opacity: 0.6;
+      transition: all 0.3s;
+    }
+    
+    .rule.valid {
+      opacity: 1;
+      color: #2d5016;
+    }
+    
+    .rule-icon {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      transition: all 0.3s;
+    }
+    
+    .rule.valid .rule-icon {
+      background: #2d5016;
+      border-color: #2d5016;
+      color: white;
+    }
+    
+    .register-btn {
+      width: 100%;
+      background: #2d5016;
+      color: white;
+      padding: 1rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 1rem;
+    }
+    
+    .register-btn:hover {
+      background: #1f3610;
+    }
+    
+    .register-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    
+    .password-mismatch {
+      color: #dc3545;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+    
+    .footer {
+      background: white;
+      color: #2d5016;
+      padding: 1.5rem 0;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      border-top: 1px solid #e9ecef;
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      text-align: center;
+    }
+    
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    
+    .footer-links a {
+      color: #2d5016;
+      text-decoration: none;
+      opacity: 0.8;
+      font-size: 0.9rem;
+      transition: opacity 0.3s;
+    }
+    
+    .footer-links a:hover { 
+      opacity: 1; 
+    }
+    
+    .footer-copyright {
+      color: #2d5016;
+      opacity: 0.8;
+      font-size: 0.8rem;
+    }
+    
+    @media (max-width: 768px) {
+      .header { 
+        padding: 1rem; 
+      }
+      
+      .nav { 
+        gap: 1rem; 
+      }
+      
+      .main {
+        padding: 2rem 1rem;
+      }
+      
+      .register-container { 
+        padding: 2rem; 
+      }
+      
+      .user-type-selector { 
+        flex-direction: column; 
+      }
+      
+      .footer-links { 
+        flex-wrap: wrap; 
+        gap: 1rem; 
+      }
+    }
+  </style>
 </head>
 <body>
 
   <header class="header">
-    <a href="/index.html" class="logo">talfy</a>
+    <a href="/" class="logo">talfy</a>
     <nav class="nav">
-      <a href="/pricing.html">Pricing</a>
-      <a href="/about.html">About us</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/login.html">Login</a>
+      <a href="/login.html">Sign In</a>
     </nav>
-    <button class="hamburger" onclick="toggleMenu()">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-    <div class="mobile-menu" id="mobileMenu">
-      <a href="/pricing.html">Pricing</a>
-      <a href="/about.html">About us</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/login.html">Login</a>
-      <a href="/privacy.html">Privacy</a>
-      <a href="/terms.html">Terms</a>
-    </div>
   </header>
 
-  <main class="main register-page">
-    <div class="register-content">
-      <div class="register-hero">
+  <main class="main">
+    <div class="register-container">
+      <div class="register-header">
         <h1 class="register-title">Join Talfy</h1>
-        <div class="register-underline"></div>
-        <p class="register-subtitle">Create your account and start connecting with finance talent</p>
+        <p class="register-subtitle">Create your account in seconds</p>
       </div>
 
-      <div class="register-container">
-        <form class="register-form" id="registerForm">
-          <div class="form-section">
-            <h3>Choose Your Account Type</h3>
-            <div class="user-type-cards">
-              <div class="user-type-card" id="candidateCard" onclick="selectUserType('candidate')">
-                <div class="card-icon">👤</div>
-                <h4>I'm a Finance Professional</h4>
-                <p>Looking for new opportunities in finance</p>
-                <div class="card-features">
-                  <span>✓ Create anonymous profile</span>
-                  <span>✓ Get discovered by companies</span>
-                  <span>✓ Control your visibility</span>
-                </div>
-              </div>
-              
-              <div class="user-type-card" id="companyCard" onclick="selectUserType('company')">
-                <div class="card-icon">🏢</div>
-                <h4>I'm a Company</h4>
-                <p>Looking to hire finance professionals</p>
-                <div class="card-features">
-                  <span>✓ Browse candidate profiles</span>
-                  <span>✓ Download CVs</span>
-                  <span>✓ Build talent archive</span>
-                </div>
-              </div>
-            </div>
-            <input type="hidden" id="userType" name="userType" required>
-          </div>
+      <div class="user-type-selector">
+        <div class="user-type active" onclick="selectUserType('candidate')">
+          <div class="user-type-icon">👤</div>
+          <div class="user-type-title">Candidate</div>
+        </div>
+        <div class="user-type" onclick="selectUserType('company')">
+          <div class="user-type-icon">🏢</div>
+          <div class="user-type-title">Company</div>
+        </div>
+      </div>
 
-          <div class="form-section">
-            <h3>Account Details</h3>
-            <div class="form-group">
-              <label for="email">Email Address</label>
-              <input type="email" id="email" name="email" required placeholder="your@email.com">
-            </div>
-
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" id="password" name="password" required placeholder="At least 6 characters">
-            </div>
-
-            <div class="form-group">
-              <label for="confirmPassword">Confirm Password</label>
-              <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Repeat your password">
-            </div>
-
-            <div class="form-group checkbox-group">
-              <label class="checkbox-label">
-                <input type="checkbox" required>
-                <span class="checkmark"></span>
-                I agree to the <a href="/terms.html">Terms of Service</a> and <a href="/privacy.html">Privacy Policy</a>
-              </label>
-            </div>
-
-            <button type="submit" class="register-button">
-              <span>Create Account</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-              </svg>
-            </button>
-          </div>
-        </form>
-
-        <div class="register-footer">
-          <p>Already have an account? <a href="/login.html">Sign in here</a></p>
+      <form id="registerForm">
+        <div class="form-group">
+          <label for="email" class="form-label">Email Address</label>
+          <input type="email" id="email" class="form-input" placeholder="Enter your email" required>
         </div>
 
-        <div id="registerMessage" class="message" style="display: none;"></div>
-      </div>
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" id="password" class="form-input" placeholder="Create a password" required>
+          <div class="password-rules" id="passwordRules">
+            <div class="rule" id="lengthRule">
+              <span class="rule-icon">✓</span>
+              <span>At least 8 characters</span>
+            </div>
+            <div class="rule" id="uppercaseRule">
+              <span class="rule-icon">✓</span>
+              <span>One uppercase letter</span>
+            </div>
+            <div class="rule" id="numberRule">
+              <span class="rule-icon">✓</span>
+              <span>One number</span>
+            </div>
+            <div class="rule" id="symbolRule">
+              <span class="rule-icon">✓</span>
+              <span>One special character</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword" class="form-label">Confirm Password</label>
+          <input type="password" id="confirmPassword" class="form-input" placeholder="Confirm your password" required>
+          <div class="password-mismatch" id="passwordMismatch" style="display: none;">
+            Passwords do not match
+          </div>
+        </div>
+
+        <button type="submit" class="register-btn" id="registerBtn" disabled>Register</button>
+      </form>
     </div>
   </main>
 
   <footer class="footer">
-    <div class="footer-center">&copy; 2025 Talfy. All rights reserved.</div>
-    <div class="footer-right">
-      <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a>
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="/about.html">About Us</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+      </div>
+      <div class="footer-copyright">
+        <p>&copy; 2024 Talfy. All rights reserved.</p>
+      </div>
     </div>
   </footer>
 
-  <!-- Collega register.js -->
-
-  <script type="module" src="/static/firebase-config.js"></script>
- <script type="module" src="/static/register.js"></script>
+  <script>
+    let selectedUserType = 'candidate';
+    
+    function selectUserType(type) {
+      selectedUserType = type;
+      
+      // Update UI
+      document.querySelectorAll('.user-type').forEach(el => el.classList.remove('active'));
+      event.target.closest('.user-type').classList.add('active');
+    }
+    
+    // Password validation
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    const registerBtn = document.getElementById('registerBtn');
+    const passwordMismatch = document.getElementById('passwordMismatch');
+    
+    const rules = {
+      length: { element: document.getElementById('lengthRule'), test: (pwd) => pwd.length >= 8 },
+      uppercase: { element: document.getElementById('uppercaseRule'), test: (pwd) => /[A-Z]/.test(pwd) },
+      number: { element: document.getElementById('numberRule'), test: (pwd) => /[0-9]/.test(pwd) },
+      symbol: { element: document.getElementById('symbolRule'), test: (pwd) => /[!@#$%^&*(),.?":{}|<>]/.test(pwd) }
+    };
+    
+    function validatePassword() {
+      const password = passwordInput.value;
+      let allValid = true;
+      
+      // Check each rule
+      Object.keys(rules).forEach(key => {
+        const rule = rules[key];
+        const isValid = rule.test(password);
+        
+        if (isValid) {
+          rule.element.classList.add('valid');
+        } else {
+          rule.element.classList.remove('valid');
+          allValid = false;
+        }
+      });
+      
+      return allValid;
+    }
+    
+    function validatePasswordMatch() {
+      const password = passwordInput.value;
+      const confirmPassword = confirmPasswordInput.value;
+      
+      if (confirmPassword && password !== confirmPassword) {
+        passwordMismatch.style.display = 'block';
+        return false;
+      } else {
+        passwordMismatch.style.display = 'none';
+        return true;
+      }
+    }
+    
+    function updateRegisterButton() {
+      const email = document.getElementById('email').value;
+      const passwordValid = validatePassword();
+      const passwordsMatch = validatePasswordMatch();
+      
+      if (email && passwordValid && passwordsMatch && confirmPasswordInput.value) {
+        registerBtn.disabled = false;
+      } else {
+        registerBtn.disabled = true;
+      }
+    }
+    
+    // Event listeners
+    passwordInput.addEventListener('input', () => {
+      validatePassword();
+      updateRegisterButton();
+    });
+    
+    confirmPasswordInput.addEventListener('input', () => {
+      validatePasswordMatch();
+      updateRegisterButton();
+    });
+    
+    document.getElementById('email').addEventListener('input', updateRegisterButton);
+    
+    // Form submission
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value;
+      const password = passwordInput.value;
+      
+      // Final validation
+      if (!validatePassword() || !validatePasswordMatch()) {
+        alert('Please fix the password requirements');
+        return;
+      }
+      
+      // Simulate registration
+      registerBtn.textContent = 'Creating Account...';
+      registerBtn.disabled = true;
+      
+      setTimeout(() => {
+        alert(`Account created successfully!\nType: ${selectedUserType}\nEmail: ${email}`);
+        
+        // Reset form
+        document.getElementById('registerForm').reset();
+        Object.keys(rules).forEach(key => {
+          rules[key].element.classList.remove('valid');
+        });
+        passwordMismatch.style.display = 'none';
+        registerBtn.textContent = 'Register';
+        registerBtn.disabled = true;
+      }, 1500);
+    });
+  </script>
 </body>
 </html>

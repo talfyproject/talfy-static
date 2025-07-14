@@ -1,67 +1,65 @@
+import { db, auth } from "./firebase-config.js";
+import { doc, updateDoc } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
+
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("candidateProfileForm");
   const message = document.getElementById("profileMessage");
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    message.textContent = "";
-
-    const userId = localStorage.getItem("user_id");
-    if (!userId) {
-      message.textContent = "User ID not found. Please register again.";
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      message.textContent = "User not authenticated. Please log in again.";
       return;
     }
 
-    const name = document.getElementById("display_name").value.trim();
-    const job = document.getElementById("current_job").value.trim();
-    const exp = parseInt(document.getElementById("experience_years").value);
-    const salary = document.getElementById("salary_range").value.trim();
-    const sector = getCheckedValues("sector[]");
-    const tools = getCheckedValues("tools[]");
-    const avatar = document.querySelector('input[name="avatar_choice"]:checked')?.value;
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      message.textContent = "";
+      message.style.color = "red";
 
-    if (!name || !job || isNaN(exp) || !salary || sector.length === 0 || tools.length === 0 || !avatar) {
-      message.textContent = "Please fill in all required fields.";
-      return;
-    }
+      const name = document.getElementById("display_name").value.trim();
+      const job = document.getElementById("current_job").value.trim();
+      const exp = parseInt(document.getElementById("experience_years").value);
+      const salary = document.getElementById("salary_range").value.trim();
+      const sector = getCheckedValues("sector[]");
+      const tools = getCheckedValues("tools[]");
+      const avatar = document.querySelector('input[name="avatar_choice"]:checked')?.value;
 
-    const payload = {
-      user_id: userId,
-      display_name: name,
-      current_job: job,
-      experience_years: exp,
-      salary_range: salary,
-      sector: sector,
-      tools: tools,
-      avatar: avatar
-    };
+      if (!name || !job || isNaN(exp) || !salary || sector.length === 0 || tools.length === 0 || !avatar) {
+        message.textContent = "Please fill in all required fields.";
+        return;
+      }
 
-    try {
-  const response = await fetch("https://talfy-backend.onrender.com/api/save-candidate-profile", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const payload = {
+        display_name: name,
+        current_job: job,
+        experience_years: exp,
+        salary_range: salary,
+        sector: sector,
+        tools: tools,
+        avatar: avatar,
+        completed_profile: true,
+        updated_at: new Date()
+      };
 
-      const data = await response.json();
+      try {
+        const userRef = doc(db, "users", user.uid);
+        await updateDoc(userRef, payload);
 
-      if (response.ok) {
         message.textContent = "Profile saved successfully!";
         message.style.color = "green";
+
         setTimeout(() => {
-          window.location.href = "candidates.html";
+          window.location.href = `candidate.html?id=${user.uid}`;
         }, 1500);
-      } else {
-        message.textContent = data.error || "Error saving profile.";
-        message.style.color = "red";
+      } catch (error) {
+        console.error(error);
+        message.textContent = "Error saving profile. Try again.";
       }
-    } catch (err) {
-      console.error(err);
-      message.textContent = "Network error. Try again later.";
+    });
+
+    function getCheckedValues(name) {
+      return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
     }
   });
-
-  function getCheckedValues(name) {
-    return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
-  }
 });

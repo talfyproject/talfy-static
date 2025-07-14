@@ -16,17 +16,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const job = document.getElementById("current_job").value.trim();
     const exp = parseInt(document.getElementById("experience_years").value);
     const salary = document.getElementById("salary_range").value.trim();
-    const sector = getCheckedValues("sector[]").join(", ");
-    const tools = getCheckedValues("tools[]").join(", ");
+    const sector = getCheckedValues("sector[]");
+    const tools = getCheckedValues("tools[]");
     const avatar = document.querySelector('input[name="avatar_choice"]:checked')?.value;
 
-    if (!name || !job || isNaN(exp) || !salary || !sector || !tools || !avatar) {
+    if (!name || !job || isNaN(exp) || !salary || sector.length === 0 || tools.length === 0 || !avatar) {
       message.textContent = "Please fill in all required fields.";
       return;
     }
 
     const payload = {
-      user_id: userId,
       display_name: name,
       current_job: job,
       experience_years: exp,
@@ -37,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     try {
-      const response = await fetch("https://talfy-backend.onrender.com/save-candidate-profile", {
+      const response = await fetch(`https://talfy-backend.onrender.com/api/update-candidate/${userId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

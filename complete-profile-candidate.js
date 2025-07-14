@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     try {
-      const response = await fetch("https://talfy-backend.onrender.com/api/save-candidate-profile", {
+     const response = await fetch("https://talfy-backend.onrender.com/save-candidate-profile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

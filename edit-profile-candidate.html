@@ -29,24 +29,65 @@
         document.getElementById("current_job").value = data.current_job || "";
         document.getElementById("experience_years").value = data.experience_years || "";
         document.getElementById("salary_range").value = data.salary_range || "";
-        document.getElementById("native_language").value = data.native_language || "";
-        document.getElementById("birth_day").value = data.birth_day || "";
-        document.getElementById("birth_month").value = data.birth_month || "";
-        document.getElementById("birth_year").value = data.birth_year || "";
+        document.getElementById("native_language").val<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Candidate Profile – Talfy</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <script>
+    function toggleMenu() {
+      document.getElementById("mobileMenu").classList.toggle("active");
+    }
 
-        // Check checkboxes for sector, tools, education_area, job_title, other_languages
-        (data.sector || []).forEach(v => document.querySelector(`input[name="sector[]"][value="${v}"]`)?.click());
-        (data.tools || []).forEach(v => document.querySelector(`input[name="tools[]"][value="${v}"]`)?.click());
-        (data.education_area || []).forEach(v => document.querySelector(`input[name="education_area[]"][value="${v}"]`)?.click());
-        (data.job_title || []).forEach(v => document.querySelector(`input[name="job_title[]"][value="${v}"]`)?.click());
-        (data.other_languages || []).forEach(v => document.querySelector(`input[name="other_languages[]"][value="${v}"]`)?.click());
+    async function loadProfileData() {
+      const userId = localStorage.getItem("user_id");
+      const userType = localStorage.getItem("user_type");
+      if (!userId || userType !== "candidate") {
+        window.location.href = "/login.html";
+        return;
+      }
+
+      try {
+        const res = await fetch("https://talfy-backend.onrender.com/api/candidate/" + userId);
+        const data = await res.json();
+
+        if (data.error) {
+          alert("Profile not found.");
+          return;
+        }
+
+        document.getElementById("display_name").value = data.display_name || "";
+        document.getElementById("current_job").value = data.current_job || "";
+        document.getElementById("experience_years").value = data.experience_years || "";
+        document.getElementById("salary_range").value = data.salary_range || "";
+
+        if (data.tools) {
+          const toolsArray = data.tools.split(",").map(t => t.trim());
+          toolsArray.forEach(tool => {
+            const checkbox = document.querySelector(`input[name="tools[]"][value="${tool}"]`);
+            if (checkbox) checkbox.checked = true;
+          });
+        }
+
+        if (data.sector) {
+          const sectorArray = data.sector.split(",").map(s => s.trim());
+          sectorArray.forEach(sector => {
+            const checkbox = document.querySelector(`input[name="sector[]"][value="${sector}"]`);
+            if (checkbox) checkbox.checked = true;
+          });
+        }
 
         if (data.avatar) {
-          document.querySelector(`input[name="avatar"][value="${data.avatar}"]`)?.click();
+          const radio = document.querySelector(`input[name="avatar"][value="${data.avatar}"]`);
+          if (radio) radio.checked = true;
         }
 
       } catch (err) {
         alert("Error loading profile data.");
+        console.error(err);
       }
     }
 
@@ -71,9 +112,7 @@
       try {
         const res = await fetch("https://talfy-backend.onrender.com/api/update-candidate/" + userId, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(json)
         });
 
@@ -112,28 +151,10 @@
   <main class="main">
     <h1>Edit Your Candidate Profile</h1>
     <form id="profileForm" onsubmit="submitForm(event)">
-      <label>First Name: <input type="text" id="first_name" name="first_name"/></label>
-      <label>Last Name: <input type="text" id="last_name" name="last_name"/></label>
       <label>Display Name: <input type="text" id="display_name" name="display_name"/></label>
       <label>Current Job: <input type="text" id="current_job" name="current_job"/></label>
       <label>Years of Experience: <input type="number" id="experience_years" name="experience_years"/></label>
       <label>Salary Range: <input type="text" id="salary_range" name="salary_range"/></label>
-
-      <label>Native Language:
-        <select id="native_language" name="native_language">
-          <option value="">Select</option>
-          <option value="Italian">Italian</option>
-          <option value="English">English</option>
-          <option value="French">French</option>
-        </select>
-      </label>
-
-      <fieldset>
-        <legend>Other Languages:</legend>
-        <label><input type="checkbox" name="other_languages[]" value="English"/> English</label>
-        <label><input type="checkbox" name="other_languages[]" value="Spanish"/> Spanish</label>
-        <label><input type="checkbox" name="other_languages[]" value="German"/> German</label>
-      </fieldset>
 
       <fieldset>
         <legend>Sectors:</legend>
@@ -147,27 +168,6 @@
         <label><input type="checkbox" name="tools[]" value="SAP"/> SAP</label>
         <label><input type="checkbox" name="tools[]" value="Excel"/> Excel</label>
         <label><input type="checkbox" name="tools[]" value="Power BI"/> Power BI</label>
-      </fieldset>
-
-      <fieldset>
-        <legend>Job Titles:</legend>
-        <label><input type="checkbox" name="job_title[]" value="Controller"/> Controller</label>
-        <label><input type="checkbox" name="job_title[]" value="Accountant"/> Accountant</label>
-        <label><input type="checkbox" name="job_title[]" value="Treasury Manager"/> Treasury Manager</label>
-      </fieldset>
-
-      <fieldset>
-        <legend>Education Area:</legend>
-        <label><input type="checkbox" name="education_area[]" value="Economics"/> Economics</label>
-        <label><input type="checkbox" name="education_area[]" value="Engineering"/> Engineering</label>
-        <label><input type="checkbox" name="education_area[]" value="Languages"/> Languages</label>
-      </fieldset>
-
-      <fieldset>
-        <legend>Birth Date:</legend>
-        <label>Day: <input type="number" id="birth_day" name="birth_day" min="1" max="31"/></label>
-        <label>Month: <input type="number" id="birth_month" name="birth_month" min="1" max="12"/></label>
-        <label>Year: <input type="number" id="birth_year" name="birth_year" min="1950" max="2025"/></label>
       </fieldset>
 
       <fieldset>
@@ -186,6 +186,5 @@
       <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a>
     </div>
   </footer>
-
 </body>
 </html>

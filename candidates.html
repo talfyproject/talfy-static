@@ -1,256 +1,1328 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Finance Candidates – Talfy</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script>
-    function toggleMenu() {
-      document.getElementById("mobileMenu").classList.toggle("active");
-    }
-
-    function toggleFilters() {
-      const filters = document.getElementById("filtersPanel");
-      filters.classList.toggle("active");
-    }
-
-    let currentPage = 1;
-    const candidatesPerPage = 10;
-    let allCandidates = [];
-
-    async function loadCandidates() {
-      const container = document.getElementById("candidatesContainer");
-      const loadingEl = document.getElementById("loadingState");
-
-      try {
-        loadingEl.style.display = "block";
-        const response = await fetch("https://talfy-backend.onrender.com/api/candidates");
-        const data = await response.json();
-        loadingEl.style.display = "none";
-
-        allCandidates = data;
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const query = urlParams.get("search");
-        if (query) {
-          allCandidates = allCandidates.filter(c => {
-            const combined = `${c.display_name} ${c.current_job} ${c.sector} ${c.tools}`.toLowerCase();
-            return combined.includes(query.toLowerCase());
-          });
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Candidates – Talfy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* RESET E BASE */
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
         }
 
-        displayCandidates();
-
-      } catch (error) {
-        loadingEl.style.display = "none";
-        container.innerHTML = `<div class="empty-state"><div class="empty-icon">👥</div><h3>Error loading candidates</h3><p>Please try again later.</p></div>`;
-      }
-    }
-
-    function displayCandidates() {
-      const container = document.getElementById("candidatesContainer");
-      const startIndex = (currentPage - 1) * candidatesPerPage;
-      const endIndex = startIndex + candidatesPerPage;
-      const candidatesToShow = allCandidates.slice(startIndex, endIndex);
-
-      container.innerHTML = "";
-
-      if (candidatesToShow.length === 0) {
-        container.innerHTML = `<div class="empty-state"><div class="empty-icon">👥</div><h3>No candidates found</h3><p>Try adjusting your search filters or check back later.</p></div>`;
-        document.getElementById("resultsCount").textContent = "0 candidates found";
-        return;
-      }
-
-      candidatesToShow.forEach(candidate => {
-        const card = document.createElement("div");
-        card.className = "candidate-card";
-        card.onclick = () => showPremiumModal();
-
-        card.innerHTML = `
-          ${candidate.verified ? '<div class="verified-badge">✓ Verified by Talfy</div>' : ''}
-          <div class="candidate-avatar">
-            <div class="avatar-placeholder">${candidate.display_name.charAt(0)}</div>
-            <div class="availability-badge ${candidate.available ? 'available' : 'busy'}">
-              ${candidate.available ? '🟢' : '🔴'}
-            </div>
-          </div>
-          <div class="candidate-info">
-            <h3 class="candidate-name">${candidate.display_name}</h3>
-            <div class="candidate-details">
-              <div class="detail-item"><span class="detail-icon">💼</span><span>${candidate.current_job || 'Finance Professional'}</span></div>
-              <div class="detail-item"><span class="detail-icon">📊</span><span>${candidate.experience_years || 0} years experience</span></div>
-              <div class="detail-item"><span class="detail-icon">🏢</span><span>${candidate.sector || 'Various sectors'}</span></div>
-              <div class="detail-item"><span class="detail-icon">🛠️</span><span>${candidate.tools || 'Multiple tools'}</span></div>
-              <div class="detail-item"><span class="detail-icon">📍</span><span>${candidate.available ? 'Available now' : 'Open to opportunities'}</span></div>
-            </div>
-          </div>
-          <div class="candidate-actions">
-            <div class="view-profile"><span>View Details</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-
-      document.getElementById("resultsCount").textContent = `${allCandidates.length} candidates found`;
-      updatePagination();
-    }
-
-    function showPremiumModal() {
-      const modal = document.getElementById('premiumModal');
-      modal.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closePremiumModal() {
-      const modal = document.getElementById('premiumModal');
-      modal.style.display = 'none';
-      document.body.style.overflow = 'auto';
-    }
-
-    function updatePagination() {
-      const totalPages = Math.ceil(allCandidates.length / candidatesPerPage);
-      const paginationEl = document.getElementById('pagination');
-      paginationEl.innerHTML = "";
-
-      if (totalPages <= 1) {
-        paginationEl.style.display = 'none';
-        return;
-      }
-
-      paginationEl.style.display = 'flex';
-
-      const prevBtn = document.createElement('button');
-      prevBtn.className = "pagination-btn";
-      prevBtn.innerText = "← Previous";
-      prevBtn.disabled = currentPage === 1;
-      prevBtn.onclick = () => {
-        if (currentPage > 1) {
-          currentPage--;
-          displayCandidates();
+        :root {
+          --primary-color: #134e3a;
+          --primary-light: #1a6b4a;
+          --primary-dark: #0d3a2a;
+          --accent-color: #2dd4bf;
+          --text-primary: #0f172a;
+          --text-secondary: #64748b;
+          --text-muted: #94a3b8;
+          --background: #ffffff;
+          --surface: #f8fafc;
+          --border: #e2e8f0;
+          --border-light: #f1f5f9;
+          --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+          --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+          --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+          --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+          --radius-sm: 0.375rem;
+          --radius-md: 0.5rem;
+          --radius-lg: 0.75rem;
+          --radius-xl: 1rem;
         }
-      };
-      paginationEl.appendChild(prevBtn);
 
-      for (let i = 1; i <= totalPages; i++) {
-        const pageBtn = document.createElement('button');
-        pageBtn.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
-        pageBtn.innerText = i;
-        pageBtn.onclick = () => {
-          currentPage = i;
-          displayCandidates();
-        };
-        paginationEl.appendChild(pageBtn);
-      }
-
-      const nextBtn = document.createElement('button');
-      nextBtn.className = "pagination-btn";
-      nextBtn.innerText = "Next →";
-      nextBtn.disabled = currentPage === totalPages;
-      nextBtn.onclick = () => {
-        if (currentPage < totalPages) {
-          currentPage++;
-          displayCandidates();
+        body {
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          line-height: 1.6;
+          color: var(--text-primary);
+          background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+          font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
         }
-      };
-      paginationEl.appendChild(nextBtn);
-    }
 
-    function handleSearch() {
-      const searchTerm = document.getElementById("searchInput").value;
-      if (searchTerm.trim()) {
-        window.location.href = `candidates.html?search=${encodeURIComponent(searchTerm)}`;
-      }
-    }
+        /* HEADER */
+        .header {
+          position: sticky;
+          top: 0;
+          z-index: 1000;
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(20px);
+          border-bottom: 1px solid var(--border-light);
+          transition: all 0.3s ease;
+          padding: 1rem 2rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          position: relative;
+        }
 
-    window.onload = loadCandidates;
-  </script>
+        .logo {
+          font-size: 2.25rem;
+          font-weight: 700;
+          color: var(--primary-color);
+          text-transform: lowercase;
+          text-decoration: none;
+          transition: all 0.3s ease;
+          position: relative;
+        }
+
+        .logo:hover {
+          transform: translateY(-2px);
+        }
+
+        .nav {
+          display: flex;
+          gap: 0.5rem;
+          align-items: center;
+        }
+
+        .nav a {
+          text-decoration: none;
+          color: var(--text-secondary);
+          font-size: 0.95rem;
+          font-weight: 500;
+          padding: 0.5rem 1rem;
+          border-radius: var(--radius-md);
+          transition: all 0.2s ease;
+          position: relative;
+        }
+
+        .nav a:hover {
+          color: var(--primary-color);
+          background-color: var(--surface);
+          transform: translateY(-1px);
+        }
+
+        /* Login button without background */
+        .nav a:nth-last-child(2) {
+          color: var(--text-primary);
+          font-weight: 600;
+        }
+
+        .nav a:nth-last-child(2):hover {
+          color: var(--primary-color);
+          background-color: var(--surface);
+        }
+
+        /* Register button with background */
+        .nav a:last-child {
+          background-color: var(--primary-color);
+          color: white;
+          margin-left: 0.5rem;
+        }
+
+        .nav a:last-child:hover {
+          background-color: var(--primary-dark);
+          color: white;
+          box-shadow: var(--shadow-md);
+        }
+
+        .hamburger {
+          display: none;
+          flex-direction: column;
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 0.5rem;
+          border-radius: var(--radius-md);
+          transition: all 0.2s ease;
+        }
+
+        .hamburger span {
+          width: 20px;
+          height: 2px;
+          background-color: var(--text-primary);
+          margin: 2px 0;
+          transition: all 0.3s ease;
+          border-radius: 1px;
+        }
+
+        .hamburger:hover {
+          background-color: var(--surface);
+        }
+
+        .mobile-menu {
+          display: none;
+          position: absolute;
+          top: 100%;
+          right: 2rem;
+          background: white;
+          border: 1px solid var(--border);
+          border-radius: var(--radius-lg);
+          box-shadow: var(--shadow-xl);
+          flex-direction: column;
+          z-index: 10;
+          min-width: 200px;
+          overflow: hidden;
+        }
+
+        .mobile-menu.active {
+          display: flex;
+          animation: slideDown 0.3s ease;
+        }
+
+        .mobile-menu a {
+          padding: 1rem 1.5rem;
+          text-decoration: none;
+          color: var(--text-secondary);
+          font-size: 0.95rem;
+          font-weight: 500;
+          border-bottom: 1px solid var(--border-light);
+          transition: all 0.2s ease;
+        }
+
+        .mobile-menu a:hover {
+          color: var(--primary-color);
+          background-color: var(--surface);
+        }
+
+        .mobile-menu a:last-child {
+          border-bottom: none;
+        }
+
+        /* Main content styles */
+        .main {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .page-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        /* Search and filters */
+        .search-container {
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-input {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-input input {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 2.5rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-input input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(19, 78, 58, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .search-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .search-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .filters-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-primary);
+        }
+
+        .filters-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .filter-tag {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-tag:hover, .filter-tag.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Candidates grid */
+        .candidates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .candidate-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .candidate-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .candidate-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1.5rem auto 1rem;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .candidate-avatar.female {
+            background-color: var(--accent-color);
+        }
+
+        .candidate-info {
+            padding: 0 1.5rem 1.5rem;
+            text-align: center;
+        }
+
+        .candidate-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: var(--text-primary);
+        }
+
+        .candidate-location {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+        }
+
+        .candidate-role {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .candidate-experience {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            background-color: var(--surface);
+            padding: 0.3rem 0.8rem;
+            border-radius: var(--radius-md);
+            display: inline-block;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .pagination-item {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-md);
+            background-color: white;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .pagination-item:hover {
+            background-color: var(--surface);
+            color: var(--primary-color);
+        }
+
+        .pagination-item.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            transition: color 0.2s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        /* Candidate profile styles */
+        .candidate-profile {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 600;
+        }
+
+        .profile-avatar.female {
+            background-color: var(--accent-color);
+        }
+
+        .profile-basic-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+            color: var(--text-primary);
+        }
+
+        .profile-role {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-location {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .profile-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .profile-section-title svg {
+            color: var(--primary-color);
+        }
+
+        .profile-detail {
+            display: flex;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-detail-label {
+            width: 150px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .profile-detail-value {
+            flex: 1;
+            color: var(--text-primary);
+        }
+
+        .profile-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .profile-skill {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 0.3rem 0.8rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .profile-experience-item {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .profile-experience-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .experience-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.2rem;
+        }
+
+        .experience-company {
+            font-weight: 500;
+            color: var(--primary-color);
+            margin-bottom: 0.2rem;
+        }
+
+        .experience-period {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .experience-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Premium upsell */
+        .premium-upsell {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .premium-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .premium-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .premium-description {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .premium-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .premium-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* FOOTER */
+        .footer {
+          background: var(--surface);
+          border-top: 1px solid var(--border);
+          padding: 2rem;
+          font-size: 0.9rem;
+          color: var(--text-muted);
+          text-align: center;
+          margin-top: auto;
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+
+        .footer-links {
+          display: flex;
+          justify-content: center;
+          gap: 1rem;
+        }
+
+        .footer a {
+          text-decoration: none;
+          color: var(--text-secondary);
+          font-weight: 500;
+          transition: color 0.2s ease;
+        }
+
+        .footer a:hover {
+          color: var(--primary-color);
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                display: none;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .main {
+                padding: 1.5rem 1rem;
+            }
+            .search-row {
+                flex-direction: column;
+            }
+            .candidates-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .profile-detail {
+                flex-direction: column;
+                margin-bottom: 1rem;
+            }
+            .profile-detail-label {
+                width: 100%;
+                margin-bottom: 0.2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-
-  <!-- HEADER (identico al tuo) -->
-  <header class="header">
-    <a href="/index.html" class="logo">talfy</a>
-    <nav class="nav">
-      <a href="/pricing.html">Pricing</a>
-      <a href="/about.html">About us</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/login.html">Login</a>
-      <a href="/register.html">Register</a>
-    </nav>
-    <button class="hamburger" onclick="toggleMenu()">
-      <span></span><span></span><span></span>
-    </button>
-    <div class="mobile-menu" id="mobileMenu">
-      <a href="/pricing.html">Pricing</a>
-      <a href="/about.html">About us</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/login.html">Login</a>
-      <a href="/register.html">Register</a>
-      <a href="/privacy.html">Privacy</a>
-      <a href="/terms.html">Terms</a>
-    </div>
-  </header>
-
-  <!-- MAIN + RISULTATI -->
-  <main class="main candidates-page">
-    <div class="candidates-content">
-      <div class="candidates-hero">
-        <h1 class="candidates-title">Finance Candidates</h1>
-        <div class="candidates-underline"></div>
-        <p class="candidates-subtitle">Discover talented finance professionals ready for their next opportunity</p>
-      </div>
-
-      <div class="search-filters-section">
-        <div class="search-bar">
-          <div class="search-input-wrapper">
-            <input type="text" id="searchInput" placeholder="Search by role, skills, or experience..." />
-            <button class="search-button" onclick="handleSearch()">
-              <span>Search</span>
-            </button>
-          </div>
+    <header class="header">
+        <a href="/index.html" class="logo">talfy</a>
+        <nav class="nav">
+            <a href="/pricing.html">Pricing</a>
+            <a href="/about.html">About us</a>
+            <a href="/contact.html">Contact</a>
+            <a href="/login.html">Login</a>
+            <a href="/register.html">Register</a>
+        </nav>
+        <button class="hamburger" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/pricing.html">Pricing</a>
+            <a href="/about.html">About us</a>
+            <a href="/contact.html">Contact</a>
+            <a href="/login.html">Login</a>
+            <a href="/register.html">Register</a>
+            <a href="/privacy.html">Privacy</a>
+            <a href="/terms.html">Terms</a>
         </div>
-      </div>
+    </header>
 
-      <div class="results-header">
-        <div class="results-info">
-          <span id="resultsCount">Loading candidates...</span>
+    <main class="main">
+        <h1 class="page-title">Find Talented Candidates</h1>
+        <p class="page-subtitle">Browse through our pool of qualified professionals ready for their next opportunity</p>
+        
+        <div class="search-container">
+            <div class="search-row">
+                <div class="search-input">
+                    <div class="search-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                        </svg>
+                    </div>
+                    <input type="text" id="searchInput" placeholder="Search by name, location, role...">
+                </div>
+                <button class="search-button" onclick="searchCandidates()">Search</button>
+            </div>
+            
+            <div class="filters">
+                <h3 class="filters-title">Popular filters:</h3>
+                <div class="filters-row">
+                    <div class="filter-tag" onclick="toggleFilter(this)">Software Developer</div>
+                    <div class="filter-tag" onclick="toggleFilter(this)">Designer</div>
+                    <div class="filter-tag" onclick="toggleFilter(this)">Marketing</div>
+                    <div class="filter-tag" onclick="toggleFilter(this)">Project Manager</div>
+                    <div class="filter-tag" onclick="toggleFilter(this)">Data Analyst</div>
+                    <div class="filter-tag" onclick="toggleFilter(this)">Remote</div>
+                    <div class="filter-tag" onclick="toggleFilter(this)">5+ Years</div>
+                    <div class="filter-tag" onclick="toggleFilter(this)">New York</div>
+                    <div class="filter-tag" onclick="toggleFilter(this)">London</div>
+                </div>
+            </div>
         </div>
-      </div>
-
-      <div id="loadingState" class="loading-state" style="display: none;">
-        <div class="loading-spinner"></div>
-        <p>Loading candidates...</p>
-      </div>
-
-      <div class="candidates-grid" id="candidatesContainer"></div>
-
-      <div class="pagination" id="pagination"></div>
-    </div>
-
-    <!-- PREMIUM MODAL -->
-    <div class="premium-modal" id="premiumModal" onclick="closePremiumModal()">
-      <div class="modal-content" onclick="event.stopPropagation()">
-        <button class="modal-close" onclick="closePremiumModal()">×</button>
-        <div class="modal-icon">🔒</div>
-        <h3>Premium Feature</h3>
-        <p>Full candidate details are available only to Talfy premium subscribers.</p>
-        <div class="modal-actions">
-          <a href="/pricing.html" class="modal-cta">View Pricing Plans</a>
-          <button onclick="closePremiumModal()" class="modal-secondary">Maybe Later</button>
+        
+        <div class="candidates-grid" id="candidatesGrid">
+            <!-- Candidates will be dynamically inserted here -->
         </div>
-      </div>
-    </div>
-  </main>
+        
+        <div class="pagination">
+            <div class="pagination-item" onclick="changePage(this, 1)">1</div>
+            <div class="pagination-item active" onclick="changePage(this, 2)">2</div>
+            <div class="pagination-item" onclick="changePage(this, 3)">3</div>
+            <div class="pagination-item" onclick="changePage(this, 4)">4</div>
+            <div class="pagination-item" onclick="changePage(this, 5)">5</div>
+            <div class="pagination-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+            </div>
+        </div>
+    </main>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-center">&copy; 2025 Talfy. All rights reserved.</div>
-    <div class="footer-right">
-      <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a>
+    <!-- Candidate Profile Modal -->
+    <div class="modal-overlay" id="candidateModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Candidate Profile</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalContent">
+                <!-- Content will be dynamically inserted here -->
+            </div>
+        </div>
     </div>
-  </footer>
 
+    <footer class="footer">
+        <div>&copy; 2025 Talfy. All rights reserved.</div>
+        <div class="footer-links">
+            <a href="/privacy.html">Privacy</a>
+            <a href="/terms.html">Terms</a>
+        </div>
+    </footer>
+
+    <script>
+        // Check if user is logged in and has premium subscription
+        // This would normally be handled by a server-side check
+        let isLoggedIn = false;
+        let hasPremiumSubscription = false;
+        
+        // Try to get user data from localStorage (simulating persistence between pages)
+        const userData = localStorage.getItem('talfyUserData');
+        if (userData) {
+            const user = JSON.parse(userData);
+            isLoggedIn = true;
+            hasPremiumSubscription = user.isPremium || false;
+            
+            // Update navigation based on login status
+            updateNavigation(user);
+        }
+        
+        // Function to update navigation based on login status
+        function updateNavigation(user) {
+            const nav = document.querySelector('.nav');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            if (user) {
+                // Replace login/register with user menu for desktop
+                nav.innerHTML = `
+                    <a href="/pricing.html">Pricing</a>
+                    <a href="/about.html">About us</a>
+                    <a href="/contact.html">Contact</a>
+                    <a href="/dashboard.html">Dashboard</a>
+                    <a href="#" onclick="logout()">Logout</a>
+                `;
+                
+                // Update mobile menu
+                mobileMenu.innerHTML = `
+                    <a href="/pricing.html">Pricing</a>
+                    <a href="/about.html">About us</a>
+                    <a href="/contact.html">Contact</a>
+                    <a href="/dashboard.html">Dashboard</a>
+                    <a href="#" onclick="logout()">Logout</a>
+                    <a href="/privacy.html">Privacy</a>
+                    <a href="/terms.html">Terms</a>
+                `;
+            }
+        }
+        
+        // Function to logout
+        function logout() {
+            localStorage.removeItem('talfyUserData');
+            window.location.href = '/index.html';
+        }
+        
+        // Sample candidate data - in a real app, this would come from a database
+        // This includes both basic info (shown in cards) and detailed info (shown in modal)
+        const candidatesData = [
+            { 
+                id: 1, 
+                name: "Emma Johnson", 
+                location: "New York, USA", 
+                role: "UX/UI Designer", 
+                experience: 5, 
+                gender: "female",
+                email: "emma.johnson@example.com",
+                phone: "+1 (555) 123-4567",
+                education: "Bachelor of Fine Arts, Design, NYU",
+                languages: ["English (Native)", "Spanish (Intermediate)"],
+                skills: ["UI Design", "User Research", "Figma", "Adobe XD", "Prototyping", "Wireframing"],
+                about: "Passionate UX/UI designer with 5 years of experience creating intuitive and engaging digital experiences. Specialized in user-centered design processes and creating accessible interfaces.",
+                workExperience: [
+                    {
+                        title: "Senior UX Designer",
+                        company: "DesignHub Inc.",
+                        period: "2021 - Present",
+                        description: "Lead designer for multiple client projects, conducting user research and creating design systems."
+                    },
+                    {
+                        title: "UI Designer",
+                        company: "Creative Solutions",
+                        period: "2018 - 2021",
+                        description: "Designed user interfaces for web and mobile applications, collaborating with development teams."
+                    }
+                ]
+            },
+            { 
+                id: 2, 
+                name: "Michael Chen", 
+                location: "San Francisco, USA", 
+                role: "Full Stack Developer", 
+                experience: 7, 
+                gender: "male",
+                email: "michael.chen@example.com",
+                phone: "+1 (555) 987-6543",
+                education: "Master of Computer Science, Stanford University",
+                languages: ["English (Fluent)", "Mandarin (Native)"],
+                skills: ["JavaScript", "React", "Node.js", "Python", "MongoDB", "AWS", "Docker"],
+                about: "Full stack developer with 7 years of experience building scalable web applications. Strong background in both frontend and backend technologies with a focus on performance optimization.",
+                workExperience: [
+                    {
+                        title: "Senior Developer",
+                        company: "TechNova",
+                        period: "2020 - Present",
+                        description: "Lead developer for enterprise SaaS platform, architecting solutions and mentoring junior developers."
+                    },
+                    {
+                        title: "Full Stack Developer",
+                        company: "WebSolutions Inc.",
+                        period: "2016 - 2020",
+                        description: "Developed and maintained multiple client websites and web applications using modern JavaScript frameworks."
+                    }
+                ]
+            },
+            // Additional candidates with basic info only
+            { id: 3, name: "Sophia Rodriguez", location: "London, UK", role: "Product Manager", experience: 6, gender: "female" },
+            { id: 4, name: "James Wilson", location: "Toronto, Canada", role: "Data Scientist", experience: 4, gender: "male" },
+            { id: 5, name: "Olivia Martinez", location: "Berlin, Germany", role: "Frontend Developer", experience: 3, gender: "female" },
+            { id: 6, name: "William Taylor", location: "Sydney, Australia", role: "DevOps Engineer", experience: 8, gender: "male" },
+            { id: 7, name: "Ava Thompson", location: "Paris, France", role: "Marketing Specialist", experience: 5, gender: "female" },
+            { id: 8, name: "Ethan Brown", location: "Amsterdam, Netherlands", role: "Backend Developer", experience: 6, gender: "male" },
+            { id: 9, name: "Isabella Garcia", location: "Madrid, Spain", role: "Content Strategist", experience: 4, gender: "female" },
+            { id: 10, name: "Alexander Lee", location: "Tokyo, Japan", role: "Mobile Developer", experience: 7, gender: "male" },
+            { id: 11, name: "Mia Clark", location: "Chicago, USA", role: "Project Manager", experience: 9, gender: "female" },
+            { id: 12, name: "Daniel Wright", location: "Vancouver, Canada", role: "Software Engineer", experience: 5, gender: "male" },
+            { id: 13, name: "Charlotte Lewis", location: "Dublin, Ireland", role: "UX Researcher", experience: 3, gender: "female" },
+            { id: 14, name: "Matthew Hall", location: "Stockholm, Sweden", role: "Data Analyst", experience: 4, gender: "male" },
+            { id: 15, name: "Amelia Young", location: "Singapore", role: "Product Designer", experience: 6, gender: "female" },
+            { id: 16, name: "Benjamin King", location: "Melbourne, Australia", role: "Systems Architect", experience: 10, gender: "male" },
+            { id: 17, name: "Harper Scott", location: "Barcelona, Spain", role: "Digital Marketer", experience: 5, gender: "female" },
+            { id: 18, name: "Lucas Adams", location: "Munich, Germany", role: "QA Engineer", experience: 4, gender: "male" },
+            { id: 19, name: "Evelyn Nelson", location: "Oslo, Norway", role: "Business Analyst", experience: 7, gender: "female" },
+            { id: 20, name: "Henry Carter", location: "Copenhagen, Denmark", role: "Frontend Developer", experience: 3, gender: "male" }
+        ];
+
+        // Function to toggle mobile menu
+        function toggleMenu() {
+            document.getElementById("mobileMenu").classList.toggle("active");
+        }
+
+        // Function to toggle filter selection
+        function toggleFilter(element) {
+            element.classList.toggle("active");
+            searchCandidates();
+        }
+
+        // Function to change pagination page
+        function changePage(element, pageNum) {
+            document.querySelectorAll('.pagination-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            element.classList.add('active');
+            
+            // In a real application, this would load the next page of candidates
+            // For this demo, we'll just reload the same candidates
+            renderCandidates(candidatesData);
+        }
+
+        // Function to search candidates
+        function searchCandidates() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const activeFilters = Array.from(document.querySelectorAll('.filter-tag.active')).map(el => el.textContent.toLowerCase());
+            
+            let filteredCandidates = candidatesData;
+            
+            if (searchTerm) {
+                filteredCandidates = filteredCandidates.filter(candidate => 
+                    candidate.name.toLowerCase().includes(searchTerm) ||
+                    candidate.location.toLowerCase().includes(searchTerm) ||
+                    candidate.role.toLowerCase().includes(searchTerm) ||
+                    candidate.experience.toString().includes(searchTerm)
+                );
+            }
+            
+            if (activeFilters.length > 0) {
+                filteredCandidates = filteredCandidates.filter(candidate => {
+                    return activeFilters.some(filter => 
+                        candidate.role.toLowerCase().includes(filter) ||
+                        candidate.location.toLowerCase().includes(filter) ||
+                        (filter.includes('years') && candidate.experience >= 5)
+                    );
+                });
+            }
+            
+            renderCandidates(filteredCandidates);
+        }
+
+        // Function to render candidates
+        function renderCandidates(candidates) {
+            const grid = document.getElementById('candidatesGrid');
+            grid.innerHTML = '';
+            
+            if (candidates.length === 0) {
+                grid.innerHTML = '<div class="no-results" style="grid-column: 1 / -1; text-align: center; padding: 3rem 0; color: var(--text-secondary);">No candidates match your search criteria. Try adjusting your filters.</div>';
+                return;
+            }
+            
+            candidates.forEach(candidate => {
+                const card = document.createElement('div');
+                card.className = 'candidate-card';
+                card.setAttribute('data-id', candidate.id);
+                card.onclick = () => showCandidateProfile(candidate.id);
+                
+                card.innerHTML = `
+                    <div class="candidate-avatar ${candidate.gender}">
+                        ${candidate.gender === 'female' ? 
+                            '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/></svg>' : 
+                            '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/></svg>'
+                        }
+                    </div>
+                    <div class="candidate-info">
+                        <h3 class="candidate-name">${candidate.name}</h3>
+                        <div class="candidate-location">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                            </svg>
+                            ${candidate.location}
+                        </div>
+                        <div class="candidate-role">${candidate.role}</div>
+                        <div class="candidate-experience">${candidate.experience} years experience</div>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        // Function to show candidate profile
+        function showCandidateProfile(candidateId) {
+            const candidate = candidatesData.find(c => c.id === candidateId);
+            const modal = document.getElementById('candidateModal');
+            const modalContent = document.getElementById('modalContent');
+            
+            if (!candidate) return;
+            
+            // Check if user has premium subscription
+            if (hasPremiumSubscription) {
+                // Show full profile for premium users
+                modalContent.innerHTML = `
+                    <div class="candidate-profile">
+                        <div class="profile-header">
+                            <div class="profile-avatar ${candidate.gender}">
+                                ${candidate.gender === 'female' ? 
+                                    '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" viewBox="0 0 16 16"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/></svg>' : 
+                                    '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" viewBox="0 0 16 16"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/></svg>'
+                                }
+                            </div>
+                            <div class="profile-basic-info">
+                                <h3 class="profile-name">${candidate.name}</h3>
+                                <div class="profile-role">${candidate.role}</div>
+                                <div class="profile-location">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                                    </svg>
+                                    ${candidate.location}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        ${candidate.about ? `
+                        <div class="profile-section">
+                            <h4 class="profile-section-title">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                </svg>
+                                About
+                            </h4>
+                            <p>${candidate.about}</p>
+                        </div>
+                        ` : ''}
+                        
+                        <div class="profile-section">
+                            <h4 class="profile-section-title">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>
+                                </svg>
+                                Contact Information
+                            </h4>
+                            <div class="profile-detail">
+                                <div class="profile-detail-label">Email:</div>
+                                <div class="profile-detail-value">${candidate.email || 'Not provided'}</div>
+                            </div>
+                            <div class="profile-detail">
+                                <div class="profile-detail-label">Phone:</div>
+                                <div class="profile-detail-value">${candidate.phone || 'Not provided'}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-section">
+                            <h4 class="profile-section-title">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917l-7.5-3.5Z"/>
+                                    <path d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466 4.176 9.032Z"/>
+                                </svg>
+                                Education
+                            </h4>
+                            <div class="profile-detail">
+                                <div class="profile-detail-value">${candidate.education || 'Not provided'}</div>
+                            </div>
+                        </div>
+                        
+                        ${candidate.skills ? `
+                        <div class="profile-section">
+                            <h4 class="profile-section-title">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+                                    <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"/>
+                                </svg>
+                                Skills
+                            </h4>
+                            <div class="profile-skills">
+                                ${candidate.skills.map(skill => `<div class="profile-skill">${skill}</div>`).join('')}
+                            </div>
+                        </div>
+                        ` : ''}
+                        
+                        ${candidate.languages ? `
+                        <div class="profile-section">
+                            <h4 class="profile-section-title">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M4.545 6.714 4.11 8H3l1.862-5h1.284L8 8H6.833l-.435-1.286H4.545zm1.634-.736L5.5 3.956h-.049l-.679 2.022H6.18z"/>
+                                    <path d="M0 2a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v3h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-3H2a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H2zm7.138 9.995c.193.301.402.583.63.846-.748.575-1.673 1.001-2.768 1.292.178.217.451.635.555.867 1.125-.359 2.08-.844 2.886-1.494.777.665 1.739 1.165 2.93 1.472.133-.254.414-.673.629-.89-1.125-.253-2.057-.694-2.82-1.284.681-.747 1.222-1.651 1.621-2.757H14V8h-3v1.047h.765c-.318.844-.74 1.546-1.272 2.13a6.066 6.066 0 0 1-.415-.492 1.988 1.988 0 0 1-.94.31z"/>
+                                </svg>
+                                Languages
+                            </h4>
+                            <div class="profile-detail">
+                                <div class="profile-detail-value">${candidate.languages.join(', ')}</div>
+                            </div>
+                        </div>
+                        ` : ''}
+                        
+                        ${candidate.workExperience ? `
+                        <div class="profile-section">
+                            <h4 class="profile-section-title">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v1.384l7.614 2.03a1.5 1.5 0 0 0 .772 0L16 5.884V4.5A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1h-3zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5z"/>
+                                    <path d="M0 12.5A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5V6.85L8.129 8.947a.5.5 0 0 1-.258 0L0 6.85v5.65z"/>
+                                </svg>
+                                Work Experience
+                            </h4>
+                            ${candidate.workExperience.map(exp => `
+                                <div class="profile-experience-item">
+                                    <div class="experience-title">${exp.title}</div>
+                                    <div class="experience-company">${exp.company}</div>
+                                    <div class="experience-period">${exp.period}</div>
+                                    <div class="experience-description">${exp.description}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+                
+                // Add download CV button in modal footer if we have detailed info
+                if (candidate.email) {
+                    const modalFooter = document.createElement('div');
+                    modalFooter.className = 'modal-footer';
+                    modalFooter.innerHTML = `
+                        <button class="premium-button" onclick="downloadCV(${candidate.id})">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 8px;">
+                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                            </svg>
+                            Download CV
+                        </button>
+                    `;
+                    modalContent.appendChild(modalFooter);
+                }
+            } else {
+                // Show premium upsell for non-premium users
+                modalContent.innerHTML = `
+                    <div class="premium-upsell">
+                        <div class="premium-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2z"/>
+                                <path fill-rule="evenodd" d="M8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+                            </svg>
+                        </div>
+                        <h3 class="premium-title">Unlock Full Candidate Details</h3>
+                        <p class="premium-description">Subscribe to our premium plan to view complete candidate profiles, contact information, and download CVs.</p>
+                        <a href="/pricing.html" class="premium-button">View Pricing Plans</a>
+                    </div>
+                `;
+            }
+            
+            // Show modal
+            modal.classList.add('active');
+        }
+
+        // Function to close modal
+        function closeModal() {
+            document.getElementById('candidateModal').classList.remove('active');
+        }
+
+        // Function to download CV (simulated)
+        function downloadCV(candidateId) {
+            const candidate = candidatesData.find(c => c.id === candidateId);
+            if (!candidate) return;
+            
+            alert(`Downloading CV for ${candidate.name}...\nIn a real application, this would download the candidate's CV.`);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('candidateModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Initial render
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCandidates(candidatesData);
+            
+            // Check if we have candidates from registration (stored in localStorage)
+            const registeredCandidates = localStorage.getItem('talfyRegisteredCandidates');
+            if (registeredCandidates) {
+                const parsedCandidates = JSON.parse(registeredCandidates);
+                
+                // Add registered candidates to our data
+                parsedCandidates.forEach(candidate => {
+                    // Check if candidate is not already in the list
+                    if (!candidatesData.some(c => c.email === candidate.email)) {
+                        // Generate a new ID
+                        const newId = candidatesData.length > 0 ? 
+                            Math.max(...candidatesData.map(c => c.id)) + 1 : 1;
+                        
+                        // Add the candidate with basic info
+                        candidatesData.push({
+                            id: newId,
+                            name: candidate.name || candidate.email.split('@')[0],
+                            location: candidate.location || 'Location not specified',
+                            role: candidate.role || 'Role not specified',
+                            experience: candidate.experience || 0,
+                            gender: candidate.gender || (Math.random() > 0.5 ? 'male' : 'female'),
+                            email: candidate.email
+                        });
+                    }
+                });
+                
+                // Re-render with updated data
+                renderCandidates(candidatesData);
+            }
+        });
+
+        // Integration with registration page
+        // This code simulates how the registration page would add a new candidate
+        function addNewCandidate(candidateData) {
+            // In a real app, this would be handled by a server
+            // For this demo, we'll store in localStorage
+            
+            let registeredCandidates = [];
+            const storedCandidates = localStorage.getItem('talfyRegisteredCandidates');
+            
+            if (storedCandidates) {
+                registeredCandidates = JSON.parse(storedCandidates);
+            }
+            
+            // Add the new candidate
+            registeredCandidates.push(candidateData);
+            
+            // Save back to localStorage
+            localStorage.setItem('talfyRegisteredCandidates', JSON.stringify(registeredCandidates));
+            
+            // In a real app, we would refresh the candidates list or add the new one
+            // For this demo, we'll just reload the page
+            window.location.reload();
+        }
+    </script>
 </body>
 </html>

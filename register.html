@@ -263,14 +263,21 @@
           body: JSON.stringify({ email, password, accountType, company })
         });
         const data = await res.json();
-        if (res.ok) {
-          window.location.href = `/complete-profile.html?type=${accountType}`;
+
+        if (res.ok && data.status === "success") {
+          const userId = data.id;
+          if (accountType === "candidate") {
+            window.location.href = `/edit-profile-candidate.html?id=${userId}`;
+          } else {
+            window.location.href = `/edit-profile-company.html?id=${userId}`;
+          }
         } else {
           document.getElementById('emailError').textContent = data.message || "Registration failed";
         }
       } catch (err) {
         document.getElementById('emailError').textContent = "Error connecting to server";
       }
+
       registerBtn.textContent = "Create Account";
       registerBtn.disabled = false;
     });

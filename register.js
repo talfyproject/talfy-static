@@ -1,8 +1,8 @@
-// Account type toggle
 const accountOptions = document.querySelectorAll('.account-type-option');
 const companyField = document.getElementById('companyField');
 let accountType = 'candidate';
 
+// Gestione toggle candidate/company
 accountOptions.forEach(opt => {
   opt.addEventListener('click', () => {
     accountOptions.forEach(o => o.classList.remove('active'));
@@ -29,7 +29,7 @@ passwordInput.addEventListener('input', () => {
   requirements.symbol.classList.toggle('valid', /[!@#$%^&*]/.test(value));
 });
 
-// Form submission
+// Submit form
 document.getElementById('registerForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const email = document.getElementById('email').value;
@@ -73,3 +73,4 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
   registerBtn.textContent = "Create Account";
   registerBtn.disabled = false;
 });
+

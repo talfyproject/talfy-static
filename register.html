@@ -1,404 +1,461 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Register – Talfy</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --talfy-green: #164B35;
-      --talfy-green-dark: #0B281A;
-      --talfy-bg-light: #F9FAFB;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login – Talfy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* RESET E BASE */
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+        :root {
+          --primary-color: #134e3a;
+          --primary-light: #1a6b4a;
+          --primary-dark: #0d3a2a;
+          --accent-color: #2dd4bf;
+          --text-primary: #0f172a;
+          --text-secondary: #64748b;
+          --text-muted: #94a3b8;
+          --background: #ffffff;
+          --surface: #f8fafc;
+          --border: #e2e8f0;
+          --border-light: #f1f5f9;
+          --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+          --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+          --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+          --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+          --radius-sm: 0.375rem;
+          --radius-md: 0.5rem;
+          --radius-lg: 0.75rem;
+          --radius-xl: 1rem;
+        }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      color: var(--talfy-green);
-      background-color: var(--talfy-bg-light);
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+        body {
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          line-height: 1.6;
+          color: var(--text-primary);
+          background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+          font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+        }
 
-    /* HEADER */
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-      background-color: #fff;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-    }
+        /* HEADER */
+        .header {
+          position: sticky;
+          top: 0;
+          z-index: 1000;
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(20px);
+          border-bottom: 1px solid var(--border-light);
+          transition: all 0.3s ease;
+          padding: 1rem 2rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          position: relative;
+        }
 
-    .logo {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--talfy-green);
-      text-decoration: none;
-    }
+        .logo {
+          font-size: 2.25rem;
+          font-weight: 700;
+          color: var(--primary-color);
+          text-transform: lowercase;
+          text-decoration: none;
+          transition: all 0.3s ease;
+          position: relative;
+        }
 
-    .nav {
-      display: flex;
-      gap: 1.5rem;
-    }
+        .logo:hover {
+          transform: translateY(-2px);
+        }
 
-    .nav a {
-      text-decoration: none;
-      color: var(--talfy-green);
-      font-weight: 500;
-      transition: color 0.3s;
-    }
+        .nav {
+          display: flex;
+          gap: 0.5rem;
+          align-items: center;
+        }
 
-    .nav a:hover {
-      color: var(--talfy-green-dark);
-    }
+        .nav a {
+          text-decoration: none;
+          color: var(--text-secondary);
+          font-size: 0.875rem;
+          font-weight: 500;
+          padding: 0.5rem 1rem;
+          border-radius: var(--radius-md);
+          transition: all 0.2s ease;
+          position: relative;
+        }
 
-    .nav-active {
-      font-weight: 700;
-      position: relative;
-    }
+        .nav a:hover {
+          color: var(--primary-color);
+          background-color: var(--surface);
+          transform: translateY(-1px);
+        }
 
-    .nav-active::after {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background-color: var(--talfy-green);
-    }
+        .nav a.nav-active {
+          color: var(--primary-color);
+          background-color: var(--surface);
+        }
 
-    .hamburger {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      flex-direction: column;
-      gap: 6px;
-    }
+        .nav a:last-child {
+          background-color: var(--primary-color);
+          color: white;
+          margin-left: 0.5rem;
+        }
 
-    .hamburger span {
-      display: block;
-      width: 25px;
-      height: 2px;
-      background-color: var(--talfy-green);
-    }
+        .nav a:last-child:hover {
+          background-color: var(--primary-dark);
+          color: white;
+          box-shadow: var(--shadow-md);
+        }
 
-    .mobile-menu {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      background-color: #fff;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      padding: 1rem 0;
-      flex-direction: column;
-      z-index: 100;
-    }
+        .hamburger {
+          display: none;
+          flex-direction: column;
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 0.5rem;
+          border-radius: var(--radius-md);
+          transition: all 0.2s ease;
+        }
 
-    .mobile-menu.active {
-      display: flex;
-    }
+        .hamburger span {
+          width: 20px;
+          height: 2px;
+          background-color: var(--text-primary);
+          margin: 2px 0;
+          transition: all 0.3s ease;
+          border-radius: 1px;
+        }
 
-    .mobile-menu a {
-      padding: 0.8rem 2rem;
-      text-decoration: none;
-      color: var(--talfy-green);
-      font-weight: 500;
-    }
+        .hamburger:hover {
+          background-color: var(--surface);
+        }
 
-    .mobile-menu a:hover {
-      background-color: #f5f7fa;
-    }
+        .mobile-menu {
+          display: none;
+          position: absolute;
+          top: 100%;
+          right: 2rem;
+          background: white;
+          border: 1px solid var(--border);
+          border-radius: var(--radius-lg);
+          box-shadow: var(--shadow-xl);
+          flex-direction: column;
+          z-index: 10;
+          min-width: 200px;
+          overflow: hidden;
+        }
 
-    /* MAIN */
-    .main {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex: 1;
-      padding: 2rem;
-    }
+        .mobile-menu.active {
+          display: flex;
+          animation: slideDown 0.3s ease;
+        }
 
-    .register-container {
-      width: 100%;
-      max-width: 450px;
-      background: #fff;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-      text-align: center;
-    }
+        .mobile-menu a {
+          padding: 1rem 1.5rem;
+          text-decoration: none;
+          color: var(--text-secondary);
+          font-size: 0.875rem;
+          font-weight: 500;
+          border-bottom: 1px solid var(--border-light);
+          transition: all 0.2s ease;
+        }
 
-    .register-title {
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
+        .mobile-menu a:hover {
+          color: var(--primary-color);
+          background-color: var(--surface);
+        }
 
-    .register-subtitle {
-      font-size: 0.95rem;
-      color: #5f6e5d;
-      margin-bottom: 1.5rem;
-    }
+        .mobile-menu a:last-child {
+          border-bottom: none;
+        }
 
-    .user-type-selection {
-      display: flex;
-      gap: 0.8rem;
-      margin-bottom: 1.5rem;
-    }
+        /* Main content styles */
+        .main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+            max-width: 1000px;
+            margin: 0 auto;
+            min-height: calc(100vh - 200px);
+        }
 
-    .user-type-btn {
-      flex: 1;
-      padding: 1rem;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      cursor: pointer;
-      background: #fff;
-      font-weight: 600;
-      color: var(--talfy-green);
-      transition: all 0.2s;
-    }
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+            background: white;
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+            animation: fadeInUp 0.8s ease;
+        }
 
-    .user-type-btn:hover {
-      border-color: var(--talfy-green);
-    }
+        .login-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
 
-    .user-type-btn.active {
-      background: var(--talfy-green);
-      color: #fff;
-      border-color: var(--talfy-green);
-    }
+        .login-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
 
-    .form-group {
-      text-align: left;
-      margin-bottom: 1rem;
-    }
+        .form-group {
+            text-align: left;
+            margin-bottom: 1rem;
+        }
 
-    .form-label {
-      font-weight: 500;
-      margin-bottom: 0.3rem;
-      display: block;
-    }
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+            display: block;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
 
-    .form-input {
-      width: 100%;
-      padding: 0.8rem;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-size: 0.9rem;
-      outline: none;
-      transition: border 0.2s;
-    }
+        .form-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
 
-    .form-input:focus {
-      border-color: var(--talfy-green);
-    }
+        .form-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(19, 78, 58, 0.1);
+        }
 
-    .password-requirements {
-      margin-top: 0.5rem;
-      font-size: 0.8rem;
-      color: #666;
-    }
+        .forgot-password {
+            display: block;
+            text-align: right;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+        }
 
-    .requirement.valid {
-      color: green;
-    }
+        .forgot-password a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
 
-    .submit-btn {
-      width: 100%;
-      background: var(--talfy-green);
-      color: #fff;
-      border: none;
-      padding: 0.9rem;
-      font-size: 1rem;
-      font-weight: 600;
-      border-radius: 8px;
-      margin-top: 0.8rem;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
+        .forgot-password a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
 
-    .submit-btn:hover {
-      background: var(--talfy-green-dark);
-    }
+        .login-btn {
+            width: 100%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.9rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            margin-top: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
 
-    .login-link {
-      margin-top: 1rem;
-      font-size: 0.9rem;
-    }
+        .login-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
 
-    .login-link a {
-      color: var(--talfy-green);
-      font-weight: 600;
-      text-decoration: none;
-    }
+        .register-link {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
 
-    .login-link a:hover {
-      text-decoration: underline;
-    }
+        .register-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
 
-    /* FOOTER */
-    .footer {
-      display: flex;
-      justify-content: space-between;
-      padding: 1.5rem 2rem;
-      background: #fff;
-      font-size: 0.9rem;
-      border-top: 1px solid #eee;
-    }
+        .register-link a:hover {
+            text-decoration: underline;
+            color: var(--primary-dark);
+        }
 
-    .footer a {
-      color: #666;
-      text-decoration: none;
-    }
+        /* FOOTER */
+        .footer {
+          background: var(--surface);
+          border-top: 1px solid var(--border);
+          padding: 2rem;
+          font-size: 0.875rem;
+          color: var(--text-muted);
+          text-align: center;
+          margin-top: auto;
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+        }
 
-    .footer a:hover {
-      color: var(--talfy-green);
-    }
+        .footer-links {
+          display: flex;
+          justify-content: center;
+          gap: 1rem;
+        }
 
-    /* Responsive */
-    @media (max-width: 768px) {
-      .nav {
-        display: none;
-      }
-      .hamburger {
-        display: flex;
-      }
-      .footer {
-        flex-direction: column;
-        text-align: center;
-        gap: 0.5rem;
-      }
-    }
-  </style>
+        .footer a {
+          text-decoration: none;
+          color: var(--text-secondary);
+          font-weight: 500;
+          transition: color 0.2s ease;
+        }
+
+        .footer a:hover {
+          color: var(--primary-color);
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes underlineGrow {
+          from {
+            transform: scaleX(0);
+          }
+          to {
+            transform: scaleX(1);
+          }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                display: none;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .main {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-<header class="header">
-  <a href="/index.html" class="logo">talfy</a>
-  <nav class="nav">
-    <a href="/pricing.html">Pricing</a>
-    <a href="/about.html">About us</a>
-    <a href="/contact.html">Contact</a>
-    <a href="/login.html">Login</a>
-    <a href="/register.html" class="nav-active">Register</a>
-  </nav>
-  <button class="hamburger" onclick="toggleMenu()">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="/pricing.html">Pricing</a>
-    <a href="/about.html">About us</a>
-    <a href="/contact.html">Contact</a>
-    <a href="/login.html">Login</a>
-    <a href="/register.html">Register</a>
-    <a href="/privacy.html">Privacy</a>
-    <a href="/terms.html">Terms</a>
-  </div>
-</header>
-
-<main class="main">
-  <div class="register-container">
-    <h1 class="register-title">Create an Account</h1>
-    <p class="register-subtitle">Join Talfy and discover the future of finance recruitment.</p>
-
-    <div class="user-type-selection">
-      <div class="user-type-btn active" id="candidateOption">Candidate</div>
-      <div class="user-type-btn" id="companyOption">Company</div>
-    </div>
-
-    <form id="registerForm">
-      <input type="hidden" id="userType" value="candidate">
-
-      <div class="form-group">
-        <label for="email" class="form-label">Email Address</label>
-        <input type="email" id="email" class="form-input" placeholder="your@email.com" required>
-      </div>
-
-      <div class="form-group">
-        <label for="password" class="form-label">Password</label>
-        <input type="password" id="password" class="form-input" placeholder="Create a password" required>
-        <div class="password-requirements">
-          <div id="req-length">• At least 8 characters</div>
-          <div id="req-uppercase">• One uppercase letter</div>
-          <div id="req-symbol">• One symbol</div>
+    <header class="header">
+        <a href="/index.html" class="logo">talfy</a>
+        <nav class="nav">
+            <a href="/pricing.html">Pricing</a>
+            <a href="/about.html">About us</a>
+            <a href="/contact.html">Contact</a>
+            <a href="/login.html" class="nav-active">Login</a>
+            <a href="/register.html">Register</a>
+        </nav>
+        <button class="hamburger" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/pricing.html">Pricing</a>
+            <a href="/about.html">About us</a>
+            <a href="/contact.html">Contact</a>
+            <a href="/login.html">Login</a>
+            <a href="/register.html">Register</a>
+            <a href="/privacy.html">Privacy</a>
+            <a href="/terms.html">Terms</a>
         </div>
-      </div>
+    </header>
 
-      <div class="form-group">
-        <label for="confirmPassword" class="form-label">Confirm Password</label>
-        <input type="password" id="confirmPassword" class="form-input" placeholder="Confirm your password" required>
-      </div>
+    <main class="main">
+        <div class="login-container">
+            <h1 class="login-title">Welcome Back</h1>
+            <p class="login-subtitle">Sign in to access your Talfy account</p>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" id="email" class="form-input" placeholder="your@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
+                    <div class="forgot-password">
+                        <a href="/forgot-password.html">Forgot password?</a>
+                    </div>
+                </div>
+                
+                <button type="submit" class="login-btn">Sign In</button>
+            </form>
+            
+            <div class="register-link">
+                Don't have an account? <a href="/register.html">Create one now</a>
+            </div>
+        </div>
+    </main>
 
-      <button type="submit" class="submit-btn">Register</button>
-    </form>
+    <footer class="footer">
+        <div>&copy; 2025 Talfy. All rights reserved.</div>
+        <div class="footer-links">
+            <a href="/privacy.html">Privacy</a>
+            <a href="/terms.html">Terms</a>
+        </div>
+    </footer>
 
-    <div class="login-link">
-      Already have an account? <a href="/login.html">Login</a>
-    </div>
-  </div>
-</main>
+    <script>
+        function toggleMenu() {
+            document.getElementById("mobileMenu").classList.toggle("active");
+        }
 
-<footer class="footer">
-  <div>&copy; 2025 Talfy. All rights reserved.</div>
-  <div><a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a></div>
-</footer>
-
-<script>
-  function toggleMenu() {
-    document.getElementById("mobileMenu").classList.toggle("active");
-  }
-
-  // User type toggle
-  const candidateOption = document.getElementById('candidateOption');
-  const companyOption = document.getElementById('companyOption');
-  const userTypeInput = document.getElementById('userType');
-
-  candidateOption.addEventListener('click', function() {
-    candidateOption.classList.add('active');
-    companyOption.classList.remove('active');
-    userTypeInput.value = 'candidate';
-  });
-
-  companyOption.addEventListener('click', function() {
-    companyOption.classList.add('active');
-    candidateOption.classList.remove('active');
-    userTypeInput.value = 'company';
-  });
-
-  // Password validation
-  const passwordInput = document.getElementById('password');
-  const confirmInput = document.getElementById('confirmPassword');
-  const reqLength = document.getElementById('req-length');
-  const reqUppercase = document.getElementById('req-uppercase');
-  const reqSymbol = document.getElementById('req-symbol');
-
-  passwordInput.addEventListener('input', function() {
-    const password = passwordInput.value;
-    reqLength.classList.toggle('valid', password.length >= 8);
-    reqUppercase.classList.toggle('valid', /[A-Z]/.test(password));
-    reqSymbol.classList.toggle('valid', /[!@#$%^&*(),.?":{}|<>]/.test(password));
-  });
-
-  document.getElementById('registerForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    if (passwordInput.value !== confirmInput.value) {
-      alert('Passwords do not match.');
-      return;
-    }
-    alert('Registration successful! (Demo)');
-  });
-</script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // In a real application, this would send a request to your authentication server
+            alert(`Login attempt with email: ${email}\nIn a real application, this would authenticate you.`);
+            
+            // Redirect to dashboard after successful login
+            // window.location.href = "/dashboard.html";
+        });
+    </script>
 </body>
 </html>
 

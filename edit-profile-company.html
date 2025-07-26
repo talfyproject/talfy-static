@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Company Profile – Talfy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Stili identici a company.html */
+        /* ... INCOLLA QUI TUTTI GLI STILI DI company.html SENZA MODIFICHE ... */
+    </style>
+</head>
+<body>
+<header class="header">
+    <a href="/index.html" class="logo">talfy</a>
+    <nav class="nav">
+        <a href="/pricing.html">Pricing</a>
+        <a href="/about.html">About us</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/login.html">Login</a>
+        <a href="/register.html">Register</a>
+    </nav>
+    <button class="hamburger" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="/pricing.html">Pricing</a>
+        <a href="/about.html">About us</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/login.html">Login</a>
+        <a href="/register.html">Register</a>
+        <a href="/privacy.html">Privacy</a>
+        <a href="/terms.html">Terms</a>
+    </div>
+</header>
+
+<main class="main">
+    <h1 class="page-title">Edit Company Profile</h1>
+    <p class="page-subtitle">Update your company information and make your profile stand out.</p>
+    
+    <div class="profile-container">
+        <div class="profile-sidebar">
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="profile-logo-container">
+                        <div class="profile-logo" id="profileLogo">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5m1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0M1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5"/>
+                            </svg>
+                        </div>
+                        <label class="profile-logo-upload" id="logoUploadBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M6.502 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+                                <path d="M14 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5V14zM4 1a1 1 0 0 0-1 1v10l2.224-2.224a.5.5 0 0 1 .61-.075L8 11l2.157-3.02a.5.5 0 0 1 .76-.063L13 10V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4z"/>
+                            </svg>
+                            <input type="file" id="logoInput" accept="image/*">
+                        </label>
+                    </div>
+                    <h2 class="profile-name" id="profileNameDisplay">Your Company Name</h2>
+                    <a href="#" class="profile-website" id="profileWebsiteDisplay" target="_blank">website.com</a>
+                    <div class="profile-location" id="profileLocationDisplay">City, Country</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="profile-main">
+            <form id="profileForm">
+                <!-- SEZIONE COMPANY INFORMATION -->
+                <!-- Copiata identica da company.html -->
+                
+                <!-- Pulsanti sempre visibili -->
+                <div class="form-actions">
+                    <button type="button" class="form-button form-button-secondary" id="cancelBtn">Cancel</button>
+                    <button type="submit" class="form-button form-button-primary" id="saveBtn">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<div class="toast" id="toast">
+    <div class="toast-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+        </svg>
+    </div>
+    <div class="toast-message" id="toastMessage">Profile saved successfully!</div>
+    <button class="toast-close" onclick="hideToast()">×</button>
+</div>
+
+<footer class="footer">
+    <div>&copy; 2025 Talfy. All rights reserved.</div>
+    <div class="footer-links">
+        <a href="/privacy.html">Privacy</a>
+        <a href="/terms.html">Terms</a>
+    </div>
+</footer>
+
+<script>
+    /* Script identico a company.html ma SENZA toggleEditMode (siamo sempre in edit) */
+    // All fields editabili by default
+</script>
+</body>
+</html>

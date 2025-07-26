@@ -1,74 +1,75 @@
-import { auth, db } from "./firebase-config.js";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+// Account type toggle
+const accountOptions = document.querySelectorAll('.account-type-option');
+const companyField = document.getElementById('companyField');
+let accountType = 'candidate';
 
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.querySelector(".register-form");
-  const message = document.getElementById("registerMessage");
-  const submitBtn = form.querySelector("button[type='submit']");
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    message.textContent = "";
-    message.style.display = "none";
-    submitBtn.disabled = true;
-    submitBtn.classList.add("disabled");
-
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
-    const user_type = document.getElementById("userType").value;
-
-    // Validazioni
-    if (!email || !password || !confirmPassword || !user_type) {
-      showMessage("Please fill in all fields.");
-      return resetButton();
-    }
-
-    if (password !== confirmPassword) {
-      showMessage("Passwords do not match.");
-      return resetButton();
-    }
-
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/;
-    if (!passwordRegex.test(password)) {
-      showMessage("Password must contain 1 uppercase, 1 number, and 1 symbol.");
-      return resetButton();
-    }
-
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
-      // Salva info base in Firestore
-      await setDoc(doc(db, "users", user.uid), {
-        email,
-        user_type,
-        created_at: new Date()
-      });
-
-      localStorage.setItem("user_id", user.uid);
-      localStorage.setItem("user_type", user_type);
-
-      window.location.href =
-        user_type === "candidate"
-          ? "/complete-profile-candidate.html"
-          : "/complete-profile-company.html";
-    } catch (error) {
-      console.error(error);
-      showMessage(error.message || "Registration failed. Please try again.");
-      resetButton();
-    }
-
-    function showMessage(msg) {
-      message.textContent = msg;
-      message.className = "message error";
-      message.style.display = "block";
-    }
-
-    function resetButton() {
-      submitBtn.disabled = false;
-      submitBtn.classList.remove("disabled");
-    }
+accountOptions.forEach(opt => {
+  opt.addEventListener('click', () => {
+    accountOptions.forEach(o => o.classList.remove('active'));
+    opt.classList.add('active');
+    accountType = opt.getAttribute('data-type');
+    companyField.style.display = accountType === 'company' ? 'block' : 'none';
   });
+});
+
+// Password validation
+const passwordInput = document.getElementById('password');
+const requirements = {
+  length: document.getElementById('length'),
+  uppercase: document.getElementById('uppercase'),
+  number: document.getElementById('number'),
+  symbol: document.getElementById('symbol')
+};
+
+passwordInput.addEventListener('input', () => {
+  const value = passwordInput.value;
+  requirements.length.classList.toggle('valid', value.length >= 8);
+  requirements.uppercase.classList.toggle('valid', /[A-Z]/.test(value));
+  requirements.number.classList.toggle('valid', /\d/.test(value));
+  requirements.symbol.classList.toggle('valid', /[!@#$%^&*]/.test(value));
+});
+
+// Form submission
+document.getElementById('registerForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('email').value;
+  const password = passwordInput.value;
+  const confirmPassword = document.getElementById('confirmPassword').value;
+  const company = accountType === 'company' ? document.getElementById('company').value : '';
+
+  if (password !== confirmPassword) {
+    document.getElementById('confirmError').textContent = "Passwords don't match";
+    return;
+  } else {
+    document.getElementById('confirmError').textContent = "";
+  }
+
+  const registerBtn = document.getElementById('registerBtn');
+  registerBtn.textContent = "Registering...";
+  registerBtn.disabled = true;
+
+  try {
+    const res = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, accountType, company })
+    });
+    const data = await res.json();
+
+    if (res.ok && data.status === "success") {
+      const userId = data.id;
+      if (accountType === "candidate") {
+        window.location.href = `/edit-profile-candidate.html?id=${userId}`;
+      } else {
+        window.location.href = `/edit-profile-company.html?id=${userId}`;
+      }
+    } else {
+      document.getElementById('emailError').textContent = data.message || "Registration failed";
+    }
+  } catch (err) {
+    document.getElementById('emailError').textContent = "Error connecting to server";
+  }
+
+  registerBtn.textContent = "Create Account";
+  registerBtn.disabled = false;
 });

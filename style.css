@@ -4568,3 +4568,123 @@ Ti creo il CSS per il file style.css che sia perfettamente coerente con il desig
     font-size: 1.5rem;
   }
 }
+:root {
+  --primary-color: #134E3A;
+  --primary-dark: #0f3b2c;
+  --accent-color: #10B981;
+  --text-color: #333;
+  --bg-light: #f9fafb;
+  --radius-lg: 12px;
+  --shadow-md: 0 10px 20px rgba(0, 0, 0, 0.05);
+  --transition: 0.3s ease;
+}
+
+/* AUTH PAGES */
+.auth-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--bg-light);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.auth-header {
+  padding: 1rem 2rem;
+  text-align: center;
+}
+
+.logo {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.auth-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.auth-card {
+  background: #fff;
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+.auth-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.auth-subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.auth-form .form-group {
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  margin-top: 0.25rem;
+}
+
+.password-rules {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #666;
+  padding-left: 1rem;
+}
+
+.btn {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-primary {
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+}
+
+.auth-switch {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.auth-switch a {
+  color: var(--primary-color);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.85rem;
+  color: #666;
+}

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login – Talfy</title>
+    <title>Register – Talfy</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* RESET E BASE */
@@ -85,7 +85,7 @@
         .nav a {
           text-decoration: none;
           color: var(--text-secondary);
-          font-size: 0.9rem;
+          font-size: 0.95rem;
           font-weight: 500;
           padding: 0.5rem 1rem;
           border-radius: var(--radius-md);
@@ -100,15 +100,26 @@
         }
 
         /* Login button without background */
-        .nav a.nav-active {
-          color: var(--primary-color);
+        .nav a:nth-last-child(2) {
+          color: var(--text-primary);
+          font-weight: 600;
         }
 
-        /* Register button with background */
+        .nav a:nth-last-child(2):hover {
+          color: var(--primary-color);
+          background-color: var(--surface);
+        }
+
+        /* Register button with background and active state */
         .nav a:last-child {
           background-color: var(--primary-color);
           color: white;
           margin-left: 0.5rem;
+        }
+
+        .nav a.nav-active {
+          background-color: var(--primary-dark);
+          color: white;
         }
 
         .nav a:last-child:hover {
@@ -193,9 +204,9 @@
             min-height: calc(100vh - 200px);
         }
 
-        .login-container {
+        .register-container {
             width: 100%;
-            max-width: 420px;
+            max-width: 480px;
             background: white;
             padding: 2rem;
             border-radius: var(--radius-lg);
@@ -204,14 +215,14 @@
             animation: fadeInUp 0.8s ease;
         }
 
-        .login-title {
+        .register-title {
             font-size: 1.8rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
             color: var(--text-primary);
         }
 
-        .login-subtitle {
+        .register-subtitle {
             font-size: 0.95rem;
             color: var(--text-secondary);
             margin-bottom: 1.5rem;
@@ -220,6 +231,17 @@
         .form-group {
             text-align: left;
             margin-bottom: 1rem;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
         }
 
         .form-label {
@@ -245,25 +267,36 @@
             box-shadow: 0 0 0 2px rgba(19, 78, 58, 0.1);
         }
 
-        .forgot-password {
-            display: block;
-            text-align: right;
-            margin-top: 0.5rem;
-            font-size: 0.85rem;
+        .form-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1.5rem;
         }
 
-        .forgot-password a {
+        .form-checkbox input {
+            margin-top: 0.3rem;
+        }
+
+        .form-checkbox label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-align: left;
+        }
+
+        .form-checkbox a {
             color: var(--primary-color);
             text-decoration: none;
             transition: color 0.2s;
         }
 
-        .forgot-password a:hover {
+        .form-checkbox a:hover {
             color: var(--primary-dark);
             text-decoration: underline;
         }
 
-        .login-btn {
+        .register-btn {
             width: 100%;
             background: var(--primary-color);
             color: white;
@@ -277,28 +310,62 @@
             transition: all 0.2s ease;
         }
 
-        .login-btn:hover {
+        .register-btn:hover {
             background: var(--primary-dark);
             transform: translateY(-1px);
             box-shadow: var(--shadow-md);
         }
 
-        .register-link {
+        .login-link {
             margin-top: 1.5rem;
             font-size: 0.9rem;
             color: var(--text-secondary);
         }
 
-        .register-link a {
+        .login-link a {
             color: var(--primary-color);
             text-decoration: none;
             font-weight: 600;
             transition: color 0.2s;
         }
 
-        .register-link a:hover {
+        .login-link a:hover {
             text-decoration: underline;
             color: var(--primary-dark);
+        }
+
+        /* Account type selector */
+        .account-type-selector {
+            display: flex;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .account-type-option {
+            flex: 1;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: white;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .account-type-option.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .account-type-option:first-child {
+            border-right: 1px solid var(--border);
+        }
+
+        .account-type-option:hover:not(.active) {
+            background-color: var(--surface);
+            color: var(--primary-color);
         }
 
         /* FOOTER */
@@ -355,15 +422,6 @@
           }
         }
 
-        @keyframes underlineGrow {
-          from {
-            transform: scaleX(0);
-          }
-          to {
-            transform: scaleX(1);
-          }
-        }
-
         /* Responsive */
         @media (max-width: 768px) {
             .nav {
@@ -375,6 +433,10 @@
             .main {
                 padding: 2rem 1rem;
             }
+            .form-row {
+                flex-direction: column;
+                gap: 1rem;
+            }
         }
     </style>
 </head>
@@ -385,8 +447,8 @@
             <a href="/pricing.html">Pricing</a>
             <a href="/about.html">About us</a>
             <a href="/contact.html">Contact</a>
-            <a href="/login.html" class="nav-active">Login</a>
-            <a href="/register.html">Register</a>
+            <a href="/login.html">Login</a>
+            <a href="/register.html" class="nav-active">Register</a>
         </nav>
         <button class="hamburger" onclick="toggleMenu()">
             <span></span>
@@ -405,29 +467,50 @@
     </header>
 
     <main class="main">
-        <div class="login-container">
-            <h1 class="login-title">Welcome Back</h1>
-            <p class="login-subtitle">Sign in to access your Talfy account</p>
+        <div class="register-container">
+            <h1 class="register-title">Create Your Account</h1>
+            <p class="register-subtitle">Join Talfy and start boosting your productivity today</p>
             
-            <form id="loginForm">
+            <form id="registerForm">
+                <div class="account-type-selector">
+                    <div class="account-type-option active" data-type="candidate" onclick="selectAccountType('candidate')">
+                        Candidate
+                    </div>
+                    <div class="account-type-option" data-type="company" onclick="selectAccountType('company')">
+                        Company
+                    </div>
+                </div>
+                
                 <div class="form-group">
                     <label for="email" class="form-label">Email Address</label>
                     <input type="email" id="email" class="form-input" placeholder="your@email.com" required>
                 </div>
                 
-                <div class="form-group">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
-                    <div class="forgot-password">
-                        <a href="/forgot-password.html">Forgot password?</a>
-                    </div>
+                <div id="companyField" class="form-group" style="display: none;">
+                    <label for="company" class="form-label">Company Name</label>
+                    <input type="text" id="company" class="form-input" placeholder="Your Company">
                 </div>
                 
-                <button type="submit" class="login-btn">Sign In</button>
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" class="form-input" placeholder="Create a strong password" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                    <input type="password" id="confirmPassword" class="form-input" placeholder="Confirm your password" required>
+                </div>
+                
+                <div class="form-checkbox">
+                    <input type="checkbox" id="terms" required>
+                    <label for="terms">I agree to the <a href="/terms.html">Terms of Service</a> and <a href="/privacy.html">Privacy Policy</a></label>
+                </div>
+                
+                <button type="submit" class="register-btn">Create Account</button>
             </form>
             
-            <div class="register-link">
-                Don't have an account? <a href="/register.html">Create one now</a>
+            <div class="login-link">
+                Already have an account? <a href="/login.html">Sign in</a>
             </div>
         </div>
     </main>
@@ -445,15 +528,52 @@
             document.getElementById("mobileMenu").classList.toggle("active");
         }
 
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        function selectAccountType(type) {
+            // Update active state on buttons
+            document.querySelectorAll('.account-type-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            document.querySelector(`.account-type-option[data-type="${type}"]`).classList.add('active');
+            
+            // Show/hide company field based on selection
+            if (type === 'company') {
+                document.getElementById('companyField').style.display = 'block';
+                document.getElementById('company').setAttribute('required', 'required');
+            } else {
+                document.getElementById('companyField').style.display = 'none';
+                document.getElementById('company').removeAttribute('required');
+            }
+        }
+
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            
+            // Get form values
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const accountType = document.querySelector('.account-type-option.active').getAttribute('data-type');
             
-            // In a real application, this would send a request to your authentication server
-            alert(`Login attempt with email: ${email}\nIn a real application, this would authenticate you.`);
+            // Basic validation
+            if (password !== confirmPassword) {
+                alert("Passwords don't match!");
+                return;
+            }
             
-            // Redirect to dashboard after successful login
+            // Get company name if company account type
+            let companyName = '';
+            if (accountType === 'company') {
+                companyName = document.getElementById('company').value;
+            }
+            
+            // In a real application, this would send a request to your registration server
+            if (accountType === 'company') {
+                alert(`Company account created for ${companyName} (${email})!\nIn a real application, this would register your company account.`);
+            } else {
+                alert(`Candidate account created for ${email}!\nIn a real application, this would register your candidate account.`);
+            }
+            
+            // Redirect to dashboard after successful registration
             // window.location.href = "/dashboard.html";
         });
     </script>

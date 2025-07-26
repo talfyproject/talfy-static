@@ -1,582 +1,279 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Register – Talfy</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* RESET E BASE */
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register – Talfy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #134e3a;
+      --primary-dark: #0d3a2a;
+      --text-primary: #0f172a;
+      --text-secondary: #64748b;
+      --surface: #ffffff;
+      --border: #e2e8f0;
+      --radius-md: 0.5rem;
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
 
-        :root {
-          --primary-color: #134e3a;
-          --primary-light: #1a6b4a;
-          --primary-dark: #0d3a2a;
-          --accent-color: #2dd4bf;
-          --text-primary: #0f172a;
-          --text-secondary: #64748b;
-          --text-muted: #94a3b8;
-          --background: #ffffff;
-          --surface: #f8fafc;
-          --border: #e2e8f0;
-          --border-light: #f1f5f9;
-          --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-          --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-          --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-          --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-          --radius-sm: 0.375rem;
-          --radius-md: 0.5rem;
-          --radius-lg: 0.75rem;
-          --radius-xl: 1rem;
-        }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f9fafb;
+      color: var(--text-primary);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
 
-        body {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-          line-height: 1.6;
-          color: var(--text-primary);
-          background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
-          font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
-          min-height: 100vh;
-          display: flex;
-          flex-direction: column;
-        }
+    /* Header */
+    .header {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo { font-size: 2rem; font-weight: 700; color: var(--primary-color); text-decoration: none; }
+    .nav { display: flex; gap: 1rem; }
+    .nav a {
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-md);
+      transition: 0.2s;
+    }
+    .nav a:hover { color: var(--primary-color); background: #f1f5f9; }
+    .nav a.nav-active { background: var(--primary-color); color: #fff; }
 
-        /* HEADER */
-        .header {
-          position: sticky;
-          top: 0;
-          z-index: 1000;
-          background: rgba(255, 255, 255, 0.95);
-          backdrop-filter: blur(20px);
-          border-bottom: 1px solid var(--border-light);
-          transition: all 0.3s ease;
-          padding: 1rem 2rem;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          position: relative;
-        }
+    /* Main */
+    .main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+    .register-container {
+      max-width: 460px;
+      width: 100%;
+      background: #fff;
+      padding: 2rem;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+    }
+    h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+    p { color: var(--text-secondary); margin-bottom: 1.5rem; }
 
-        .logo {
-          font-size: 2.25rem;
-          font-weight: 700;
-          color: var(--primary-color);
-          text-transform: lowercase;
-          text-decoration: none;
-          transition: all 0.3s ease;
-          position: relative;
-        }
+    .account-type-selector {
+      display: flex;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      margin-bottom: 1.5rem;
+    }
+    .account-type-option {
+      flex: 1;
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: 0.3s;
+    }
+    .account-type-option.active {
+      background: var(--primary-color);
+      color: #fff;
+    }
+    .account-type-option:hover:not(.active) {
+      background: #f9fafb;
+    }
 
-        .logo:hover {
-          transform: translateY(-2px);
-        }
+    .form-group { margin-bottom: 1rem; text-align: left; }
+    .form-label { display: block; margin-bottom: 0.3rem; font-weight: 500; }
+    .form-input {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+    }
 
-        .nav {
-          display: flex;
-          gap: 0.5rem;
-          align-items: center;
-        }
+    .error-text { color: red; font-size: 0.85rem; margin-top: 0.3rem; }
 
-        .nav a {
-          text-decoration: none;
-          color: var(--text-secondary);
-          font-size: 0.95rem;
-          font-weight: 500;
-          padding: 0.5rem 1rem;
-          border-radius: var(--radius-md);
-          transition: all 0.2s ease;
-          position: relative;
-        }
+    .password-requirements {
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      color: var(--text-secondary);
+    }
+    .password-requirements li.valid { color: green; }
 
-        .nav a:hover {
-          color: var(--primary-color);
-          background-color: var(--surface);
-          transform: translateY(-1px);
-        }
+    .register-btn {
+      width: 100%;
+      background: var(--primary-color);
+      color: #fff;
+      padding: 0.9rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .register-btn:disabled { background: #94a3b8; cursor: not-allowed; }
 
-        /* Login button without background */
-        .nav a:nth-last-child(2) {
-          color: var(--text-primary);
-          font-weight: 600;
-        }
+    .login-link {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    .login-link a { color: var(--primary-color); font-weight: 600; text-decoration: none; }
 
-        .nav a:nth-last-child(2):hover {
-          color: var(--primary-color);
-          background-color: var(--surface);
-        }
+    /* Footer */
+    .footer {
+      background: #fff;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
 
-        /* Register button with background and active state */
-        .nav a:last-child {
-          background-color: var(--primary-color);
-          color: white;
-          margin-left: 0.5rem;
-        }
-
-        .nav a.nav-active {
-          background-color: var(--primary-dark);
-          color: white;
-        }
-
-        .nav a:last-child:hover {
-          background-color: var(--primary-dark);
-          color: white;
-          box-shadow: var(--shadow-md);
-        }
-
-        .hamburger {
-          display: none;
-          flex-direction: column;
-          background: none;
-          border: none;
-          cursor: pointer;
-          padding: 0.5rem;
-          border-radius: var(--radius-md);
-          transition: all 0.2s ease;
-        }
-
-        .hamburger span {
-          width: 20px;
-          height: 2px;
-          background-color: var(--text-primary);
-          margin: 2px 0;
-          transition: all 0.3s ease;
-          border-radius: 1px;
-        }
-
-        .hamburger:hover {
-          background-color: var(--surface);
-        }
-
-        .mobile-menu {
-          display: none;
-          position: absolute;
-          top: 100%;
-          right: 2rem;
-          background: white;
-          border: 1px solid var(--border);
-          border-radius: var(--radius-lg);
-          box-shadow: var(--shadow-xl);
-          flex-direction: column;
-          z-index: 10;
-          min-width: 200px;
-          overflow: hidden;
-        }
-
-        .mobile-menu.active {
-          display: flex;
-          animation: slideDown 0.3s ease;
-        }
-
-        .mobile-menu a {
-          padding: 1rem 1.5rem;
-          text-decoration: none;
-          color: var(--text-secondary);
-          font-size: 0.95rem;
-          font-weight: 500;
-          border-bottom: 1px solid var(--border-light);
-          transition: all 0.2s ease;
-        }
-
-        .mobile-menu a:hover {
-          color: var(--primary-color);
-          background-color: var(--surface);
-        }
-
-        .mobile-menu a:last-child {
-          border-bottom: none;
-        }
-
-        /* Main content styles */
-        .main {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
-            text-align: center;
-            max-width: 1000px;
-            margin: 0 auto;
-            min-height: calc(100vh - 200px);
-        }
-
-        .register-container {
-            width: 100%;
-            max-width: 480px;
-            background: white;
-            padding: 2rem;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-lg);
-            text-align: center;
-            animation: fadeInUp 0.8s ease;
-        }
-
-        .register-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-        }
-
-        .register-subtitle {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group {
-            text-align: left;
-            margin-bottom: 1rem;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .form-row .form-group {
-            flex: 1;
-            margin-bottom: 0;
-        }
-
-        .form-label {
-            font-weight: 500;
-            margin-bottom: 0.3rem;
-            display: block;
-            color: var(--text-primary);
-            font-size: 0.9rem;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            font-size: 0.9rem;
-            outline: none;
-            transition: all 0.2s ease;
-        }
-
-        .form-input:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(19, 78, 58, 0.1);
-        }
-
-        .form-checkbox {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.5rem;
-            margin-top: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .form-checkbox input {
-            margin-top: 0.3rem;
-        }
-
-        .form-checkbox label {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            text-align: left;
-        }
-
-        .form-checkbox a {
-            color: var(--primary-color);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .form-checkbox a:hover {
-            color: var(--primary-dark);
-            text-decoration: underline;
-        }
-
-        .register-btn {
-            width: 100%;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 0.9rem;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: var(--radius-md);
-            margin-top: 1rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .register-btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .login-link {
-            margin-top: 1.5rem;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        .login-link a {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.2s;
-        }
-
-        .login-link a:hover {
-            text-decoration: underline;
-            color: var(--primary-dark);
-        }
-
-        /* Account type selector */
-        .account-type-selector {
-            display: flex;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            margin-bottom: 1.5rem;
-        }
-
-        .account-type-option {
-            flex: 1;
-            padding: 1rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            background-color: white;
-            font-weight: 500;
-            color: var(--text-secondary);
-        }
-
-        .account-type-option.active {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .account-type-option:first-child {
-            border-right: 1px solid var(--border);
-        }
-
-        .account-type-option:hover:not(.active) {
-            background-color: var(--surface);
-            color: var(--primary-color);
-        }
-
-        /* FOOTER */
-        .footer {
-          background: var(--surface);
-          border-top: 1px solid var(--border);
-          padding: 2rem;
-          font-size: 0.9rem;
-          color: var(--text-muted);
-          text-align: center;
-          margin-top: auto;
-          display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
-
-        .footer-links {
-          display: flex;
-          justify-content: center;
-          gap: 1rem;
-        }
-
-        .footer a {
-          text-decoration: none;
-          color: var(--text-secondary);
-          font-weight: 500;
-          transition: color 0.2s ease;
-        }
-
-        .footer a:hover {
-          color: var(--primary-color);
-        }
-
-        /* ANIMATIONS */
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes slideDown {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav {
-                display: none;
-            }
-            .hamburger {
-                display: flex;
-            }
-            .main {
-                padding: 2rem 1rem;
-            }
-            .form-row {
-                flex-direction: column;
-                gap: 1rem;
-            }
-        }
-    </style>
+    @media(max-width:768px){
+      .nav{display:none;}
+    }
+  </style>
 </head>
 <body>
-    <header class="header">
-        <a href="/index.html" class="logo">talfy</a>
-        <nav class="nav">
-            <a href="/pricing.html">Pricing</a>
-            <a href="/about.html">About us</a>
-            <a href="/contact.html">Contact</a>
-            <a href="/login.html">Login</a>
-            <a href="/register.html" class="nav-active">Register</a>
-        </nav>
-        <button class="hamburger" onclick="toggleMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-        <div class="mobile-menu" id="mobileMenu">
-            <a href="/pricing.html">Pricing</a>
-            <a href="/about.html">About us</a>
-            <a href="/contact.html">Contact</a>
-            <a href="/login.html">Login</a>
-            <a href="/register.html">Register</a>
-            <a href="/privacy.html">Privacy</a>
-            <a href="/terms.html">Terms</a>
+  <header class="header">
+    <a href="index.html" class="logo">talfy</a>
+    <nav class="nav">
+      <a href="pricing.html">Pricing</a>
+      <a href="about.html">About us</a>
+      <a href="contact.html">Contact</a>
+      <a href="login.html">Login</a>
+      <a href="register.html" class="nav-active">Register</a>
+    </nav>
+  </header>
+
+  <main class="main">
+    <div class="register-container">
+      <h1>Create Your Account</h1>
+      <p>Join Talfy and unlock your next career opportunity.</p>
+
+      <div class="account-type-selector">
+        <div class="account-type-option active" data-type="candidate">Candidate</div>
+        <div class="account-type-option" data-type="company">Company</div>
+      </div>
+
+      <form id="registerForm">
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" id="email" class="form-input" required>
+          <div id="emailError" class="error-text"></div>
         </div>
-    </header>
 
-    <main class="main">
-        <div class="register-container">
-            <h1 class="register-title">Create Your Account</h1>
-            <p class="register-subtitle">Join Talfy and start boosting your productivity today</p>
-            
-            <form id="registerForm">
-                <div class="account-type-selector">
-                    <div class="account-type-option active" data-type="candidate" onclick="selectAccountType('candidate')">
-                        Candidate
-                    </div>
-                    <div class="account-type-option" data-type="company" onclick="selectAccountType('company')">
-                        Company
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="email" class="form-label">Email Address</label>
-                    <input type="email" id="email" class="form-input" placeholder="your@email.com" required>
-                </div>
-                
-                <div id="companyField" class="form-group" style="display: none;">
-                    <label for="company" class="form-label">Company Name</label>
-                    <input type="text" id="company" class="form-input" placeholder="Your Company">
-                </div>
-                
-                <div class="form-group">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" id="password" class="form-input" placeholder="Create a strong password" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="confirmPassword" class="form-label">Confirm Password</label>
-                    <input type="password" id="confirmPassword" class="form-input" placeholder="Confirm your password" required>
-                </div>
-                
-                <div class="form-checkbox">
-                    <input type="checkbox" id="terms" required>
-                    <label for="terms">I agree to the <a href="/terms.html">Terms of Service</a> and <a href="/privacy.html">Privacy Policy</a></label>
-                </div>
-                
-                <button type="submit" class="register-btn">Create Account</button>
-            </form>
-            
-            <div class="login-link">
-                Already have an account? <a href="/login.html">Sign in</a>
-            </div>
+        <div id="companyField" class="form-group" style="display:none;">
+          <label class="form-label">Company Name</label>
+          <input type="text" id="company" class="form-input">
         </div>
-    </main>
 
-    <footer class="footer">
-        <div>&copy; 2025 Talfy. All rights reserved.</div>
-        <div class="footer-links">
-            <a href="/privacy.html">Privacy</a>
-            <a href="/terms.html">Terms</a>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" id="password" class="form-input" required>
+          <ul class="password-requirements">
+            <li id="length">At least 8 characters</li>
+            <li id="uppercase">At least one uppercase letter</li>
+            <li id="number">At least one number</li>
+            <li id="symbol">At least one symbol</li>
+          </ul>
         </div>
-    </footer>
 
-    <script>
-        function toggleMenu() {
-            document.getElementById("mobileMenu").classList.toggle("active");
-        }
+        <div class="form-group">
+          <label class="form-label">Confirm Password</label>
+          <input type="password" id="confirmPassword" class="form-input" required>
+          <div id="confirmError" class="error-text"></div>
+        </div>
 
-        function selectAccountType(type) {
-            // Update active state on buttons
-            document.querySelectorAll('.account-type-option').forEach(option => {
-                option.classList.remove('active');
-            });
-            document.querySelector(`.account-type-option[data-type="${type}"]`).classList.add('active');
-            
-            // Show/hide company field based on selection
-            if (type === 'company') {
-                document.getElementById('companyField').style.display = 'block';
-                document.getElementById('company').setAttribute('required', 'required');
-            } else {
-                document.getElementById('companyField').style.display = 'none';
-                document.getElementById('company').removeAttribute('required');
-            }
-        }
+        <button type="submit" class="register-btn" id="registerBtn">Create Account</button>
+      </form>
 
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form values
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            const accountType = document.querySelector('.account-type-option.active').getAttribute('data-type');
-            
-            // Basic validation
-            if (password !== confirmPassword) {
-                alert("Passwords don't match!");
-                return;
-            }
-            
-            // Get company name if company account type
-            let companyName = '';
-            if (accountType === 'company') {
-                companyName = document.getElementById('company').value;
-            }
-            
-            // In a real application, this would send a request to your registration server
-            if (accountType === 'company') {
-                alert(`Company account created for ${companyName} (${email})!\nIn a real application, this would register your company account.`);
-            } else {
-                alert(`Candidate account created for ${email}!\nIn a real application, this would register your candidate account.`);
-            }
-            
-            // Redirect to dashboard after successful registration
-            // window.location.href = "/dashboard.html";
+      <div class="login-link">Already have an account? <a href="login.html">Sign in</a></div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    &copy; 2025 Talfy. All rights reserved. | <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a>
+  </footer>
+
+  <script>
+    const accountOptions = document.querySelectorAll('.account-type-option');
+    const companyField = document.getElementById('companyField');
+    let accountType = 'candidate';
+
+    accountOptions.forEach(opt => {
+      opt.addEventListener('click', () => {
+        accountOptions.forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+        accountType = opt.getAttribute('data-type');
+        companyField.style.display = accountType === 'company' ? 'block' : 'none';
+      });
+    });
+
+    const passwordInput = document.getElementById('password');
+    const requirements = {
+      length: document.getElementById('length'),
+      uppercase: document.getElementById('uppercase'),
+      number: document.getElementById('number'),
+      symbol: document.getElementById('symbol')
+    };
+
+    passwordInput.addEventListener('input', () => {
+      const value = passwordInput.value;
+      requirements.length.classList.toggle('valid', value.length >= 8);
+      requirements.uppercase.classList.toggle('valid', /[A-Z]/.test(value));
+      requirements.number.classList.toggle('valid', /\d/.test(value));
+      requirements.symbol.classList.toggle('valid', /[!@#$%^&*]/.test(value));
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = passwordInput.value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const company = accountType === 'company' ? document.getElementById('company').value : '';
+
+      if (password !== confirmPassword) {
+        document.getElementById('confirmError').textContent = "Passwords don't match";
+        return;
+      } else {
+        document.getElementById('confirmError').textContent = "";
+      }
+
+      const registerBtn = document.getElementById('registerBtn');
+      registerBtn.textContent = "Registering...";
+      registerBtn.disabled = true;
+
+      try {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password, accountType, company })
         });
-    </script>
+        const data = await res.json();
+        if (res.ok) {
+          window.location.href = `/complete-profile.html?type=${accountType}`;
+        } else {
+          document.getElementById('emailError').textContent = data.message || "Registration failed";
+        }
+      } catch (err) {
+        document.getElementById('emailError').textContent = "Error connecting to server";
+      }
+      registerBtn.textContent = "Create Account";
+      registerBtn.disabled = false;
+    });
+  </script>
 </body>
 </html>
-

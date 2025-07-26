@@ -1,362 +1,504 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Register - Talfy</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      line-height: 1.5;
-      color: #2d5016;
-      background: white;
-      min-height: 100vh;
-    }
-    
-    .header {
-      padding: 0.8rem 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: white;
-      box-shadow: 0 1px 5px rgba(0,0,0,0.1);
-    }
-    
-    .logo {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #2d5016;
-      text-decoration: none;
-    }
-    
-    .nav { display: flex; gap: 1.5rem; }
-    .nav a {
-      color: #2d5016;
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 0.9rem;
-    }
-    
-    .main {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 85vh;
-      padding: 1rem;
-    }
-    
-    .register-container {
-      max-width: 400px;
-      width: 100%;
-      background: white;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-      text-align: center;
-    }
-    
-    .register-title {
-      font-size: 1.6rem;
-      font-weight: 600;
-      margin-bottom: 0.3rem;
-      color: #2d5016;
-    }
-    
-    .register-subtitle {
-      color: #2d5016;
-      opacity: 0.7;
-      margin-bottom: 1.5rem;
-      font-size: 0.9rem;
-    }
-    
-    .user-type-selection {
-      display: flex;
-      gap: 0.8rem;
-      margin-bottom: 1.5rem;
-    }
-    
-    .user-type-btn {
-      flex: 1;
-      padding: 1rem 0.5rem;
-      border: 1px solid #e9ecef;
-      background: white;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-align: center;
-    }
-    
-    .user-type-btn:hover {
-      border-color: #2d5016;
-    }
-    
-    .user-type-btn.active {
-      border-color: #2d5016;
-      background: #2d5016;
-      color: white;
-    }
-    
-    .user-type-icon {
-      font-size: 1.2rem;
-      margin-bottom: 0.3rem;
-      display: block;
-    }
-    
-    .user-type-label {
-      font-weight: 500;
-      font-size: 0.9rem;
-    }
-    
-    .register-form {
-      display: none;
-      text-align: left;
-    }
-    
-    .register-form.active {
-      display: block;
-    }
-    
-    .form-group {
-      margin-bottom: 1rem;
-    }
-    
-    .form-label {
-      display: block;
-      margin-bottom: 0.3rem;
-      font-weight: 500;
-      color: #2d5016;
-      font-size: 0.9rem;
-    }
-    
-    .form-input {
-      width: 100%;
-      padding: 0.8rem;
-      border: 1px solid #e9ecef;
-      border-radius: 6px;
-      font-size: 0.9rem;
-      transition: border-color 0.2s;
-      outline: none;
-    }
-    
-    .form-input:focus {
-      border-color: #2d5016;
-    }
-    
-    .submit-btn {
-      width: 100%;
-      background: #2d5016;
-      color: white;
-      border: none;
-      padding: 0.8rem;
-      border-radius: 6px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.2s;
-      margin-top: 0.5rem;
-    }
-    
-    .submit-btn:hover {
-      background: #1f3610;
-    }
-    
-    .login-link {
-      text-align: center;
-      margin-top: 1.5rem;
-      color: #2d5016;
-      font-size: 0.85rem;
-    }
-    
-    .login-link a {
-      color: #2d5016;
-      text-decoration: none;
-      font-weight: 500;
-    }
-    
-    .footer {
-      background: #f8f9fa;
-      padding: 1.5rem 0;
-      margin-top: 2rem;
-      border-top: 1px solid #e9ecef;
-    }
-    
-    .footer-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 1.5rem;
-      text-align: center;
-    }
-    
-    .footer-copyright {
-      color: #2d5016;
-      opacity: 0.8;
-      font-size: 0.8rem;
-      margin-bottom: 0.8rem;
-    }
-    
-    .footer-links {
-      display: flex;
-      gap: 1.5rem;
-      justify-content: center;
-    }
-    
-    .footer-links a {
-      color: #2d5016;
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 0.75rem;
-      transition: opacity 0.3s;
-    }
-    
-    .footer-links a:hover {
-      opacity: 0.7;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register – Talfy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    @media (max-width: 768px) {
-      .register-container {
-        margin: 0.5rem;
-        padding: 1.5rem;
-      }
-      .footer-links { 
-        gap: 1rem; 
-      }
-    }
-  </style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.5;
+            color: #2d5016;
+            background: white;
+            min-height: 100vh;
+        }
+
+        /* Header styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            background-color: #fff;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d5016;
+            text-decoration: none;
+        }
+
+        .nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: #2d5016;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .nav a:hover {
+            color: #1f3610;
+        }
+
+        .nav-active {
+            color: #1f3610 !important;
+            position: relative;
+        }
+
+        .nav-active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #2d5016;
+        }
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 25px;
+            height: 2px;
+            background-color: #2d5016;
+            transition: all 0.3s;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            padding: 0.8rem 2rem;
+            text-decoration: none;
+            color: #2d5016;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .mobile-menu a:hover {
+            background-color: #f5f7fa;
+        }
+
+        /* Main content styles */
+        .main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 85vh;
+            padding: 1rem;
+        }
+
+        .register-container {
+            max-width: 400px;
+            width: 100%;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .register-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: #2d5016;
+        }
+
+        .register-subtitle {
+            color: #2d5016;
+            opacity: 0.7;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .user-type-selection {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .user-type-btn {
+            flex: 1;
+            padding: 1rem 0.5rem;
+            border: 1px solid #e9ecef;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .user-type-btn:hover {
+            border-color: #2d5016;
+        }
+
+        .user-type-btn.active {
+            border-color: #2d5016;
+            background: #2d5016;
+            color: white;
+        }
+
+        .user-type-icon {
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+            display: block;
+        }
+
+        .user-type-label {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+            color: #2d5016;
+            font-size: 0.9rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: border-color 0.2s;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: #2d5016;
+        }
+
+        .password-requirements {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            text-align: left;
+        }
+
+        .requirement {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.25rem;
+            color: rgba(45, 80, 22, 0.7);
+        }
+
+        .requirement.valid {
+            color: #10b981;
+        }
+
+        .requirement-icon {
+            margin-right: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: #2d5016;
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        .submit-btn:hover {
+            background: #1f3610;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #2d5016;
+            font-size: 0.85rem;
+        }
+
+        .login-link a {
+            color: #2d5016;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer styles from index */
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            padding: 1.5rem 2rem;
+            background-color: #fff;
+            border-top: 1px solid #e9ecef;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .footer-center {
+            flex: 1;
+            text-align: center;
+        }
+
+        .footer-right {
+            text-align: right;
+        }
+
+        .footer a {
+            color: #666;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: #2d5016;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .nav {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .register-container {
+                padding: 1.5rem;
+            }
+
+            .footer {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .footer-right {
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 <body>
+    <header class="header">
+        <a href="/index.html" class="logo">talfy</a>
+        <nav class="nav">
+            <a href="/pricing.html">Pricing</a>
+            <a href="/about.html">About us</a>
+            <a href="/contact.html">Contact</a>
+            <a href="/login.html">Login</a>
+            <a href="/register.html" class="nav-active">Register</a>
+        </nav>
+        <button class="hamburger" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/pricing.html">Pricing</a>
+            <a href="/about.html">About us</a>
+            <a href="/contact.html">Contact</a>
+            <a href="/login.html">Login</a>
+            <a href="/register.html">Register</a>
+            <a href="/privacy.html">Privacy</a>
+            <a href="/terms.html">Terms</a>
+        </div>
+    </header>
 
-  <header class="header">
-    <a href="/" class="logo">talfy</a>
-    <nav class="nav">
-      <a href="/login.html">Login</a>
-    </nav>
-  </header>
+    <main class="main">
+        <div class="register-container">
+            <h1 class="register-title">Create an Account</h1>
+            <p class="register-subtitle">Join Talfy and discover the future of finance recruitment.</p>
+            
+            <div class="user-type-selection">
+                <div class="user-type-btn active" id="candidateOption">
+                    <span class="user-type-icon">👤</span>
+                    <span class="user-type-label">Candidate</span>
+                </div>
+                <div class="user-type-btn" id="companyOption">
+                    <span class="user-type-icon">🏢</span>
+                    <span class="user-type-label">Company</span>
+                </div>
+            </div>
+            
+            <form id="registerForm">
+                <input type="hidden" id="userType" value="candidate">
+                
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" id="email" class="form-input" placeholder="your@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" class="form-input" placeholder="Create a password" required>
+                    <div class="password-requirements">
+                        <div class="requirement" id="req-length"><span class="requirement-icon">○</span> At least 8 characters</div>
+                        <div class="requirement" id="req-uppercase"><span class="requirement-icon">○</span> At least one uppercase letter</div>
+                        <div class="requirement" id="req-symbol"><span class="requirement-icon">○</span> At least one symbol</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                    <input type="password" id="confirmPassword" class="form-input" placeholder="Confirm your password" required>
+                </div>
+                
+                <button type="submit" class="submit-btn" id="registerBtn">Register</button>
+            </form>
+            
+            <div class="login-link">
+                Already have an account? <a href="/login.html">Login</a>
+            </div>
+        </div>
+    </main>
 
-  <main class="main">
-    <div class="register-container">
-      <h1 class="register-title">Join Talfy</h1>
-      <p class="register-subtitle">Choose your account type</p>
-      
-      <div class="user-type-selection">
-        <div class="user-type-btn" onclick="selectUserType('candidate')">
-          <span class="user-type-icon">👤</span>
-          <div class="user-type-label">Candidate</div>
+    <footer class="footer">
+        <div class="footer-center">&copy; 2025 Talfy. All rights reserved.</div>
+        <div class="footer-right">
+            <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a>
         </div>
-        <div class="user-type-btn" onclick="selectUserType('company')">
-          <span class="user-type-icon">🏢</span>
-          <div class="user-type-label">Company</div>
-        </div>
-      </div>
+    </footer>
 
-      <form class="register-form" id="candidateForm">
-        <div class="form-group">
-          <label class="form-label">First Name</label>
-          <input type="text" class="form-input" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Last Name</label>
-          <input type="text" class="form-input" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Email</label>
-          <input type="email" class="form-input" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Password</label>
-          <input type="password" id="candidatePassword" class="form-input" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Confirm Password</label>
-          <input type="password" id="candidateConfirm" class="form-input" required>
-        </div>
-        <button type="submit" class="submit-btn">Create Account</button>
-      </form>
+    <script>
+        function toggleMenu() {
+            document.getElementById("mobileMenu").classList.toggle("active");
+        }
 
-      <form class="register-form" id="companyForm">
-        <div class="form-group">
-          <label class="form-label">Company Name</label>
-          <input type="text" class="form-input" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Email</label>
-          <input type="email" class="form-input" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Password</label>
-          <input type="password" id="companyPassword" class="form-input" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Confirm Password</label>
-          <input type="password" id="companyConfirm" class="form-input" required>
-        </div>
-        <button type="submit" class="submit-btn">Create Account</button>
-      </form>
-
-      <div class="login-link">
-        Already have an account? <a href="/login.html">Login</a>
-      </div>
-    </div>
-  </main>
-
-  <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-copyright">
-        © 2024 Talfy. All rights reserved.
-      </div>
-      <div class="footer-links">
-        <a href="/about.html">About us</a>
-        <a href="/terms.html">Terms</a>
-        <a href="/privacy.html">Privacy</a>
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    function selectUserType(type) {
-      document.querySelectorAll('.user-type-btn').forEach(btn => {
-        btn.classList.remove('active');
-      });
-      
-      document.querySelectorAll('.register-form').forEach(form => {
-        form.classList.remove('active');
-      });
-      
-      event.target.closest('.user-type-btn').classList.add('active');
-      
-      if (type === 'candidate') {
-        document.getElementById('candidateForm').classList.add('active');
-      } else {
-        document.getElementById('companyForm').classList.add('active');
-      }
-    }
-
-    document.getElementById('candidateForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const password = document.getElementById('candidatePassword').value;
-      const confirm = document.getElementById('candidateConfirm').value;
-      
-      if (password !== confirm) {
-        alert('Passwords do not match!');
-        return;
-      }
-      
-      alert('Registration successful!');
-    });
-
-    document.getElementById('companyForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const password = document.getElementById('companyPassword').value;
-      const confirm = document.getElementById('companyConfirm').value;
-      
-      if (password !== confirm) {
-        alert('Passwords do not match!');
-        return;
-      }
-      
-      alert('Registration successful!');
-    });
-  </script>
+        // User type selection
+        const candidateOption = document.getElementById('candidateOption');
+        const companyOption = document.getElementById('companyOption');
+        const userTypeInput = document.getElementById('userType');
+        
+        candidateOption.addEventListener('click', function() {
+            candidateOption.classList.add('active');
+            companyOption.classList.remove('active');
+            userTypeInput.value = 'candidate';
+        });
+        
+        companyOption.addEventListener('click', function() {
+            companyOption.classList.add('active');
+            candidateOption.classList.remove('active');
+            userTypeInput.value = 'company';
+        });
+        
+        // Password validation
+        const passwordInput = document.getElementById('password');
+        const confirmInput = document.getElementById('confirmPassword');
+        const registerBtn = document.getElementById('registerBtn');
+        
+        const reqLength = document.getElementById('req-length');
+        const reqUppercase = document.getElementById('req-uppercase');
+        const reqSymbol = document.getElementById('req-symbol');
+        
+        function validatePassword() {
+            const password = passwordInput.value;
+            
+            // Check length
+            if (password.length >= 8) {
+                reqLength.classList.add('valid');
+                reqLength.querySelector('.requirement-icon').textContent = '✓';
+            } else {
+                reqLength.classList.remove('valid');
+                reqLength.querySelector('.requirement-icon').textContent = '○';
+            }
+            
+            // Check uppercase
+            if (/[A-Z]/.test(password)) {
+                reqUppercase.classList.add('valid');
+                reqUppercase.querySelector('.requirement-icon').textContent = '✓';
+            } else {
+                reqUppercase.classList.remove('valid');
+                reqUppercase.querySelector('.requirement-icon').textContent = '○';
+            }
+            
+            // Check symbol
+            if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+                reqSymbol.classList.add('valid');
+                reqSymbol.querySelector('.requirement-icon').textContent = '✓';
+            } else {
+                reqSymbol.classList.remove('valid');
+                reqSymbol.querySelector('.requirement-icon').textContent = '○';
+            }
+        }
+        
+        passwordInput.addEventListener('input', validatePassword);
+        
+        // Register form submission
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = passwordInput.value;
+            const confirmPassword = confirmInput.value;
+            const userType = userTypeInput.value;
+            
+            // Validate password
+            const isLengthValid = password.length >= 8;
+            const isUppercaseValid = /[A-Z]/.test(password);
+            const isSymbolValid = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+            const isPasswordMatch = password === confirmPassword;
+            
+            if (!isLengthValid || !isUppercaseValid || !isSymbolValid) {
+                alert('Please ensure your password meets all requirements.');
+                return;
+            }
+            
+            if (!isPasswordMatch) {
+                alert('Passwords do not match.');
+                return;
+            }
+            
+            // This is a demo - in a real app, you would send this to a server
+            alert(`Registration successful!\nUser type: ${userType}\nEmail: ${email}\nIn a real application, your account would now be created.`);
+        });
+    </script>
 </body>
 </html>

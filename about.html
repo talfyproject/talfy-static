@@ -21,29 +21,6 @@
       overflow-x: hidden;
     }
 
-    /* Animated background particles */
-    .bg-particles {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: -1;
-    }
-
-    .particle {
-      position: absolute;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 50%;
-      animation: float 6s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-20px) rotate(180deg); }
-    }
-
     /* Header */
     .header {
       background: rgba(255, 255, 255, 0.95);
@@ -56,7 +33,6 @@
       top: 0;
       z-index: 1000;
       box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
     }
 
     .logo {
@@ -84,10 +60,9 @@
       padding: 0.5rem 1rem;
       border-radius: 8px;
       transition: all 0.3s ease;
-      position: relative;
     }
 
-    .nav a:hover, .nav a.nav-active {
+    .nav a:hover {
       color: #047857;
       background: rgba(4, 120, 87, 0.1);
       transform: translateY(-2px);
@@ -134,10 +109,6 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     }
 
-    .mobile-menu.active {
-      display: block;
-    }
-
     .mobile-menu a {
       display: block;
       padding: 1rem;
@@ -152,15 +123,27 @@
       color: #047857;
     }
 
-    /* Main Content */
-    .main {
-      padding: 4rem 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
+    /* Animated background particles */
+    .bg-particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
     }
 
-    .about-content {
-      animation: fadeInUp 1s ease-out;
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
     }
 
     @keyframes fadeInUp {
@@ -172,6 +155,10 @@
         opacity: 1;
         transform: translateY(0);
       }
+    }
+
+    .about-content {
+      animation: fadeInUp 1s ease-out;
     }
 
     .about-hero {
@@ -248,6 +235,11 @@
       color: white;
       margin-bottom: 1rem;
       text-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Login status styles */
+    .nav a[onclick="logout()"] {
+      cursor: pointer;
     }
 
     .about-card p {
@@ -360,6 +352,221 @@
       transform: translateY(-2px);
     }
 
+    /* Main Content */
+    .main {
+      padding: 4rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .hero-section {
+      text-align: center;
+      margin-bottom: 5rem;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .hero-subtitle {
+      font-size: 1.3rem;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .content-section {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 3rem;
+      margin-bottom: 3rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .section-text {
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .feature-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #047857, #064e3b);
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .feature-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    .feature-text {
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.6;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .team-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 2rem;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .team-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .team-avatar {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #047857, #064e3b);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 2rem;
+      color: white;
+    }
+
+    .team-name {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 0.5rem;
+    }
+
+    .team-role {
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 1rem;
+    }
+
+    .team-bio {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .cta-section {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 3rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .cta-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    .cta-text {
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #047857, #064e3b);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(4, 120, 87, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(4, 120, 87, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
     /* Footer */
     .footer {
       background: rgba(0, 0, 0, 0.1);
@@ -427,44 +634,93 @@
         font-size: 2rem;
       }
 
-      .about-card {
-        padding: 2rem;
-      }
-
-      .about-cta {
-        padding: 2rem;
+      .header {
+        padding: 1rem;
       }
     }
   </style>
 
   <script>
-    // Create animated background particles
-    function createParticles() {
-      const container = document.querySelector('.bg-particles');
-      const particleCount = 50;
-
-      for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        
-        const size = Math.random() * 4 + 2;
-        particle.style.width = size + 'px';
-        particle.style.height = size + 'px';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.top = Math.random() * 100 + '%';
-        particle.style.animationDelay = Math.random() * 6 + 's';
-        particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
-        
-        container.appendChild(particle);
-      }
-    }
-
     function toggleMenu() {
       document.getElementById("mobileMenu").classList.toggle("active");
     }
 
+    function createParticles() {
+      const particlesContainer = document.querySelector('.bg-particles');
+      const particleCount = 50;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.width = Math.random() * 4 + 2 + 'px';
+        particle.style.height = particle.style.width;
+        particle.style.animationDelay = Math.random() * 6 + 's';
+        particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+        particlesContainer.appendChild(particle);
+      }
+    }
+
+    function checkLoginStatus() {
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      const desktopNav = document.querySelector('.nav');
+      const mobileMenu = document.getElementById('mobileMenu');
+      
+      if (isLoggedIn) {
+        // Desktop navigation for logged in users
+        desktopNav.innerHTML = `
+          <a href="/pricing.html">Pricing</a>
+          <a href="/about.html" class="nav-active">About us</a>
+          <a href="/contact.html">Contact</a>
+          <a href="/dashboard.html">Dashboard</a>
+          <a href="#" onclick="logout()">Logout</a>
+        `;
+        
+        // Mobile navigation for logged in users
+        mobileMenu.innerHTML = `
+          <a href="/pricing.html">Pricing</a>
+          <a href="/about.html">About us</a>
+          <a href="/contact.html">Contact</a>
+          <a href="/dashboard.html">Dashboard</a>
+          <a href="#" onclick="logout()">Logout</a>
+          <a href="/privacy.html">Privacy</a>
+          <a href="/terms.html">Terms</a>
+        `;
+      } else {
+        // Desktop navigation for non-logged in users
+        desktopNav.innerHTML = `
+          <a href="/pricing.html">Pricing</a>
+          <a href="/about.html" class="nav-active">About us</a>
+          <a href="/contact.html">Contact</a>
+          <a href="/login.html">Login</a>
+          <a href="/register.html">Register</a>
+        `;
+        
+        // Mobile navigation for non-logged in users
+        mobileMenu.innerHTML = `
+          <a href="/pricing.html">Pricing</a>
+          <a href="/about.html">About us</a>
+          <a href="/contact.html">Contact</a>
+          <a href="/login.html">Login</a>
+          <a href="/register.html">Register</a>
+          <a href="/privacy.html">Privacy</a>
+          <a href="/terms.html">Terms</a>
+        `;
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('userType');
+      localStorage.removeItem('userName');
+      checkLoginStatus();
+      location.reload();
+    }
+
     window.onload = function() {
       createParticles();
+      checkLoginStatus();
     };
   </script>
 </head>
@@ -475,7 +731,7 @@
     <a href="/index.html" class="logo">talfy</a>
     <nav class="nav">
       <a href="/pricing.html">Pricing</a>
-      <a href="/about.html" class="nav-active">About us</a>
+      <a href="/about.html">About us</a>
       <a href="/contact.html">Contact</a>
       <a href="/login.html">Login</a>
       <a href="/register.html">Register</a>

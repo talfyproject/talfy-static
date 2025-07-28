@@ -20,14 +20,10 @@ async function handleRegister(event) {
 
   try {
     const response = await fetch('https://talfy-backend-4.onrender.com/api/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email,
-        password,
-        userType: userType.value
-      })
-    });
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ email, password, userType: userType.value })
+});
 
     const data = await response.json();
 

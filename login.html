@@ -355,15 +355,6 @@
           }
         }
 
-        @keyframes underlineGrow {
-          from {
-            transform: scaleX(0);
-          }
-          to {
-            transform: scaleX(1);
-          }
-        }
-
         /* Responsive */
         @media (max-width: 768px) {
             .nav {
@@ -375,6 +366,12 @@
             .main {
                 padding: 2rem 1rem;
             }
+        }
+
+        .error-text {
+            color: red;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
         }
     </style>
 </head>
@@ -418,12 +415,12 @@
                 <div class="form-group">
                     <label for="password" class="form-label">Password</label>
                     <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
-                    <div class="forgot-password">
-                        <a href="/forgot-password.html">Forgot password?</a>
-                    </div>
                 </div>
+
+                <!-- Nuovo spazio per messaggi di errore -->
+                <div id="loginError" class="error-text"></div>
                 
-                <button type="submit" class="login-btn">Sign In</button>
+                <button type="submit" class="login-btn" id="loginBtn">Sign In</button>
             </form>
             
             <div class="register-link">
@@ -444,18 +441,8 @@
         function toggleMenu() {
             document.getElementById("mobileMenu").classList.toggle("active");
         }
-
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            // In a real application, this would send a request to your authentication server
-            alert(`Login attempt with email: ${email}\nIn a real application, this would authenticate you.`);
-            
-            // Redirect to dashboard after successful login
-            // window.location.href = "/dashboard.html";
-        });
     </script>
-    </body>
-  </html>
+    <script src="login.js"></script>
+</body>
+</html>
+

@@ -1,4 +1,4 @@
-async function handleRegister(event) {
+document.getElementById('registerForm').addEventListener('submit', async (event) => {
   event.preventDefault();
 
   const userType = document.querySelector('input[name="userType"]:checked');
@@ -7,6 +7,11 @@ async function handleRegister(event) {
   const confirmPassword = document.getElementById('confirmPassword').value.trim();
   const terms = document.getElementById('terms').checked;
   const registerButton = document.getElementById('registerButton');
+  const errorMsg = document.getElementById('errorMessage');
+  const successMsg = document.getElementById('successMessage');
+
+  errorMsg.style.display = 'none';
+  successMsg.style.display = 'none';
 
   if (!userType) return showMessage('Please select whether you are a candidate or company');
   if (!email || !password || !confirmPassword) return showMessage('Please fill in all fields');
@@ -20,15 +25,21 @@ async function handleRegister(event) {
 
   try {
     const response = await fetch('https://talfy-backend-4.onrender.com/api/register', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ email, password, userType: userType.value })
-});
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, userType: userType.value })
+    });
 
     const data = await response.json();
 
     if (response.ok && data.success) {
-      showMessage('Account created successfully! Redirecting...', 'success');
+      successMsg.style.display = 'block';
+      successMsg.textContent = 'Account created successfully! Redirecting...';
+
+      // ✅ Salva info per uso futuro
+      localStorage.setItem('userId', data.userId);
+      localStorage.setItem('userType', data.userType);
+
       setTimeout(() => {
         if (data.userType === 'candidate') {
           window.location.href = '/complete-profile-candidate.html';
@@ -47,27 +58,12 @@ async function handleRegister(event) {
     registerButton.disabled = false;
     registerButton.textContent = 'Create Account';
   }
-}
 
-function showMessage(message, type = 'error') {
-  const errorMsg = document.getElementById('errorMessage');
-  const successMsg = document.getElementById('successMessage');
-
-  if (type === 'error') {
-    errorMsg.textContent = message;
+  function showMessage(message) {
     errorMsg.style.display = 'block';
-    successMsg.style.display = 'none';
-  } else {
-    successMsg.textContent = message;
-    successMsg.style.display = 'block';
-    errorMsg.style.display = 'none';
+    errorMsg.textContent = message;
   }
-
-  setTimeout(() => {
-    errorMsg.style.display = 'none';
-    successMsg.style.display = 'none';
-  }, 5000);
-}
+});
 
 function isPasswordValid() {
   const password = document.getElementById('password').value.trim();
@@ -79,4 +75,3 @@ function isPasswordValid() {
   );
 }
 
-document.querySelector('.login-form').addEventListener('submit', handleRegister);

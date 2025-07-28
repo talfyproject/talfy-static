@@ -3,8 +3,8 @@ async function handleRegister(event) {
 
   const userType = document.querySelector('input[name="userType"]:checked');
   const email = document.getElementById('email').value.trim();
-  const password = document.getElementById('password').value;
-  const confirmPassword = document.getElementById('confirmPassword').value;
+  const password = document.getElementById('password').value.trim();
+  const confirmPassword = document.getElementById('confirmPassword').value.trim();
   const terms = document.getElementById('terms').checked;
   const registerButton = document.getElementById('registerButton');
 
@@ -41,7 +41,7 @@ async function handleRegister(event) {
         }
       }, 1500);
     } else {
-      showMessage(data.message || 'Registration failed');
+      showMessage(data.error || 'Registration failed');
       registerButton.disabled = false;
       registerButton.textContent = 'Create Account';
     }
@@ -74,7 +74,7 @@ function showMessage(message, type = 'error') {
 }
 
 function isPasswordValid() {
-  const password = document.getElementById('password').value;
+  const password = document.getElementById('password').value.trim();
   return (
     password.length >= 8 &&
     /[A-Z]/.test(password) &&

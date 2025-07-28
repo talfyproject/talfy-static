@@ -775,38 +775,42 @@
       }
     }
 
-    function checkLoginStatus() {
-      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-      
-      if (isLoggedIn) {
-        // Redirect to dashboard if already logged in
-        window.location.href = '/dashboard.html';
-        return;
-      }
-      
-      const desktopNav = document.querySelector('.nav');
-      const mobileMenu = document.getElementById('mobileMenu');
-      
-      // Desktop navigation for non-logged in users
-      desktopNav.innerHTML = `
-        <a href="/pricing.html">Pricing</a>
-        <a href="/about.html">About us</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/login.html">Login</a>
-        <a href="/register.html" class="nav-active">Register</a>
-      `;
-      
-      // Mobile navigation for non-logged in users
-      mobileMenu.innerHTML = `
-        <a href="/pricing.html">Pricing</a>
-        <a href="/about.html">About us</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/login.html">Login</a>
-        <a href="/register.html">Register</a>
-        <a href="/privacy.html">Privacy</a>
-        <a href="/terms.html">Terms</a>
-      `;
+function checkLoginStatus() {
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  const userType = localStorage.getItem('userType');
+
+  if (isLoggedIn && userType) {
+    // Redirect based on user type
+    if (userType === 'candidate') {
+      window.location.href = '/candidate.html';
+    } else if (userType === 'company') {
+      window.location.href = '/company.html';
     }
+    return;
+  }
+
+  // Update navigation for non-logged-in users
+  const desktopNav = document.querySelector('.nav');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  desktopNav.innerHTML = `
+    <a href="/pricing.html">Pricing</a>
+    <a href="/about.html">About us</a>
+    <a href="/contact.html">Contact</a>
+    <a href="/login.html">Login</a>
+    <a href="/register.html" class="nav-active">Register</a>
+  `;
+
+  mobileMenu.innerHTML = `
+    <a href="/pricing.html">Pricing</a>
+    <a href="/about.html">About us</a>
+    <a href="/contact.html">Contact</a>
+    <a href="/login.html">Login</a>
+    <a href="/register.html">Register</a>
+    <a href="/privacy.html">Privacy</a>
+    <a href="/terms.html">Terms</a>
+  `;
+}
 
     window.onload = function() {
       createParticles();

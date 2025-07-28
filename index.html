@@ -6,11 +6,8 @@
   <title>Talfy – The smart way to find finance people</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
   <script>
-    function toggleMenu() {
-      document.getElementById("mobileMenu").classList.toggle("active");
-    }
-
     async function updateCounters() {
       try {
         const res = await fetch('https://talfy-backend.onrender.com/api/counts');
@@ -123,6 +120,7 @@
       }
     });
   </script>
-
+  
+  <script src="menu.js"></script>
 </body>
 </html>

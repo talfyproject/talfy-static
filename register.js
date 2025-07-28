@@ -27,7 +27,7 @@ document.getElementById('registerForm').addEventListener('submit', async (event)
     const response = await fetch('https://talfy-backend-4.onrender.com/api/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password, userType: userType.value })
+      body: JSON.stringify({ email, password, user_type: userType.value })
     });
 
     const data = await response.json();
@@ -36,7 +36,6 @@ document.getElementById('registerForm').addEventListener('submit', async (event)
       successMsg.style.display = 'block';
       successMsg.textContent = 'Account created successfully! Redirecting...';
 
-      // ✅ Salva info per uso futuro
       localStorage.setItem('userId', data.userId);
       localStorage.setItem('userType', data.userType);
 
@@ -54,7 +53,7 @@ document.getElementById('registerForm').addEventListener('submit', async (event)
     }
   } catch (error) {
     console.error('Error during registration:', error);
-    showMessage('Server error, please try again later.');
+    showMessage('Cannot connect to server. Please try again later.');
     registerButton.disabled = false;
     registerButton.textContent = 'Create Account';
   }
@@ -74,4 +73,3 @@ function isPasswordValid() {
     /[!@#$%^&*(),.?":{}|<>]/.test(password)
   );
 }
-

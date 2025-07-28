@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Complete Your Profile – Talfy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #047857 0%, #064e3b 100%);
+      min-height: 100vh;
+      color: #333;
+      overflow-x: hidden;
+    }
+
+    /* Animated background particles */
+    .bg-particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+
+    /* Header */
+    .header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .header-center {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #047857;
+      text-decoration: none;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
+    }
+
+    .nav {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: #555;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav a:hover {
+      color: #047857;
+      background: rgba(4, 120, 87, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .nav a.nav-active {
+      color: #047857;
+      background: rgba(4, 120, 87, 0.1);
+    }
+
+    .nav a:last-child {
+      background: linear-gradient(135deg, #047857, #064e3b);
+      color: white;
+      box-shadow: 0 4px 15px rgba(4, 120, 87, 0.3);
+    }
+
+    .nav a:last-child:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(4, 120, 87, 0.4);
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+
+    .hamburger span {
+      width: 25px;
+      height: 3px;
+      background: #333;
+      margin: 3px 0;
+      transition: 0.3s;
+      border-radius: 2px;
+    }
+
+    .mobile-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 1rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .mobile-menu.active {
+      display: block;
+    }
+
+    .mobile-menu a {
+      display: block;
+      padding: 1rem;
+      text-decoration: none;
+      color: #555;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu a:hover {
+      background: rgba(4, 120, 87, 0.1);
+      color: #047857;
+    }
+
+    .progress-indicator {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: #555;
+      font-size: 0.9rem;
+    }
+
+    .progress-bar {
+      width: 200px;
+      height: 8px;
+      background: rgba(4, 120, 87, 0.2);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(135deg, #047857, #064e3b);
+      width: 0%;
+      transition: width 0.3s ease;
+      border-radius: 4px;
+    }
+
+    /* Main Content */
+    .main {
+      padding: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .profile-content {
+      animation: fadeInUp 1s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .profile-hero {
+      text-align: center;
+      margin-bottom: 3rem;
+      animation: fadeInUp 1s ease-out 0.2s both;
+    }
+
+    .profile-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .profile-underline {
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(135deg, #047857, #064e3b);
+      margin: 0 auto 1.5rem;
+      border-radius: 2px;
+    }
+
+    .profile-subtitle {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* Form Container */
+    .profile-form-container {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 3rem;
+      border-radius: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      animation: fadeInUp 1s ease-out 0.4s both;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-form-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.5s;
+    }
+
+    .profile-form-container:hover::before {
+      left: 100%;
+    }
+
+    .profile-form {
+      position: relative;
+      z-index: 1;
+    }
+
+    .form-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .section-title {
+      color: white;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-row.single {
+      grid-template-columns: 1fr;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      color: white;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 1rem 1.2rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+
+    .form-input::placeholder, .form-textarea::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: #047857;
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.2);
+    }
+
+    .form-select {
+      cursor: pointer;
+    }
+
+    .form-select option {
+      background: #064e3b;
+      color: white;
+      padding: 0.5rem;
+    }
+
+    .form-select {
+      color: white;
+    }
+
+    .form-select option:hover {
+      background: #047857;
+    }
+
+    .form-textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .birth-date-group {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      gap: 1rem;
+    }
+
+    .language-group {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1rem;
+      align-items: end;
+    }
+
+    .multi-select-container {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      padding: 1rem;
+      min-height: 120px;
+    }
+
+    .multi-select-input {
+      width: 100%;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .multi-select-input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .multi-select-input:focus {
+      outline: none;
+    }
+
+    .selected-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .selected-item {
+      background: rgba(4, 120, 87, 0.3);
+      color: white;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .remove-item {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 0;
+      width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Avatar Selection */
+    .avatar-selection {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .avatar-option {
+      cursor: pointer;
+    }
+
+    .avatar-option input[type="radio"] {
+      display: none;
+    }
+
+    .avatar-card {
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+      height: 140px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .avatar-card:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .avatar-option input[type="radio"]:checked + .avatar-card {
+      background: rgba(4, 120, 87, 0.3);
+      border-color: #047857;
+      box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.2);
+    }
+
+    .avatar-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .avatar-label {
+      color: white;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    /* Photo Upload */
+    .photo-upload-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .photo-preview {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .photo-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .photo-placeholder {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 3rem;
+    }
+
+    .photo-upload-btn {
+      background: rgba(4, 120, 87, 0.3);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .photo-upload-btn:hover {
+      background: rgba(4, 120, 87, 0.4);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .photo-input {
+      display: none;
+    }
+
+    .photo-remove-btn {
+      background: rgba(239, 68, 68, 0.3);
+      color: white;
+      border: 1px solid rgba(239, 68, 68, 0.5);
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: all 0.3s ease;
+    }
+
+    .photo-remove-btn:hover {
+      background: rgba(239, 68, 68, 0.4);
+    }
+
+    /* File Upload */
+    .file-upload-container {
+      border: 2px dashed rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.05);
+      margin-top: 0.5rem;
+    }
+
+    .file-upload-container:hover {
+      border-color: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .file-upload-container.dragover {
+      border-color: #047857;
+      background: rgba(4, 120, 87, 0.1);
+    }
+
+    .file-upload-icon {
+      font-size: 3rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 1rem;
+    }
+
+    .file-upload-text {
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .file-upload-subtext {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .file-upload-btn {
+      background: linear-gradient(135deg, #047857, #064e3b);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 10px rgba(4, 120, 87, 0.3);
+    }
+
+    .file-upload-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px rgba(4, 120, 87, 0.4);
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .uploaded-file {
+      background: rgba(4, 120, 87, 0.2);
+      border: 1px solid rgba(4, 120, 87, 0.4);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .file-info {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .file-icon {
+      font-size: 1.5rem;
+      color: #047857;
+    }
+
+    .file-details {
+      color: white;
+    }
+
+    .file-name {
+      font-weight: 500;
+      margin-bottom: 0.2rem;
+    }
+
+    .file-size {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .file-remove {
+      background: rgba(239, 68, 68, 0.3);
+      color: white;
+      border: none;
+      padding: 0.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: all 0.3s ease;
+    }
+
+    .file-remove:hover {
+      background: rgba(239, 68, 68, 0.4);
+    }
+
+    /* Status Cards */
+    .status-card {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .status-indicator.active .status-icon {
+      color: #22c55e;
+      font-size: 1.5rem;
+    }
+
+    .status-indicator.inactive .status-icon {
+      color: #ef4444;
+      font-size: 1.5rem;
+    }
+
+    .status-info {
+      flex: 1;
+    }
+
+    .status-title {
+      color: white;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .status-subtitle {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+    }
+
+    .stats-card {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+
+    .stats-number {
+      color: #047857;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .stats-label {
+      color: white;
+      font-weight: 500;
+      margin-bottom: 0.3rem;
+    }
+
+    .stats-period {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.85rem;
+    }
+
+    .submit-button {
+      width: 100%;
+      background: linear-gradient(135deg, #047857, #064e3b);
+      color: white;
+      padding: 1.2rem;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(4, 120, 87, 0.3);
+      margin-top: 2rem;
+    }
+
+    .submit-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(4, 120, 87, 0.4);
+    }
+
+    .submit-button:active {
+      transform: translateY(0);
+    }
+
+    .submit-button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .error-message {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    .success-message {
+      background: rgba(34, 197, 94, 0.2);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #86efac;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .nav {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .birth-date-group {
+        grid-template-columns: 1fr;
+      }
+
+      .language-group {
+        grid-template-columns: 1fr;
+      }
+
+      .profile-title {
+        font-size: 2rem;
+      }
+
+      .profile-form-container {
+        padding: 2rem;
+      }
+
+      .progress-indicator {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .progress-bar {
+        width: 150px;
+      }
+
+      .avatar-selection {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .main {
+        padding: 1rem;
+      }
+
+      .profile-form-container {
+        padding: 1.5rem;
+      }
+
+      .avatar-selection {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <script>
+    let uploadedPhoto = null;
+
+    function createParticles() {
+      const container = document.querySelector('.bg-particles');
+      const particleCount = 50;
+
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+  
+        const size = Math.random() * 4 + 2;
+        particle.style.width = size + 'px';
+        particle.style.height = size + 'px';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 6 + 's';
+        particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+        
+        container.appendChild(particle);
+      }
+    }
+
+    function updateProgress() {
+      const form = document.getElementById('profileForm');
+      const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
+      let filledInputs = 0;
+
+      inputs.forEach(input => {
+        if (input.type === 'radio') {
+          const radioGroup = form.querySelectorAll(`input[name="${input.name}"]`);
+          const isChecked = Array.from(radioGroup).some(radio => radio.checked);
+          if (isChecked && input === radioGroup[0]) {
+            filledInputs++;
+          }
+        } else if (input.value.trim() !== '') {
+          filledInputs++;
+        }
+      });
+
+      // Add points for optional uploads
+      if (uploadedPhoto) filledInputs += 0.5;
+      if (uploadedCV) filledInputs += 0.5;
+
+      const progress = (filledInputs / inputs.length) * 100;
+      document.querySelector('.progress-fill').style.width = progress + '%';
+      document.querySelector('.progress-text').textContent = Math.round(progress) + '% Complete';
+    }
+
+    function handlePhotoUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+      if (!allowedTypes.includes(file.type)) {
+        showMessage('Please upload a valid image file (JPG, PNG, GIF)');
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        showMessage('Image file size must be less than 5MB');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const preview = document.getElementById('photoPreview');
+        preview.innerHTML = `<img src="${e.target.result}" alt="Profile Photo">`;
+        
+        const removeBtn = document.getElementById('photoRemoveBtn');
+        removeBtn.style.display = 'block';
+        
+        uploadedPhoto = file;
+        updateProgress();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removePhoto() {
+      const preview = document.getElementById('photoPreview');
+      preview.innerHTML = '<div class="photo-placeholder">📷</div>';
+      
+      const removeBtn = document.getElementById('photoRemoveBtn');
+      removeBtn.style.display = 'none';
+      
+      const input = document.getElementById('photoInput');
+      input.value = '';
+      
+      uploadedPhoto = null;
+      updateProgress();
+    }
+
+
+
+
+
+    function showMessage(message, type = 'error') {
+      const errorMsg = document.getElementById('errorMessage');
+      const successMsg = document.getElementById('successMessage');
+      
+      if (type === 'error') {
+        errorMsg.textContent = message;
+        errorMsg.style.display = 'block';
+        successMsg.style.display = 'none';
+      } else {
+        successMsg.textContent = message;
+        successMsg.style.display = 'block';
+        errorMsg.style.display = 'none';
+      }
+      
+      setTimeout(() => {
+        errorMsg.style.display = 'none';
+        successMsg.style.display = 'none';
+      }, 5000);
+    }
+
+    function handleSubmit(event) {
+      event.preventDefault();
+      
+      const submitButton = document.getElementById('submitButton');
+      const userType = localStorage.getItem('userType');
+      const avatar = document.querySelector('input[name="avatar"]:checked');
+      
+      let formData = {};
+      let requiredFields = [];
+      
+      if (userType === 'company') {
+        formData = {
+          companyName: document.getElementById('companyName').value,
+          vatNumber: document.getElementById('vatNumber').value,
+          email: document.getElementById('email').value,
+          country: document.getElementById('country').value,
+          sector: document.getElementById('sector').value,
+          address: document.getElementById('address').value,
+          avatar: avatar ? avatar.value : null,
+          hasLogo: uploadedPhoto !== null,
+          planStatus: 'active',
+          cvDownloads: 247
+        };
+        
+        requiredFields = ['companyName', 'vatNumber', 'email', 'country', 'sector', 'address'];
+      } else {
+        // Candidate form data (existing logic)
+        const jobRole = document.getElementById('jobRole').value;
+        const finalJobRole = jobRole === 'Other' ? document.getElementById('otherJobRole').value : jobRole;
+        
+        formData = {
+          firstName: document.getElementById('firstName').value,
+          lastName: document.getElementById('lastName').value,
+          email: document.getElementById('email').value,
+          phone: document.getElementById('phone').value,
+          location: document.getElementById('location').value,
+          birthDay: document.getElementById('birthDay').value,
+          birthMonth: document.getElementById('birthMonth').value,
+          birthYear: document.getElementById('birthYear').value,
+          avatar: avatar ? avatar.value : null,
+          jobRole: finalJobRole,
+          experience: document.getElementById('experience').value,
+          education: document.getElementById('education').value,
+          salaryMin: document.getElementById('salaryMin').value,
+          salaryMax: document.getElementById('salaryMax').value,
+          nativeLanguage: document.getElementById('nativeLanguage').value,
+          secondLanguage: document.getElementById('secondLanguage').value,
+          secondLanguageLevel: document.getElementById('secondLanguageLevel').value,
+          thirdLanguage: document.getElementById('thirdLanguage').value,
+          thirdLanguageLevel: document.getElementById('thirdLanguageLevel').value,
+          availability: document.getElementById('availability').value,
+          remoteWork: document.getElementById('remoteWork').value,
+          relocation: document.getElementById('relocation').value,
+          summary: document.getElementById('summary').value,
+          sectors: selectedSectors,
+          software: selectedSoftware,
+          hasPhoto: uploadedPhoto !== null,
+          hasCV: uploadedCV !== null
+        };
+        
+        requiredFields = ['firstName', 'lastName', 'email', 'phone', 'location', 'birthDay', 'birthMonth', 'birthYear', 'jobRole', 'experience', 'education', 'salaryMin', 'salaryMax', 'nativeLanguage', 'availability', 'remoteWork', 'relocation', 'summary'];
+      }
+
+      // Basic validation
+      for (let field of requiredFields) {
+        if (!formData[field] || formData[field].trim() === '') {
+          showMessage('Please fill in all required fields');
+          return;
+        }
+      }
+
+      if (!avatar) {
+        showMessage('Please select an avatar');
+        return;
+      }
+
+      // Additional validation for candidates
+      if (userType === 'candidate') {
+        const minSalary = parseInt(formData.salaryMin);
+        const maxSalary = parseInt(formData.salaryMax);
+        if (minSalary >= maxSalary) {
+          showMessage('Maximum salary must be higher than minimum salary');
+          return;
+        }
+      }
+
+      if (!formData.email.includes('@')) {
+        showMessage('Please enter a valid email address');
+        return;
+      }
+
+      // Simulate form submission
+      submitButton.disabled = true;
+      submitButton.textContent = 'Saving Profile...';
+      
+      setTimeout(() => {
+        // Save profile data to localStorage
+        if (userType === 'company') {
+          localStorage.setItem('companyProfile', JSON.stringify(formData));
+        } else {
+          localStorage.setItem('candidateProfile', JSON.stringify(formData));
+        }
+        localStorage.setItem('profileCompleted', 'true');
+        
+        showMessage('Profile completed successfully! Redirecting to dashboard...', 'success');
+        
+        setTimeout(() => {
+          window.location.href = '/dashboard.html';
+        }, 1500);
+      }, 2000);
+    }
+
+
+
+    function populateForm() {
+      // Pre-fill email from registration
+      const userEmail = localStorage.getItem('userEmail');
+      const userType = localStorage.getItem('userType');
+      
+      if (userEmail) {
+        document.getElementById('email').value = userEmail;
+        document.getElementById('email').readOnly = true;
+        document.getElementById('email').style.opacity = '0.7';
+      }
+      
+      // Show appropriate form based on user type
+      showFormForUserType(userType);
+    }
+
+    function showFormForUserType(userType) {
+      const form = document.getElementById('profileForm');
+      
+      if (userType === 'company') {
+        // Update title and subtitle for company
+        document.querySelector('.profile-title').textContent = 'Complete Company Profile';
+        document.querySelector('.profile-subtitle').textContent = 'Set up your company profile to start hiring';
+        
+        // Update submit button text
+        document.getElementById('submitButton').textContent = 'Complete Company Profile';
+        
+        // The form sections are already set up for company in the HTML
+      } else {
+        // For candidates, we would need to show the candidate form
+        // This would require switching the form content
+        window.location.href = '/complete-profile-candidate.html';
+      }
+    }
+
+    function toggleMenu() {
+      document.getElementById("mobileMenu").classList.toggle("active");
+    }
+
+    function checkLoginStatus() {
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      const userName = localStorage.getItem('userName') || 'User';
+      
+      const desktopNav = document.getElementById('desktopNav');
+      const mobileMenu = document.getElementById('mobileMenu');
+      
+      if (isLoggedIn) {
+        // Desktop navigation for logged in users
+        desktopNav.innerHTML = `
+          <a href="/dashboard.html">Dashboard</a>
+          <a href="/profile.html">Profile</a>
+          <a href="/messages.html">Messages</a>
+          <a href="#" onclick="logout()" style="color: #ef4444;">Logout (${userName})</a>
+        `;
+        
+        // Mobile navigation for logged in users
+        mobileMenu.innerHTML = `
+          <a href="/dashboard.html">Dashboard</a>
+          <a href="/profile.html">Profile</a>
+          <a href="/messages.html">Messages</a>
+          <a href="/settings.html">Settings</a>
+          <a href="#" onclick="logout()" style="color: #ef4444;">Logout (${userName})</a>
+        `;
+      } else {
+        // Desktop navigation for non-logged in users
+        desktopNav.innerHTML = `
+          <a href="/pricing.html">Pricing</a>
+          <a href="/about.html">About us</a>
+          <a href="/contact.html">Contact</a>
+          <a href="/login.html">Login</a>
+          <a href="/register.html">Register</a>
+        `;
+        
+        // Mobile navigation for non-logged in users
+        mobileMenu.innerHTML = `
+          <a href="/pricing.html">Pricing</a>
+          <a href="/about.html">About us</a>
+          <a href="/contact.html">Contact</a>
+          <a href="/login.html">Login</a>
+          <a href="/register.html">Register</a>
+          <a href="/privacy.html">Privacy</a>
+          <a href="/terms.html">Terms</a>
+        `;
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('userName');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userType');
+      localStorage.removeItem('candidateProfile');
+      localStorage.removeItem('profileCompleted');
+      window.location.href = '/index.html';
+    }
+
+    window.onload = function() {
+      createParticles();
+      checkLoginStatus();
+      populateForm();
+      
+      // Add event listeners for progress tracking
+      const form = document.getElementById('profileForm');
+      const inputs = form.querySelectorAll('input, select, textarea');
+      inputs.forEach(input => {
+        input.addEventListener('input', updateProgress);
+        input.addEventListener('change', updateProgress);
+      });
+      
+      updateProgress();
+    };
+  </script>
+</head>
+<body>
+  <div class="bg-particles"></div>
+
+  <header class="header">
+    <a href="/index.html" class="logo">talfy</a>
+    <div class="header-center">
+      <div class="progress-indicator">
+        <span class="progress-text">0% Complete</span>
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+        </div>
+      </div>
+    </div>
+    <nav class="nav" id="desktopNav">
+      <!-- Navigation will be populated by JavaScript -->
+    </nav>
+    <button class="hamburger" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="mobile-menu" id="mobileMenu">
+      <!-- Mobile menu will be populated by JavaScript -->
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="profile-content">
+      <div class="profile-hero">
+        <h1 class="profile-title">Complete Your Profile</h1>
+        <div class="profile-underline"></div>
+        <p class="profile-subtitle">Help us match you with the perfect opportunities</p>
+      </div>
+
+      <div class="profile-form-container">
+        <div id="errorMessage" class="error-message"></div>
+        <div id="successMessage" class="success-message"></div>
+        
+        <form class="profile-form" id="profileForm" onsubmit="handleSubmit(event)">
+          <!-- Company Information -->
+          <div class="form-section">
+            <h2 class="section-title">Company Information</h2>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="companyName" class="form-label">Company Name / Business Name *</label>
+                <input type="text" id="companyName" class="form-input" placeholder="Enter your company name" required />
+              </div>
+              <div class="form-group">
+                <label for="vatNumber" class="form-label">VAT Number / P.IVA *</label>
+                <input type="text" id="vatNumber" class="form-input" placeholder="Enter your VAT number" required />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email" class="form-label">Email Address *</label>
+                <input type="email" id="email" class="form-input" placeholder="Enter company email" required />
+              </div>
+              <div class="form-group">
+                <label for="country" class="form-label">Country *</label>
+                <select id="country" class="form-select" required>
+                  <option value="">Select country</option>
+                  <option value="Italy">Italy</option>
+                  <option value="Germany">Germany</option>
+                  <option value="France">France</option>
+                  <option value="Spain">Spain</option>
+                  <option value="United Kingdom">United Kingdom</option>
+                  <option value="Netherlands">Netherlands</option>
+                  <option value="Belgium">Belgium</option>
+                  <option value="Austria">Austria</option>
+                  <option value="Switzerland">Switzerland</option>
+                  <option value="Portugal">Portugal</option>
+                  <option value="Poland">Poland</option>
+                  <option value="Czech Republic">Czech Republic</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="sector" class="form-label">Business Sector *</label>
+                <select id="sector" class="form-select" required>
+                  <option value="">Select sector</option>
+                  <option value="Technology">Technology</option>
+                  <option value="Finance & Banking">Finance & Banking</option>
+                  <option value="Healthcare">Healthcare</option>
+                  <option value="Manufacturing">Manufacturing</option>
+                  <option value="Retail">Retail</option>
+                  <option value="Consulting">Consulting</option>
+                  <option value="Real Estate">Real Estate</option>
+                  <option value="Education">Education</option>
+                  <option value="Energy">Energy</option>
+                  <option value="Transportation">Transportation</option>
+                  <option value="Media & Entertainment">Media & Entertainment</option>
+                  <option value="Food & Beverage">Food & Beverage</option>
+                  <option value="Construction">Construction</option>
+                  <option value="Telecommunications">Telecommunications</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="address" class="form-label">Company Address *</label>
+                <input type="text" id="address" class="form-input" placeholder="Enter company address" required />
+              </div>
+            </div>
+          </div>
+
+          <!-- Company Logo/Avatar -->
+          <div class="form-section">
+            <h2 class="section-title">Company Logo</h2>
+            
+            <div class="form-group">
+              <label class="form-label">Choose Avatar *</label>
+              <div class="avatar-selection">
+                <label class="avatar-option">
+                  <input type="radio" name="avatar" value="building" required />
+                  <div class="avatar-card">
+                    <div class="avatar-icon">🏢</div>
+                    <div class="avatar-label">Building</div>
+                  </div>
+                </label>
+                <label class="avatar-option">
+                  <input type="radio" name="avatar" value="corporate" required />
+                  <div class="avatar-card">
+                    <div class="avatar-icon">🏛️</div>
+                    <div class="avatar-label">Corporate</div>
+                  </div>
+                </label>
+                <label class="avatar-option">
+                  <input type="radio" name="avatar" value="modern" required />
+                  <div class="avatar-card">
+                    <div class="avatar-icon">🌟</div>
+                    <div class="avatar-label">Modern</div>
+                  </div>
+                </label>
+                <label class="avatar-option">
+                  <input type="radio" name="avatar" value="tech" required />
+                  <div class="avatar-card">
+                    <div class="avatar-icon">💼</div>
+                    <div class="avatar-label">Business</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Upload Company Logo (Optional)</label>
+              <div class="photo-upload-container">
+                <div class="photo-preview" id="photoPreview">
+                  <div class="photo-placeholder">🏢</div>
+                </div>
+                <button type="button" class="photo-upload-btn" onclick="document.getElementById('photoInput').click()">
+                  Choose Logo
+                </button>
+                <button type="button" class="photo-remove-btn" id="photoRemoveBtn" onclick="removePhoto()" style="display: none;">
+                  Remove Logo
+                </button>
+                <input type="file" id="photoInput" class="photo-input" accept="image/*" onchange="handlePhotoUpload(event)" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Plan Status & Statistics -->
+          <div class="form-section">
+            <h2 class="section-title">Account Status</h2>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Current Plan</label>
+                <div class="status-card">
+                  <div class="status-indicator active" id="planStatus">
+                    <div class="status-icon">✅</div>
+                    <div class="status-info">
+                      <div class="status-title">Premium Plan Active</div>
+                      <div class="status-subtitle">Valid until: March 15, 2025</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">CV Downloads</label>
+                <div class="stats-card">
+                  <div class="stats-number" id="cvDownloads">247</div>
+                  <div class="stats-label">CVs Downloaded</div>
+                  <div class="stats-period">This month: 23</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" id="submitButton" class="submit-button">
+            Complete Profile
+          </button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer" style="background: rgba(0, 0, 0, 0.1); backdrop-filter: blur(10px); padding: 2rem; text-align: center; color: rgba(255, 255, 255, 0.8); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div class="footer-center" style="flex: 1; text-align: center;">&copy; 2025 Talfy. All rights reserved.</div>
+    <div class="footer-right" style="display: flex; gap: 1rem;">
+      <a href="/privacy.html" style="color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: color 0.3s ease;">Privacy</a>
+      <span style="color: rgba(255, 255, 255, 0.5);">·</span>
+      <a href="/terms.html" style="color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: color 0.3s ease;">Terms</a>
+    </div>
+  </footer>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96653317f16eee76',t:'MTc1MzcxNDMzOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

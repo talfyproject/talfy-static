@@ -317,16 +317,15 @@
       accent-color: #047857;
     }
 
-    .forgot-password {
-      color: rgba(255, 255, 255, 0.8);
-      text-decoration: none;
-      font-size: 0.9rem;
+    .remember-me a {
+      color: #fff;
+      text-decoration: underline;
+      margin-left: 5px;
       transition: color 0.3s ease;
     }
 
-    .forgot-password:hover {
-      color: white;
-      text-decoration: underline;
+    .remember-me a:hover {
+      color: #86efac;
     }
 
     .login-button {
@@ -696,63 +695,55 @@
       }, 5000);
     }
 
-    function handleRegister(event) {
+    async function handleRegister(event) {
       event.preventDefault();
-      
+
       const userType = document.querySelector('input[name="userType"]:checked');
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       const confirmPassword = document.getElementById('confirmPassword').value;
       const terms = document.getElementById('terms').checked;
       const registerButton = document.getElementById('registerButton');
-      
-      if (!userType) {
-        showMessage('Please select whether you are a candidate or company');
-        return;
-      }
-      
-      if (!email || !password || !confirmPassword) {
-        showMessage('Please fill in all fields');
-        return;
-      }
-      
-      if (!email.includes('@')) {
-        showMessage('Please enter a valid email address');
-        return;
-      }
-      
-      if (!isPasswordValid()) {
-        showMessage('Password must meet all requirements');
-        return;
-      }
-      
-      if (password !== confirmPassword) {
-        showMessage('Passwords do not match');
-        return;
-      }
-      
-      if (!terms) {
-        showMessage('Please accept the Terms of Service and Privacy Policy');
-        return;
-      }
-      
-      // Simulate registration process
+
+      if (!userType) return showMessage('Please select whether you are a candidate or company');
+      if (!email || !password || !confirmPassword) return showMessage('Please fill in all fields');
+      if (!email.includes('@')) return showMessage('Please enter a valid email address');
+      if (!isPasswordValid()) return showMessage('Password must meet all requirements');
+      if (password !== confirmPassword) return showMessage('Passwords do not match');
+      if (!terms) return showMessage('Please accept the Terms of Service and Privacy Policy');
+
       registerButton.disabled = true;
       registerButton.textContent = 'Creating Account...';
-      
-      setTimeout(() => {
-        // Simulate successful registration
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('userEmail', email);
-        localStorage.setItem('userName', email.split('@')[0]);
-        localStorage.setItem('userType', userType.value);
-        
-        showMessage('Account created successfully! Redirecting...', 'success');
-        
-        setTimeout(() => {
-          window.location.href = '/dashboard.html';
-        }, 1500);
-      }, 2000);
+
+      try {
+        const response = await fetch('/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password, userType: userType.value })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          showMessage('Account created successfully! Redirecting...', 'success');
+          setTimeout(() => {
+            if (data.userType === 'candidate') {
+              window.location.href = '/complete-profile-candidate.html';
+            } else {
+              window.location.href = '/complete-profile-company.html';
+            }
+          }, 1500);
+        } else {
+          showMessage(data.message || 'Registration failed');
+          registerButton.disabled = false;
+          registerButton.textContent = 'Create Account';
+        }
+      } catch (error) {
+        console.error(error);
+        showMessage('Server error, please try again later.');
+        registerButton.disabled = false;
+        registerButton.textContent = 'Create Account';
+      }
     }
 
     function createParticles() {
@@ -775,42 +766,40 @@
       }
     }
 
-function checkLoginStatus() {
-  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-  const userType = localStorage.getItem('userType');
+    function checkLoginStatus() {
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      const userType = localStorage.getItem('userType');
 
-  if (isLoggedIn && userType) {
-    // Redirect based on user type
-    if (userType === 'candidate') {
-      window.location.href = '/candidate.html';
-    } else if (userType === 'company') {
-      window.location.href = '/company.html';
+      if (isLoggedIn && userType) {
+        if (userType === 'candidate') {
+          window.location.href = '/candidate.html';
+        } else if (userType === 'company') {
+          window.location.href = '/company.html';
+        }
+        return;
+      }
+
+      const desktopNav = document.querySelector('.nav');
+      const mobileMenu = document.getElementById('mobileMenu');
+
+      desktopNav.innerHTML = `
+        <a href="/pricing.html">Pricing</a>
+        <a href="/about.html">About us</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/login.html">Login</a>
+        <a href="/register.html" class="nav-active">Register</a>
+      `;
+
+      mobileMenu.innerHTML = `
+        <a href="/pricing.html">Pricing</a>
+        <a href="/about.html">About us</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/login.html">Login</a>
+        <a href="/register.html">Register</a>
+        <a href="/privacy.html">Privacy</a>
+        <a href="/terms.html">Terms</a>
+      `;
     }
-    return;
-  }
-
-  // Update navigation for non-logged-in users
-  const desktopNav = document.querySelector('.nav');
-  const mobileMenu = document.getElementById('mobileMenu');
-
-  desktopNav.innerHTML = `
-    <a href="/pricing.html">Pricing</a>
-    <a href="/about.html">About us</a>
-    <a href="/contact.html">Contact</a>
-    <a href="/login.html">Login</a>
-    <a href="/register.html" class="nav-active">Register</a>
-  `;
-
-  mobileMenu.innerHTML = `
-    <a href="/pricing.html">Pricing</a>
-    <a href="/about.html">About us</a>
-    <a href="/contact.html">Contact</a>
-    <a href="/login.html">Login</a>
-    <a href="/register.html">Register</a>
-    <a href="/privacy.html">Privacy</a>
-    <a href="/terms.html">Terms</a>
-  `;
-}
 
     window.onload = function() {
       createParticles();
@@ -947,7 +936,7 @@ function checkLoginStatus() {
           <div class="form-options">
             <label class="remember-me">
               <input type="checkbox" id="terms" required />
-              I agree to the Terms and Privacy Policy
+              I agree to the <a href="/terms.html" target="_blank">Terms</a> and <a href="/privacy.html" target="_blank">Privacy Policy</a>
             </label>
           </div>
 
@@ -975,7 +964,7 @@ function checkLoginStatus() {
     </div>
   </footer>
 
-
   <script src="register.js"></script>
 </body>
 </html>
+

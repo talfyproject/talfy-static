@@ -32,10 +32,10 @@ passwordInput.addEventListener('input', () => {
 // Submit form
 document.getElementById('registerForm').addEventListener('submit', async (e) => {
   e.preventDefault();
-  const email = document.getElementById('email').value;
-  const password = passwordInput.value;
-  const confirmPassword = document.getElementById('confirmPassword').value;
-  const company = accountType === 'company' ? document.getElementById('company').value : '';
+  const email = document.getElementById('email').value.trim();
+  const password = passwordInput.value.trim();
+  const confirmPassword = document.getElementById('confirmPassword').value.trim();
+  const company = accountType === 'company' ? document.getElementById('company').value.trim() : '';
 
   if (password !== confirmPassword) {
     document.getElementById('confirmError').textContent = "Passwords don't match";
@@ -49,7 +49,7 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
   registerBtn.disabled = true;
 
   try {
-    const res = await fetch('/api/auth/register', {
+    const res = await fetch('https://talfy-backend-4.onrender.com/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password, accountType, company })
@@ -59,18 +59,18 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
     if (res.ok && data.status === "success") {
       const userId = data.id;
       if (accountType === "candidate") {
-        window.location.href = `/edit-profile-candidate.html?id=${userId}`;
+        window.location.href = `edit-profile-candidate.html?id=${userId}`;
       } else {
-        window.location.href = `/edit-profile-company.html?id=${userId}`;
+        window.location.href = `edit-profile-company.html?id=${userId}`;
       }
     } else {
       document.getElementById('emailError').textContent = data.message || "Registration failed";
     }
   } catch (err) {
+    console.error(err);
     document.getElementById('emailError').textContent = "Error connecting to server";
   }
 
   registerBtn.textContent = "Create Account";
   registerBtn.disabled = false;
 });
-

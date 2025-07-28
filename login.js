@@ -31,13 +31,13 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
             localStorage.setItem('userId', data.userId);
             localStorage.setItem('userType', data.userType);
 
-            setTimeout(() => {
-                if (data.userType === 'candidate') {
-                    window.location.href = '/complete-profile-candidate.html';
-                } else {
-                    window.location.href = '/complete-profile-company.html';
-                }
-            }, 1500);
+           setTimeout(() => {
+    if (data.userType === 'candidate') {
+        window.location.href = `/candidate.html?id=${data.userId}`;
+    } else {
+        window.location.href = `/company.html?id=${data.userId}`;
+    }
+}, 1500);
         } else {
             errorMessage.style.display = 'block';
             errorMessage.textContent = data.error || 'Invalid email or password';

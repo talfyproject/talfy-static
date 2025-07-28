@@ -7,9 +7,11 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     const errorMessage = document.getElementById('errorMessage');
     const successMessage = document.getElementById('successMessage');
 
+    // Reset messaggi
     errorMessage.style.display = 'none';
     successMessage.style.display = 'none';
 
+    // Disabilita bottone
     loginButton.disabled = true;
     loginButton.textContent = 'Signing in...';
 
@@ -23,32 +25,36 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         const data = await response.json();
 
         if (response.ok && data.success) {
+            // ✅ Mostra messaggio di successo
             successMessage.style.display = 'block';
             successMessage.textContent = 'Login successful! Redirecting...';
 
-            // ✅ Salva token e info utente
+            // ✅ Salva dati in localStorage
             localStorage.setItem('token', data.token);
             localStorage.setItem('userId', data.userId);
             localStorage.setItem('userType', data.userType);
 
-           setTimeout(() => {
-    if (data.userType === 'candidate') {
-        window.location.href = `/candidate.html?id=${data.userId}`;
-    } else {
-        window.location.href = `/company.html?id=${data.userId}`;
-    }
-}, 1500);
+            // ✅ Redirect alla pagina corretta
+            setTimeout(() => {
+                if (data.userType === 'candidate') {
+                    window.location.href = `/edit-profile-candidate.html?id=${data.userId}`;
+                } else {
+                    window.location.href = `/edit-profile-company.html?id=${data.userId}`;
+                }
+            }, 1500);
+
         } else {
+            // Errore login
             errorMessage.style.display = 'block';
             errorMessage.textContent = data.error || 'Invalid email or password';
             loginButton.disabled = false;
             loginButton.textContent = 'Sign In';
         }
     } catch (err) {
+        // Errore server
         errorMessage.style.display = 'block';
         errorMessage.textContent = 'Server error, please try again later.';
         loginButton.disabled = false;
         loginButton.textContent = 'Sign In';
     }
 });
-

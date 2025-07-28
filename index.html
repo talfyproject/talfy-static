@@ -44,8 +44,6 @@
       50% { transform: translateY(-20px) rotate(180deg); }
     }
 
-
-
     /* Header */
     .header {
       background: rgba(255, 255, 255, 0.95);
@@ -274,6 +272,9 @@
       border: 1px solid rgba(255, 255, 255, 0.2);
       position: relative;
       overflow: hidden;
+      min-width: 200px;
+      flex: 1;
+      max-width: 250px;
     }
 
     .stat-block::before {
@@ -299,11 +300,15 @@
 
     .stat-block strong {
       display: block;
-      font-size: 3rem;
+      font-size: 2.5rem;
       font-weight: 700;
       color: white;
       margin-bottom: 0.5rem;
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      min-height: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .stat-label {
@@ -492,6 +497,62 @@
       }
     }
 
+    function checkLoginStatus() {
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      const desktopNav = document.querySelector('.nav');
+      const mobileMenu = document.getElementById('mobileMenu');
+      
+      if (isLoggedIn) {
+        // Desktop navigation for logged in users
+        desktopNav.innerHTML = `
+          <a href="/pricing.html">Pricing</a>
+          <a href="/about.html">About us</a>
+          <a href="/contact.html">Contact</a>
+          <a href="/dashboard.html">Dashboard</a>
+          <a href="#" onclick="logout()">Logout</a>
+        `;
+        
+        // Mobile navigation for logged in users
+        mobileMenu.innerHTML = `
+          <a href="/pricing.html">Pricing</a>
+          <a href="/about.html">About us</a>
+          <a href="/contact.html">Contact</a>
+          <a href="/dashboard.html">Dashboard</a>
+          <a href="#" onclick="logout()">Logout</a>
+          <a href="/privacy.html">Privacy</a>
+          <a href="/terms.html">Terms</a>
+        `;
+      } else {
+        // Desktop navigation for non-logged in users
+        desktopNav.innerHTML = `
+          <a href="/pricing.html">Pricing</a>
+          <a href="/about.html">About us</a>
+          <a href="/contact.html">Contact</a>
+          <a href="/login.html">Login</a>
+          <a href="/register.html">Register</a>
+        `;
+        
+        // Mobile navigation for non-logged in users
+        mobileMenu.innerHTML = `
+          <a href="/pricing.html">Pricing</a>
+          <a href="/about.html">About us</a>
+          <a href="/contact.html">Contact</a>
+          <a href="/login.html">Login</a>
+          <a href="/register.html">Register</a>
+          <a href="/privacy.html">Privacy</a>
+          <a href="/terms.html">Terms</a>
+        `;
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('userType');
+      localStorage.removeItem('userName');
+      checkLoginStatus();
+      location.reload();
+    }
+
     // Enhanced search with better UX
     function handleSearch(e) {
       e.preventDefault();
@@ -516,6 +577,7 @@
     window.onload = function() {
       createParticles();
       updateCounters();
+      checkLoginStatus();
       
       // Add search form listener
       document.getElementById("searchForm").addEventListener("submit", handleSearch);
@@ -604,7 +666,7 @@
     <div class="footer-right">
       <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a>
     </div>
-  </footer
+  </footer>
     </body>
 </html>
 

@@ -146,10 +146,15 @@
       border-radius: 8px;
       transition: all 0.3s ease;
     }
-
+    
     .mobile-menu a:hover {
       background: rgba(4, 120, 87, 0.1);
       color: #047857;
+    }
+
+    /* Login status styles */
+    .nav a[onclick="logout()"] {
+      cursor: pointer;
     }
 
     /* Main Content */
@@ -421,8 +426,65 @@
       document.getElementById("mobileMenu").classList.toggle("active");
     }
 
+    function checkLoginStatus() {
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      const desktopNav = document.querySelector('.nav');
+      const mobileMenu = document.getElementById('mobileMenu');
+      
+      if (isLoggedIn) {
+        // Desktop navigation for logged in users
+        desktopNav.innerHTML = `
+          <a href="/pricing.html">Pricing</a>
+          <a href="/about.html">About us</a>
+          <a href="/contact.html" class="nav-active">Contact</a>
+          <a href="/dashboard.html">Dashboard</a>
+          <a href="#" onclick="logout()">Logout</a>
+        `;
+        
+        // Mobile navigation for logged in users
+        mobileMenu.innerHTML = `
+          <a href="/pricing.html">Pricing</a>
+          <a href="/about.html">About us</a>
+          <a href="/contact.html">Contact</a>
+          <a href="/dashboard.html">Dashboard</a>
+          <a href="#" onclick="logout()">Logout</a>
+          <a href="/privacy.html">Privacy</a>
+          <a href="/terms.html">Terms</a>
+        `;
+      } else {
+        // Desktop navigation for non-logged in users
+        desktopNav.innerHTML = `
+          <a href="/pricing.html">Pricing</a>
+          <a href="/about.html">About us</a>
+          <a href="/contact.html" class="nav-active">Contact</a>
+          <a href="/login.html">Login</a>
+          <a href="/register.html">Register</a>
+        `;
+        
+        // Mobile navigation for non-logged in users
+        mobileMenu.innerHTML = `
+          <a href="/pricing.html">Pricing</a>
+          <a href="/about.html">About us</a>
+          <a href="/contact.html">Contact</a>
+          <a href="/login.html">Login</a>
+          <a href="/register.html">Register</a>
+          <a href="/privacy.html">Privacy</a>
+          <a href="/terms.html">Terms</a>
+        `;
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('userType');
+      localStorage.removeItem('userName');
+      checkLoginStatus();
+      location.reload();
+    }
+
     window.onload = function() {
       createParticles();
+      checkLoginStatus();
     };
   </script>
 </head>
@@ -483,26 +545,23 @@
           <p>Need help with your account, technical issues, or platform functionality.</p>
           <a href="mailto:support@talfy.com" class="contact-link">support@talfy.com</a>
         </div>
-
-        <div class="contact-card">
-          <div class="contact-icon">💼</div>
-          <h2>Careers</h2>
-          <p>Join our team! Send us your CV and let's build the future of finance recruitment together.</p>
-          <a href="mailto:careers@talfy.com" class="contact-link">careers@talfy.com</a>
-        </div>
       </div>
 
       <div class="contact-cta">
-        <h3>Prefer to reach out directly?</h3>
-        <p>We typically respond within 24 hours during business days</p>
+        <h3>Ready to get started?</h3>
+        <p>Join thousands of finance professionals and companies already using Talfy to make better connections.</p>
         <div class="contact-info">
           <div class="info-item">
-            <span class="info-icon">🕒</span>
-            <span>Response Time: 24 hours</span>
+            <span class="info-icon">📍</span>
+            <span>Milan, Italy</span>
           </div>
           <div class="info-item">
-            <span class="info-icon">🌍</span>
-            <span>Available: Monday - Friday</span>
+            <span class="info-icon">⏰</span>
+            <span>Mon-Fri 9:00-18:00 CET</span>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">💬</span>
+            <span>Response within 24h</span>
           </div>
         </div>
       </div>

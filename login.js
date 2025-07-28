@@ -1,40 +1,54 @@
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value.trim();
-    const loginBtn = document.getElementById('loginBtn');
-    const loginError = document.getElementById('loginError');
+    const loginButton = document.getElementById('loginButton');
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
 
-    loginError.textContent = "";
-    loginBtn.textContent = "Signing in...";
-    loginBtn.disabled = true;
+    errorMessage.style.display = 'none';
+    successMessage.style.display = 'none';
+
+    loginButton.disabled = true;
+    loginButton.textContent = 'Signing in...';
 
     try {
-        const res = await fetch('/api/auth/login', {
+        const response = await fetch('https://talfy-backend-4.onrender.com/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
         });
 
-        const data = await res.json();
+        const data = await response.json();
 
-        if (res.ok && data.status === "success") {
+        if (response.ok && data.success) {
+            successMessage.style.display = 'block';
+            successMessage.textContent = 'Login successful! Redirecting...';
+
+            // ✅ Salva token e info utente
             localStorage.setItem('token', data.token);
             localStorage.setItem('userId', data.userId);
-            localStorage.setItem('accountType', data.accountType);
+            localStorage.setItem('userType', data.userType);
 
-            if (data.accountType === "candidate") {
-                window.location.href = `/candidate.html?id=${data.userId}`;
-            } else {
-                window.location.href = `/company.html?id=${data.userId}`;
-            }
+            setTimeout(() => {
+                if (data.userType === 'candidate') {
+                    window.location.href = '/complete-profile-candidate.html';
+                } else {
+                    window.location.href = '/complete-profile-company.html';
+                }
+            }, 1500);
         } else {
-            loginError.textContent = data.message || "Invalid email or password";
+            errorMessage.style.display = 'block';
+            errorMessage.textContent = data.error || 'Invalid email or password';
+            loginButton.disabled = false;
+            loginButton.textContent = 'Sign In';
         }
     } catch (err) {
-        loginError.textContent = "Error connecting to server";
+        errorMessage.style.display = 'block';
+        errorMessage.textContent = 'Server error, please try again later.';
+        loginButton.disabled = false;
+        loginButton.textContent = 'Sign In';
     }
-
-    loginBtn.textContent = "Sign In";
-    loginBtn.disabled = false;
 });
+

@@ -59,10 +59,10 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
     if (res.ok && data.status === "success") {
       const userId = data.id;
       if (accountType === "candidate") {
-        window.location.href = `edit-profile-candidate.html?id=${userId}`;
-      } else {
-        window.location.href = `edit-profile-company.html?id=${userId}`;
-      }
+    window.location.href = `complete-profile-candidate.html?id=${userId}`;
+} else {
+    window.location.href = `complete-profile-company.html?id=${userId}`;
+}
     } else {
       document.getElementById('emailError').textContent = data.message || "Registration failed";
     }

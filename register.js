@@ -19,7 +19,7 @@ async function handleRegister(event) {
   registerButton.textContent = 'Creating Account...';
 
   try {
-    const response = await fetch('/api/register', {
+    const response = await fetch('https://talfy-backend-4.onrender.com/api/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

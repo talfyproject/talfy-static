@@ -2073,5 +2073,36 @@
             }
         }
     </script>
+
+    <form id="candidateForm" enctype="multipart/form-data">
+    <h2>Complete Your Profile</h2>
+    
+    <label>First Name</label>
+    <input type="text" name="first_name" required>
+    
+    <label>Last Name</label>
+    <input type="text" name="last_name" required>
+    
+    <label>Email</label>
+    <input type="email" name="email" required>
+    
+    <label>Upload Avatar (or choose default)</label>
+    <input type="file" name="avatar" accept="image/*" required>
+    
+    <label>Upload CV (PDF only)</label>
+    <input type="file" name="cv" accept="application/pdf" required>
+    
+    <button type="submit">Save Profile</button>
+</form>
+
+<div id="profileView" style="display:none;">
+    <h3>Candidate Profile</h3>
+    <img id="avatarPreview" src="" alt="Avatar" width="120">
+    <p id="namePreview"></p>
+    <p id="emailPreview"></p>
+    <a id="cvDownloadBtn" href="#" download>Download CV</a>
+</div>
+
+<script src="candidate.js"></script>
 </body>
 </html>

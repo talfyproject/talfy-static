@@ -1,76 +1,86 @@
-const accountOptions = document.querySelectorAll('.account-type-option');
-const companyField = document.getElementById('companyField');
-let accountType = 'candidate';
+async function handleRegister(event) {
+  event.preventDefault();
 
-// Gestione toggle candidate/company
-accountOptions.forEach(opt => {
-  opt.addEventListener('click', () => {
-    accountOptions.forEach(o => o.classList.remove('active'));
-    opt.classList.add('active');
-    accountType = opt.getAttribute('data-type');
-    companyField.style.display = accountType === 'company' ? 'block' : 'none';
-  });
-});
-
-// Password validation
-const passwordInput = document.getElementById('password');
-const requirements = {
-  length: document.getElementById('length'),
-  uppercase: document.getElementById('uppercase'),
-  number: document.getElementById('number'),
-  symbol: document.getElementById('symbol')
-};
-
-passwordInput.addEventListener('input', () => {
-  const value = passwordInput.value;
-  requirements.length.classList.toggle('valid', value.length >= 8);
-  requirements.uppercase.classList.toggle('valid', /[A-Z]/.test(value));
-  requirements.number.classList.toggle('valid', /\d/.test(value));
-  requirements.symbol.classList.toggle('valid', /[!@#$%^&*]/.test(value));
-});
-
-// Submit form
-document.getElementById('registerForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
+  const userType = document.querySelector('input[name="userType"]:checked');
   const email = document.getElementById('email').value.trim();
-  const password = passwordInput.value.trim();
-  const confirmPassword = document.getElementById('confirmPassword').value.trim();
-  const company = accountType === 'company' ? document.getElementById('company').value.trim() : '';
+  const password = document.getElementById('password').value;
+  const confirmPassword = document.getElementById('confirmPassword').value;
+  const terms = document.getElementById('terms').checked;
+  const registerButton = document.getElementById('registerButton');
 
-  if (password !== confirmPassword) {
-    document.getElementById('confirmError').textContent = "Passwords don't match";
-    return;
-  } else {
-    document.getElementById('confirmError').textContent = "";
-  }
+  if (!userType) return showMessage('Please select whether you are a candidate or company');
+  if (!email || !password || !confirmPassword) return showMessage('Please fill in all fields');
+  if (!email.includes('@')) return showMessage('Please enter a valid email address');
+  if (!isPasswordValid()) return showMessage('Password must meet all requirements');
+  if (password !== confirmPassword) return showMessage('Passwords do not match');
+  if (!terms) return showMessage('Please accept the Terms of Service and Privacy Policy');
 
-  const registerBtn = document.getElementById('registerBtn');
-  registerBtn.textContent = "Registering...";
-  registerBtn.disabled = true;
+  registerButton.disabled = true;
+  registerButton.textContent = 'Creating Account...';
 
   try {
-    const res = await fetch('https://talfy-backend-4.onrender.com/api/auth/register', {
+    const response = await fetch('/api/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password, accountType, company })
+      body: JSON.stringify({
+        email,
+        password,
+        userType: userType.value
+      })
     });
-    const data = await res.json();
 
-    if (res.ok && data.status === "success") {
-      const userId = data.id;
-      if (accountType === "candidate") {
-    window.location.href = `complete-profile-candidate.html?id=${userId}`;
-} else {
-    window.location.href = `complete-profile-company.html?id=${userId}`;
-}
+    const data = await response.json();
+
+    if (response.ok && data.success) {
+      showMessage('Account created successfully! Redirecting...', 'success');
+      setTimeout(() => {
+        if (data.userType === 'candidate') {
+          window.location.href = '/complete-profile-candidate.html';
+        } else {
+          window.location.href = '/complete-profile-company.html';
+        }
+      }, 1500);
     } else {
-      document.getElementById('emailError').textContent = data.message || "Registration failed";
+      showMessage(data.message || 'Registration failed');
+      registerButton.disabled = false;
+      registerButton.textContent = 'Create Account';
     }
-  } catch (err) {
-    console.error(err);
-    document.getElementById('emailError').textContent = "Error connecting to server";
+  } catch (error) {
+    console.error('Error during registration:', error);
+    showMessage('Server error, please try again later.');
+    registerButton.disabled = false;
+    registerButton.textContent = 'Create Account';
+  }
+}
+
+function showMessage(message, type = 'error') {
+  const errorMsg = document.getElementById('errorMessage');
+  const successMsg = document.getElementById('successMessage');
+
+  if (type === 'error') {
+    errorMsg.textContent = message;
+    errorMsg.style.display = 'block';
+    successMsg.style.display = 'none';
+  } else {
+    successMsg.textContent = message;
+    successMsg.style.display = 'block';
+    errorMsg.style.display = 'none';
   }
 
-  registerBtn.textContent = "Create Account";
-  registerBtn.disabled = false;
-});
+  setTimeout(() => {
+    errorMsg.style.display = 'none';
+    successMsg.style.display = 'none';
+  }, 5000);
+}
+
+function isPasswordValid() {
+  const password = document.getElementById('password').value;
+  return (
+    password.length >= 8 &&
+    /[A-Z]/.test(password) &&
+    /[0-9]/.test(password) &&
+    /[!@#$%^&*(),.?":{}|<>]/.test(password)
+  );
+}
+
+document.querySelector('.login-form').addEventListener('submit', handleRegister);

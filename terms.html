@@ -152,6 +152,11 @@
       color: #047857;
     }
 
+    /* Login status styles */
+    .nav a[onclick="logout()"] {
+      cursor: pointer;
+    }
+
     /* Main Content */
     .main {
       padding: 4rem 2rem;
@@ -424,7 +429,7 @@
       for (let i = 0; i < particleCount; i++) {
         const particle = document.createElement('div');
         particle.className = 'particle';
-        
+  
         const size = Math.random() * 4 + 2;
         particle.style.width = size + 'px';
         particle.style.height = size + 'px';
@@ -441,8 +446,65 @@
       document.getElementById("mobileMenu").classList.toggle("active");
     }
 
+    function checkLoginStatus() {
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      const desktopNav = document.querySelector('.nav');
+      const mobileMenu = document.getElementById('mobileMenu');
+      
+      if (isLoggedIn) {
+        // Desktop navigation for logged in users
+        desktopNav.innerHTML = `
+          <a href="/pricing.html">Pricing</a>
+          <a href="/about.html">About us</a>
+          <a href="/contact.html">Contact</a>
+          <a href="/dashboard.html">Dashboard</a>
+          <a href="#" onclick="logout()">Logout</a>
+        `;
+        
+        // Mobile navigation for logged in users
+        mobileMenu.innerHTML = `
+          <a href="/pricing.html">Pricing</a>
+          <a href="/about.html">About us</a>
+          <a href="/contact.html">Contact</a>
+          <a href="/dashboard.html">Dashboard</a>
+          <a href="#" onclick="logout()">Logout</a>
+          <a href="/privacy.html">Privacy</a>
+          <a href="/terms.html">Terms</a>
+        `;
+      } else {
+        // Desktop navigation for non-logged in users
+        desktopNav.innerHTML = `
+          <a href="/pricing.html">Pricing</a>
+          <a href="/about.html">About us</a>
+          <a href="/contact.html">Contact</a>
+          <a href="/login.html">Login</a>
+          <a href="/register.html">Register</a>
+        `;
+        
+        // Mobile navigation for non-logged in users
+        mobileMenu.innerHTML = `
+          <a href="/pricing.html">Pricing</a>
+          <a href="/about.html">About us</a>
+          <a href="/contact.html">Contact</a>
+          <a href="/login.html">Login</a>
+          <a href="/register.html">Register</a>
+          <a href="/privacy.html">Privacy</a>
+          <a href="/terms.html">Terms</a>
+        `;
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('userType');
+      localStorage.removeItem('userName');
+      checkLoginStatus();
+      location.reload();
+    }
+
     window.onload = function() {
       createParticles();
+      checkLoginStatus();
     };
   </script>
 </head>
@@ -536,19 +598,19 @@
           <h2>9. Modifications to the Terms</h2>
           <p>We may update these terms at any time. Continued use of the platform after updates constitutes acceptance. Users will be notified of significant changes.</p>
         </div>
-      </div>
 
-      <div class="terms-contact">
-        <h3>Questions about these terms?</h3>
-        <p>If you have any questions about these Terms and Conditions, please don't hesitate to contact us.</p>
-        <div class="contact-buttons">
-          <a href="mailto:legal@talfy.com" class="contact-primary">
-            <span>Contact Legal Team</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </a>
-          <a href="/contact.html" class="contact-secondary">General Support</a>
+        <div class="terms-contact">
+          <h3>Questions about these terms?</h3>
+          <p>If you have any questions about these Terms and Conditions, please don't hesitate to contact us.</p>
+          <div class="contact-buttons">
+            <a href="mailto:legal@talfy.com" class="contact-primary">
+              <span>Contact Legal Team</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+            <a href="/contact.html" class="contact-secondary">General Support</a>
+          </div>
         </div>
       </div>
     </div>
@@ -560,7 +622,6 @@
       <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a>
     </div>
   </footer>
-
 </body>
 </html>
 

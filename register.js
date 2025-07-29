@@ -17,11 +17,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const errorMsg = document.getElementById('errorMessage');
     const successMsg = document.getElementById('successMessage');
 
-    // Nascondi messaggi precedenti
     errorMsg.style.display = 'none';
     successMsg.style.display = 'none';
 
-    // Validazioni lato client
+    // Validazioni
     if (!userType) return showMessage('Please select whether you are a candidate or company');
     if (!email || !password || !confirmPassword) return showMessage('Please fill in all fields');
     if (!email.includes('@')) return showMessage('Please enter a valid email address');
@@ -29,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (password !== confirmPassword) return showMessage('Passwords do not match');
     if (!terms) return showMessage('Please accept the Terms of Service and Privacy Policy');
 
-    // Disabilita bottone durante la richiesta
     registerButton.disabled = true;
     registerButton.textContent = 'Creating Account...';
 
@@ -42,7 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       let data = {};
       try {
-        data = await response.json();
+        const text = await response.text();
+        console.log('Raw response:', text);
+        data = text ? JSON.parse(text) : {};
       } catch (err) {
         console.error('JSON parse error:', err);
       }

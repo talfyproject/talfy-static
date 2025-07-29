@@ -2493,6 +2493,59 @@
                 localStorage.setItem('talfyRegisteredCandidates', JSON.stringify([newCandidate]));
             }
         }
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('candidate-profile-form');
+    const token = localStorage.getItem('authToken');
+    const userId = localStorage.getItem('userId'); // Salvato in fase di login/registrazione
+
+    if (!token || !userId) {
+        alert('Session expired. Please log in again.');
+        window.location.href = 'login.html';
+        return;
+    }
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = {
+            first_name: document.getElementById('first_name').value,
+            last_name: document.getElementById('last_name').value,
+            native_language: document.getElementById('native_language').value,
+            other_languages: Array.from(document.querySelectorAll('input[name="other_languages[]"]:checked')).map(el => el.value),
+            job_titles: Array.from(document.querySelectorAll('input[name="job_titles[]"]:checked')).map(el => el.value),
+            tools: Array.from(document.querySelectorAll('input[name="tools[]"]:checked')).map(el => el.value),
+            sector: Array.from(document.querySelectorAll('input[name="sector[]"]:checked')).map(el => el.value),
+            education_area: Array.from(document.querySelectorAll('input[name="education_area[]"]:checked')).map(el => el.value),
+            experience_years: document.getElementById('experience_years').value,
+            salary_expectation: document.getElementById('salary_expectation').value
+        };
+
+        try {
+            const response = await fetch('/api/update-profile', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ user_id: userId, ...formData })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                alert('Profile updated successfully!');
+                window.location.href = `candidate.html?id=${userId}`;
+            } else {
+                alert('Error: ' + (result.error || 'Update failed.'));
+            }
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            alert('Server error. Please try again later.');
+        }
+    });
+});
+    
+    
     </script>
 </body>
 </html>

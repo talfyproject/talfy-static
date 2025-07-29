@@ -289,31 +289,6 @@
       left: 100%;
     }
 
-    .pricing-card:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: translateY(-5px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    }
-
-    .pricing-card.featured {
-      border: 2px solid #047857;
-      transform: scale(1.05);
-    }
-
-    .pricing-card.featured::after {
-      content: 'Most Popular';
-      position: absolute;
-      top: -1px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: linear-gradient(135deg, #047857, #064e3b);
-      color: white;
-      padding: 0.5rem 1.5rem;
-      border-radius: 0 0 10px 10px;
-      font-size: 0.8rem;
-      font-weight: 600;
-    }
-
     .plan-name {
       font-size: 1.5rem;
       font-weight: 600;
@@ -327,32 +302,29 @@
       font-weight: 700;
       color: white;
       margin-bottom: 0.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.2rem;
+      text-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
     }
 
     .currency {
       font-size: 1.5rem;
-      font-weight: 500;
+      vertical-align: top;
     }
 
     .plan-period {
       color: rgba(255, 255, 255, 0.8);
-      margin-bottom: 0.5rem;
       font-size: 0.9rem;
+      margin-bottom: 0.5rem;
     }
 
     .plan-annual {
       color: #047857;
       font-weight: 600;
-      font-size: 0.9rem;
-      margin-bottom: 1.5rem;
+      font-size: 0.85rem;
       background: rgba(255, 255, 255, 0.9);
       padding: 0.3rem 0.8rem;
       border-radius: 15px;
       display: inline-block;
+      margin-bottom: 1rem;
     }
 
     .plan-features {
@@ -791,14 +763,16 @@
             <span class="currency">€</span>19.99
           </div>
           <div class="plan-period monthly-price">per month</div>
-          <div class="plan-period annual-price" style="display: none;">per month (billed annually)</div>
-          <div class="plan-annual annual-price" style="display: none;">Save €240/year</div>
+          <div class="plan-period annual-price" style="display: none;">per month (paid monthly, annual commitment)</div>
+          <div class="plan-annual annual-price" style="display: none;">Save €240/year • Renew when credits expire</div>
           
           <ul class="plan-features">
-            <li>Up to 10 profiles</li>
+            <li>10 profile credits per month</li>
             <li>Full profile access</li>
             <li>CV download if available</li>
             <li>Email support</li>
+            <li>Credits never expire</li>
+            <li>Renew anytime when credits run out</li>
           </ul>
           
           <div class="plan-description">Ideal for startups and small companies</div>
@@ -820,15 +794,17 @@
             <span class="currency">€</span>29.99
           </div>
           <div class="plan-period monthly-price">per month</div>
-          <div class="plan-period annual-price" style="display: none;">per month (billed annually)</div>
-          <div class="plan-annual annual-price" style="display: none;">Save €360/year</div>
+          <div class="plan-period annual-price" style="display: none;">per month (paid monthly, annual commitment)</div>
+          <div class="plan-annual annual-price" style="display: none;">Save €360/year • Renew when credits expire</div>
           
           <ul class="plan-features">
-            <li>Up to 25 profiles</li>
+            <li>25 profile credits per month</li>
             <li>Full profile access</li>
             <li>CV download if available</li>
             <li>Priority support</li>
             <li>Advanced filters</li>
+            <li>Credits never expire</li>
+            <li>Renew anytime when credits run out</li>
           </ul>
           
           <div class="plan-description">Perfect for medium-sized businesses</div>
@@ -850,16 +826,18 @@
             <span class="currency">€</span>44.99
           </div>
           <div class="plan-period monthly-price">per month</div>
-          <div class="plan-period annual-price" style="display: none;">per month (billed annually)</div>
-          <div class="plan-annual annual-price" style="display: none;">Save €540/year</div>
+          <div class="plan-period annual-price" style="display: none;">per month (paid monthly, annual commitment)</div>
+          <div class="plan-annual annual-price" style="display: none;">Save €540/year • Renew when credits expire</div>
           
           <ul class="plan-features">
-            <li>Up to 50 profiles</li>
+            <li>50 profile credits per month</li>
             <li>Full profile access</li>
             <li>CV download if available</li>
             <li>Multi-user access</li>
             <li>Dedicated support</li>
             <li>Custom integrations</li>
+            <li>Credits never expire</li>
+            <li>Renew anytime when credits run out</li>
           </ul>
           
           <div class="plan-description">Great for large companies and headhunters</div>
@@ -874,8 +852,8 @@
       </div>
 
       <div class="pricing-note">
-        <h3>🔒 Lifetime Access Guarantee</h3>
-        <p>Every selected or downloaded profile will remain available in your company archive – forever. Build your talent database with confidence.</p>
+        <h3>🔄 Flexible Credit System</h3>
+        <p>Your profile credits never expire and remain in your account forever. When you run out of credits, simply renew your plan to get more. Perfect for companies with varying hiring needs throughout the year.</p>
       </div>
 
       <div class="pricing-cta">
@@ -897,11 +875,21 @@
         
         <div class="faq-item" onclick="toggleFAQ(this)">
           <div class="faq-question">
-            How does the billing work?
+            How does the billing work for annual plans?
             <span class="faq-icon">▼</span>
           </div>
           <div class="faq-answer">
-            We bill monthly or annually depending on your chosen plan. Annual plans offer significant savings with 50% off the monthly rate.
+            Annual plans are paid monthly at the discounted rate, with a 12-month commitment. You get 50% off the monthly price and can renew your credits anytime they run out.
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFAQ(this)">
+          <div class="faq-question">
+            What happens when I run out of profile credits?
+            <span class="faq-icon">▼</span>
+          </div>
+          <div class="faq-answer">
+            When your credits are exhausted, you can immediately renew your plan to get more credits. Your unused credits never expire and remain in your account forever.
           </div>
         </div>
 
@@ -911,17 +899,17 @@
             <span class="faq-icon">▼</span>
           </div>
           <div class="faq-answer">
-            Yes, you can upgrade or downgrade your plan at any time. Changes will be reflected in your next billing cycle.
+            Yes, you can upgrade or downgrade your plan at any time. Changes will be reflected in your next billing cycle, and your existing credits will remain available.
           </div>
         </div>
 
         <div class="faq-item" onclick="toggleFAQ(this)">
           <div class="faq-question">
-            What happens if I exceed my profile limit?
+            Do my credits expire if I don't use them?
             <span class="faq-icon">▼</span>
           </div>
           <div class="faq-answer">
-            You'll be notified when approaching your limit. You can upgrade your plan or wait for the next billing cycle to reset your quota.
+            No! Your profile credits never expire and remain in your account forever. This makes our plans perfect for companies with seasonal hiring needs.
           </div>
         </div>
 
@@ -931,7 +919,7 @@
             <span class="faq-icon">▼</span>
           </div>
           <div class="faq-answer">
-            Yes, we offer a 14-day free trial for all new users. No credit card required to start your trial.
+            Yes, we offer a 14-day free trial for all new users with 5 free profile credits. No credit card required to start your trial.
           </div>
         </div>
       </div>

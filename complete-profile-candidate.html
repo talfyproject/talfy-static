@@ -771,451 +771,415 @@
         grid-template-columns: 1fr;
       }
     }
-  </style>
+  </style>	
+<script>
+  let selectedSectors = [];
+  let selectedSoftware = [];
+  let uploadedPhoto = null;
+  let uploadedCV = null;
 
-  <script>
-    let selectedSectors = [];
-    let selectedSoftware = [];
-    let uploadedPhoto = null;
-    let uploadedCV = null;
+  function createParticles() {
+    const container = document.querySelector('.bg-particles');
+    const particleCount = 50;
 
-    function createParticles() {
-      const container = document.querySelector('.bg-particles');
-      const particleCount = 50;
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
 
-      for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-  
-        const size = Math.random() * 4 + 2;
-        particle.style.width = size + 'px';
-        particle.style.height = size + 'px';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.top = Math.random() * 100 + '%';
-        particle.style.animationDelay = Math.random() * 6 + 's';
-        particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
-        
-        container.appendChild(particle);
-      }
+      const size = Math.random() * 4 + 2;
+      particle.style.width = size + 'px';
+      particle.style.height = size + 'px';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.top = Math.random() * 100 + '%';
+      particle.style.animationDelay = Math.random() * 6 + 's';
+      particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+
+      container.appendChild(particle);
     }
+  }
 
-    function updateProgress() {
-      const form = document.getElementById('profileForm');
-      const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
-      let filledInputs = 0;
+  function updateProgress() {
+    const form = document.getElementById('profileForm');
+    const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
+    let filledInputs = 0;
 
-      inputs.forEach(input => {
-        if (input.type === 'radio') {
-          const radioGroup = form.querySelectorAll(`input[name="${input.name}"]`);
-          const isChecked = Array.from(radioGroup).some(radio => radio.checked);
-          if (isChecked && input === radioGroup[0]) {
-            filledInputs++;
-          }
-        } else if (input.value.trim() !== '') {
+    inputs.forEach(input => {
+      if (input.type === 'radio') {
+        const radioGroup = form.querySelectorAll(`input[name="${input.name}"]`);
+        const isChecked = Array.from(radioGroup).some(radio => radio.checked);
+        if (isChecked && input === radioGroup[0]) {
           filledInputs++;
         }
-      });
+      } else if (input.value.trim() !== '') {
+        filledInputs++;
+      }
+    });
 
-      // Add points for optional uploads
-      if (uploadedPhoto) filledInputs += 0.5;
-      if (uploadedCV) filledInputs += 0.5;
+    if (uploadedPhoto) filledInputs += 0.5;
+    if (uploadedCV) filledInputs += 0.5;
 
-      const progress = (filledInputs / inputs.length) * 100;
-      document.querySelector('.progress-fill').style.width = progress + '%';
-      document.querySelector('.progress-text').textContent = Math.round(progress) + '% Complete';
+    const progress = (filledInputs / inputs.length) * 100;
+    document.querySelector('.progress-fill').style.width = progress + '%';
+    document.querySelector('.progress-text').textContent = Math.round(progress) + '% Complete';
+  }
+
+  function handlePhotoUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+      showMessage('Please upload a valid image file (JPG, PNG, GIF)');
+      return;
     }
 
-    function handlePhotoUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      // Validate file type
-      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
-      if (!allowedTypes.includes(file.type)) {
-        showMessage('Please upload a valid image file (JPG, PNG, GIF)');
-        return;
-      }
-
-      // Validate file size (max 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        showMessage('Image file size must be less than 5MB');
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const preview = document.getElementById('photoPreview');
-        preview.innerHTML = `<img src="${e.target.result}" alt="Profile Photo">`;
-        
-        const removeBtn = document.getElementById('photoRemoveBtn');
-        removeBtn.style.display = 'block';
-        
-        uploadedPhoto = file;
-        updateProgress();
-      };
-      reader.readAsDataURL(file);
+    if (file.size > 5 * 1024 * 1024) {
+      showMessage('Image file size must be less than 5MB');
+      return;
     }
 
-    function removePhoto() {
+    const reader = new FileReader();
+    reader.onload = function(e) {
       const preview = document.getElementById('photoPreview');
-      preview.innerHTML = '<div class="photo-placeholder">📷</div>';
-      
+      preview.innerHTML = `<img src="${e.target.result}" alt="Profile Photo">`;
+
       const removeBtn = document.getElementById('photoRemoveBtn');
-      removeBtn.style.display = 'none';
-      
-      const input = document.getElementById('photoInput');
-      input.value = '';
-      
-      uploadedPhoto = null;
+      removeBtn.style.display = 'block';
+
+      uploadedPhoto = file;
       updateProgress();
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function removePhoto() {
+    const preview = document.getElementById('photoPreview');
+    preview.innerHTML = '<div class="photo-placeholder">📷</div>';
+
+    const removeBtn = document.getElementById('photoRemoveBtn');
+    removeBtn.style.display = 'none';
+
+    const input = document.getElementById('photoInput');
+    input.value = '';
+
+    uploadedPhoto = null;
+    updateProgress();
+  }
+
+  function handleCVUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    if (!allowedTypes.includes(file.type)) {
+      showMessage('Please upload a valid CV file (PDF, DOC, DOCX)');
+      return;
     }
 
-    function handleCVUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
+    if (file.size > 10 * 1024 * 1024) {
+      showMessage('CV file size must be less than 10MB');
+      return;
+    }
 
-      // Validate file type
-      const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-      if (!allowedTypes.includes(file.type)) {
-        showMessage('Please upload a valid CV file (PDF, DOC, DOCX)');
-        return;
-      }
+    const fileSize = (file.size / 1024 / 1024).toFixed(2);
+    const fileIcon = file.type.includes('pdf') ? '📄' : '📝';
 
-      // Validate file size (max 10MB)
-      if (file.size > 10 * 1024 * 1024) {
-        showMessage('CV file size must be less than 10MB');
-        return;
-      }
-
-      const fileSize = (file.size / 1024 / 1024).toFixed(2);
-      const fileIcon = file.type.includes('pdf') ? '📄' : '📝';
-      
-      const uploadContainer = document.getElementById('cvUploadContainer');
-      uploadContainer.innerHTML = `
-        <div class="uploaded-file">
-          <div class="file-info">
-            <div class="file-icon">${fileIcon}</div>
-            <div class="file-details">
-              <div class="file-name">${file.name}</div>
-              <div class="file-size">${fileSize} MB</div>
-            </div>
+    const uploadContainer = document.getElementById('cvUploadContainer');
+    uploadContainer.innerHTML = `
+      <div class="uploaded-file">
+        <div class="file-info">
+          <div class="file-icon">${fileIcon}</div>
+          <div class="file-details">
+            <div class="file-name">${file.name}</div>
+            <div class="file-size">${fileSize} MB</div>
           </div>
-          <button type="button" class="file-remove" onclick="removeCV()">Remove</button>
         </div>
-      `;
-      
-      uploadedCV = file;
-      updateProgress();
-    }
+        <button type="button" class="file-remove" onclick="removeCV()">Remove</button>
+      </div>
+    `;
 
-    function removeCV() {
-      const uploadContainer = document.getElementById('cvUploadContainer');
-      uploadContainer.innerHTML = `
-        <div class="file-upload-icon">📄</div>
-        <div class="file-upload-text">Upload your CV</div>
-        <div class="file-upload-subtext">Drag and drop your CV here, or click to browse</div>
-        <button type="button" class="file-upload-btn" onclick="document.getElementById('cvInput').click()">
-          Choose File
-        </button>
-      `;
-      
-      const input = document.getElementById('cvInput');
-      input.value = '';
-      
-      uploadedCV = null;
-      updateProgress();
-    }
+    uploadedCV = file;
+    updateProgress();
+  }
 
-    function setupDragAndDrop() {
-      const dropZone = document.getElementById('cvUploadContainer');
-      
-      dropZone.addEventListener('dragover', function(e) {
-        e.preventDefault();
-        dropZone.classList.add('dragover');
-      });
-      
-      dropZone.addEventListener('dragleave', function(e) {
-        e.preventDefault();
-        dropZone.classList.remove('dragover');
-      });
-      
-      dropZone.addEventListener('drop', function(e) {
-        e.preventDefault();
-        dropZone.classList.remove('dragover');
-        
-        const files = e.dataTransfer.files;
-        if (files.length > 0) {
-          const input = document.getElementById('cvInput');
-          input.files = files;
-          handleCVUpload({ target: { files: files } });
-        }
-      });
-    }
+  function removeCV() {
+    const uploadContainer = document.getElementById('cvUploadContainer');
+    uploadContainer.innerHTML = `
+      <div class="file-upload-icon">📄</div>
+      <div class="file-upload-text">Upload your CV</div>
+      <div class="file-upload-subtext">Drag and drop your CV here, or click to browse</div>
+      <button type="button" class="file-upload-btn" onclick="document.getElementById('cvInput').click()">
+        Choose File
+      </button>
+    `;
 
-    function addToMultiSelect(type, inputId, containerId) {
-      const input = document.getElementById(inputId);
-      const value = input.value.trim();
-      
-      if (value === '') return;
+    const input = document.getElementById('cvInput');
+    input.value = '';
 
-      if (type === 'sectors') {
-        if (!selectedSectors.includes(value)) {
-          selectedSectors.push(value);
-          updateMultiSelectDisplay('sectors', 'sectorsContainer');
-        }
-      } else if (type === 'software') {
-        if (!selectedSoftware.includes(value)) {
-          selectedSoftware.push(value);
-          updateMultiSelectDisplay('software', 'softwareContainer');
-        }
+    uploadedCV = null;
+    updateProgress();
+  }
+
+  function setupDragAndDrop() {
+    const dropZone = document.getElementById('cvUploadContainer');
+
+    dropZone.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', function(e) {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+    });
+
+    dropZone.addEventListener('drop', function(e) {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        const input = document.getElementById('cvInput');
+        input.files = files;
+        handleCVUpload({ target: { files: files } });
       }
+    });
+  }
 
-      input.value = '';
-    }
+  function addToMultiSelect(type, inputId, containerId) {
+    const input = document.getElementById(inputId);
+    const value = input.value.trim();
 
-    function updateMultiSelectDisplay(type, containerId) {
-      const container = document.getElementById(containerId);
-      const selectedItems = container.querySelector('.selected-items');
-      const items = type === 'sectors' ? selectedSectors : selectedSoftware;
+    if (value === '') return;
 
-      selectedItems.innerHTML = '';
-      items.forEach((item, index) => {
-        const itemElement = document.createElement('div');
-        itemElement.className = 'selected-item';
-        itemElement.innerHTML = `
-          ${item}
-          <button type="button" class="remove-item" onclick="removeFromMultiSelect('${type}', ${index})">×</button>
-        `;
-        selectedItems.appendChild(itemElement);
-      });
-    }
-
-    function removeFromMultiSelect(type, index) {
-      if (type === 'sectors') {
-        selectedSectors.splice(index, 1);
+    if (type === 'sectors') {
+      if (!selectedSectors.includes(value)) {
+        selectedSectors.push(value);
         updateMultiSelectDisplay('sectors', 'sectorsContainer');
-      } else if (type === 'software') {
-        selectedSoftware.splice(index, 1);
+      }
+    } else if (type === 'software') {
+      if (!selectedSoftware.includes(value)) {
+        selectedSoftware.push(value);
         updateMultiSelectDisplay('software', 'softwareContainer');
       }
     }
 
-    function handleKeyPress(event, type, inputId, containerId) {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        addToMultiSelect(type, inputId, containerId);
-      }
-    }
+    input.value = '';
+  }
 
-    function showMessage(message, type = 'error') {
-      const errorMsg = document.getElementById('errorMessage');
-      const successMsg = document.getElementById('successMessage');
-      
-      if (type === 'error') {
-        errorMsg.textContent = message;
-        errorMsg.style.display = 'block';
-        successMsg.style.display = 'none';
-      } else {
-        successMsg.textContent = message;
-        successMsg.style.display = 'block';
-        errorMsg.style.display = 'none';
-      }
-      
-      setTimeout(() => {
-        errorMsg.style.display = 'none';
-        successMsg.style.display = 'none';
-      }, 5000);
-    }
+  function updateMultiSelectDisplay(type, containerId) {
+    const container = document.getElementById(containerId);
+    const selectedItems = container.querySelector('.selected-items');
+    const items = type === 'sectors' ? selectedSectors : selectedSoftware;
 
-    function handleSubmit(event) {
+    selectedItems.innerHTML = '';
+    items.forEach((item, index) => {
+      const itemElement = document.createElement('div');
+      itemElement.className = 'selected-item';
+      itemElement.innerHTML = `
+        ${item}
+        <button type="button" class="remove-item" onclick="removeFromMultiSelect('${type}', ${index})">×</button>
+      `;
+      selectedItems.appendChild(itemElement);
+    });
+  }
+
+  function removeFromMultiSelect(type, index) {
+    if (type === 'sectors') {
+      selectedSectors.splice(index, 1);
+      updateMultiSelectDisplay('sectors', 'sectorsContainer');
+    } else if (type === 'software') {
+      selectedSoftware.splice(index, 1);
+      updateMultiSelectDisplay('software', 'softwareContainer');
+    }
+  }
+
+  function handleKeyPress(event, type, inputId, containerId) {
+    if (event.key === 'Enter') {
       event.preventDefault();
-      
-      const submitButton = document.getElementById('submitButton');
-      
-      const jobRole = document.getElementById('jobRole').value;
-      const finalJobRole = jobRole === 'Other' ? document.getElementById('otherJobRole').value : jobRole;
-      
-      const avatar = document.querySelector('input[name="avatar"]:checked');
-      
-      const formData = {
-        firstName: document.getElementById('firstName').value,
-        lastName: document.getElementById('lastName').value,
-        email: document.getElementById('email').value,
-        phone: document.getElementById('phone').value,
-        location: document.getElementById('location').value,
-        birthDay: document.getElementById('birthDay').value,
-        birthMonth: document.getElementById('birthMonth').value,
-        birthYear: document.getElementById('birthYear').value,
-        avatar: avatar ? avatar.value : null,
-        jobRole: finalJobRole,
-        experience: document.getElementById('experience').value,
-        education: document.getElementById('education').value,
-        salaryMin: document.getElementById('salaryMin').value,
-        salaryMax: document.getElementById('salaryMax').value,
-        nativeLanguage: document.getElementById('nativeLanguage').value,
-        secondLanguage: document.getElementById('secondLanguage').value,
-        secondLanguageLevel: document.getElementById('secondLanguageLevel').value,
-        thirdLanguage: document.getElementById('thirdLanguage').value,
-        thirdLanguageLevel: document.getElementById('thirdLanguageLevel').value,
-        availability: document.getElementById('availability').value,
-        remoteWork: document.getElementById('remoteWork').value,
-        relocation: document.getElementById('relocation').value,
-        summary: document.getElementById('summary').value,
-        sectors: selectedSectors,
-        software: selectedSoftware,
-        hasPhoto: uploadedPhoto !== null,
-        hasCV: uploadedCV !== null
-      };
+      addToMultiSelect(type, inputId, containerId);
+    }
+  }
 
-      // Basic validation
-      const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'location', 'birthDay', 'birthMonth', 'birthYear', 'jobRole', 'experience', 'education', 'salaryMin', 'salaryMax', 'nativeLanguage', 'availability', 'remoteWork', 'relocation', 'summary'];
-      
-      for (let field of requiredFields) {
-        if (!formData[field] || formData[field].trim() === '') {
-          showMessage('Please fill in all required fields');
-          return;
-        }
-      }
+  function showMessage(message, type = 'error') {
+    const errorMsg = document.getElementById('errorMessage');
+    const successMsg = document.getElementById('successMessage');
 
-      if (!avatar) {
-        showMessage('Please select an avatar');
-        return;
-      }
+    if (type === 'error') {
+      errorMsg.textContent = message;
+      errorMsg.style.display = 'block';
+      successMsg.style.display = 'none';
+    } else {
+      successMsg.textContent = message;
+      successMsg.style.display = 'block';
+      errorMsg.style.display = 'none';
+    }
 
-      // Validate salary range
-      const minSalary = parseInt(formData.salaryMin);
-      const maxSalary = parseInt(formData.salaryMax);
-      if (minSalary >= maxSalary) {
-        showMessage('Maximum salary must be higher than minimum salary');
-        return;
-      }
+    setTimeout(() => {
+      errorMsg.style.display = 'none';
+      successMsg.style.display = 'none';
+    }, 5000);
+  }
 
-      if (!formData.email.includes('@')) {
-        showMessage('Please enter a valid email address');
-        return;
-      }
+  // ✅ Migliorata per Node.js backend con FormData
+  async function handleSubmit(event) {
+    event.preventDefault();
 
-      // Simulate form submission
-      submitButton.disabled = true;
-      submitButton.textContent = 'Saving Profile...';
-      
-      setTimeout(() => {
-        // Save profile data to localStorage
-        localStorage.setItem('candidateProfile', JSON.stringify(formData));
-        localStorage.setItem('profileCompleted', 'true');
-        
-        showMessage('Profile completed successfully! Redirecting to dashboard...', 'success');
-        
+    const submitButton = document.getElementById('submitButton');
+    submitButton.disabled = true;
+    submitButton.textContent = 'Saving Profile...';
+
+    const jobRole = document.getElementById('jobRole').value;
+    const finalJobRole = jobRole === 'Other' ? document.getElementById('otherJobRole').value : jobRole;
+    const avatar = document.querySelector('input[name="avatar"]:checked');
+
+    const formData = new FormData();
+    formData.append('firstName', document.getElementById('firstName').value);
+    formData.append('lastName', document.getElementById('lastName').value);
+    formData.append('email', document.getElementById('email').value);
+    formData.append('phone', document.getElementById('phone').value);
+    formData.append('location', document.getElementById('location').value);
+    formData.append('birthDay', document.getElementById('birthDay').value);
+    formData.append('birthMonth', document.getElementById('birthMonth').value);
+    formData.append('birthYear', document.getElementById('birthYear').value);
+    formData.append('jobRole', finalJobRole);
+    formData.append('avatar', avatar ? avatar.value : '');
+    formData.append('experience', document.getElementById('experience').value);
+    formData.append('education', document.getElementById('education').value);
+    formData.append('salaryMin', document.getElementById('salaryMin').value);
+    formData.append('salaryMax', document.getElementById('salaryMax').value);
+    formData.append('nativeLanguage', document.getElementById('nativeLanguage').value);
+    formData.append('secondLanguage', document.getElementById('secondLanguage').value);
+    formData.append('secondLanguageLevel', document.getElementById('secondLanguageLevel').value);
+    formData.append('thirdLanguage', document.getElementById('thirdLanguage').value);
+    formData.append('thirdLanguageLevel', document.getElementById('thirdLanguageLevel').value);
+    formData.append('availability', document.getElementById('availability').value);
+    formData.append('remoteWork', document.getElementById('remoteWork').value);
+    formData.append('relocation', document.getElementById('relocation').value);
+    formData.append('summary', document.getElementById('summary').value);
+    formData.append('sectors', JSON.stringify(selectedSectors));
+    formData.append('software', JSON.stringify(selectedSoftware));
+
+    if (uploadedPhoto) formData.append('photo', uploadedPhoto);
+    if (uploadedCV) formData.append('cv', uploadedCV);
+
+    try {
+      const response = await fetch('/api/candidate-profile', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.ok) {
+        showMessage('Profile completed successfully! Redirecting...', 'success');
         setTimeout(() => {
           window.location.href = '/dashboard.html';
         }, 1500);
-      }, 2000);
-    }
-
-    function toggleOtherJobRole() {
-      const jobRole = document.getElementById('jobRole').value;
-      const otherGroup = document.getElementById('otherJobRoleGroup');
-      const otherInput = document.getElementById('otherJobRole');
-      
-      if (jobRole === 'Other') {
-        otherGroup.style.display = 'block';
-        otherInput.required = true;
       } else {
-        otherGroup.style.display = 'none';
-        otherInput.required = false;
-        otherInput.value = '';
+        const errorText = await response.text();
+        showMessage('Error saving profile: ' + errorText);
+        submitButton.disabled = false;
+        submitButton.textContent = 'Save Profile';
       }
-      updateProgress();
+    } catch (error) {
+      showMessage('Network error: ' + error.message);
+      submitButton.disabled = false;
+      submitButton.textContent = 'Save Profile';
     }
+  }
 
-    function populateForm() {
-      // Pre-fill email from registration
-      const userEmail = localStorage.getItem('userEmail');
-      if (userEmail) {
-        document.getElementById('email').value = userEmail;
-        document.getElementById('email').readOnly = true;
-        document.getElementById('email').style.opacity = '0.7';
-      }
+  function toggleOtherJobRole() {
+    const jobRole = document.getElementById('jobRole').value;
+    const otherGroup = document.getElementById('otherJobRoleGroup');
+    const otherInput = document.getElementById('otherJobRole');
+
+    if (jobRole === 'Other') {
+      otherGroup.style.display = 'block';
+      otherInput.required = true;
+    } else {
+      otherGroup.style.display = 'none';
+      otherInput.required = false;
+      otherInput.value = '';
     }
+    updateProgress();
+  }
 
-    function toggleMenu() {
-      document.getElementById("mobileMenu").classList.toggle("active");
+  function populateForm() {
+    const userEmail = localStorage.getItem('userEmail');
+    if (userEmail) {
+      document.getElementById('email').value = userEmail;
+      document.getElementById('email').readOnly = true;
+      document.getElementById('email').style.opacity = '0.7';
     }
+  }
 
-    function checkLoginStatus() {
-      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-      const userName = localStorage.getItem('userName') || 'User';
-      
-      const desktopNav = document.getElementById('desktopNav');
-      const mobileMenu = document.getElementById('mobileMenu');
-      
-      if (isLoggedIn) {
-        // Desktop navigation for logged in users
-        desktopNav.innerHTML = `
-          <a href="/dashboard.html">Dashboard</a>
-          <a href="/profile.html">Profile</a>
-          <a href="/messages.html">Messages</a>
-          <a href="#" onclick="logout()" style="color: #ef4444;">Logout (${userName})</a>
-        `;
-        
-        // Mobile navigation for logged in users
-        mobileMenu.innerHTML = `
-          <a href="/dashboard.html">Dashboard</a>
-          <a href="/profile.html">Profile</a>
-          <a href="/messages.html">Messages</a>
-          <a href="/settings.html">Settings</a>
-          <a href="#" onclick="logout()" style="color: #ef4444;">Logout (${userName})</a>
-        `;
-      } else {
-        // Desktop navigation for non-logged in users
-        desktopNav.innerHTML = `
-          <a href="/pricing.html">Pricing</a>
-          <a href="/about.html">About us</a>
-          <a href="/contact.html">Contact</a>
-          <a href="/login.html">Login</a>
-          <a href="/register.html">Register</a>
-        `;
-        
-        // Mobile navigation for non-logged in users
-        mobileMenu.innerHTML = `
-          <a href="/pricing.html">Pricing</a>
-          <a href="/about.html">About us</a>
-          <a href="/contact.html">Contact</a>
-          <a href="/login.html">Login</a>
-          <a href="/register.html">Register</a>
-          <a href="/privacy.html">Privacy</a>
-          <a href="/terms.html">Terms</a>
-        `;
-      }
+  function toggleMenu() {
+    document.getElementById("mobileMenu").classList.toggle("active");
+  }
+
+  function checkLoginStatus() {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    const userName = localStorage.getItem('userName') || 'User';
+
+    const desktopNav = document.getElementById('desktopNav');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    if (isLoggedIn) {
+      desktopNav.innerHTML = `
+        <a href="/dashboard.html">Dashboard</a>
+        <a href="/profile.html">Profile</a>
+        <a href="/messages.html">Messages</a>
+        <a href="#" onclick="logout()" style="color: #ef4444;">Logout (${userName})</a>
+      `;
+
+      mobileMenu.innerHTML = `
+        <a href="/dashboard.html">Dashboard</a>
+        <a href="/profile.html">Profile</a>
+        <a href="/messages.html">Messages</a>
+        <a href="/settings.html">Settings</a>
+        <a href="#" onclick="logout()" style="color: #ef4444;">Logout (${userName})</a>
+      `;
+    } else {
+      desktopNav.innerHTML = `
+        <a href="/pricing.html">Pricing</a>
+        <a href="/about.html">About us</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/login.html">Login</a>
+        <a href="/register.html">Register</a>
+      `;
+
+      mobileMenu.innerHTML = `
+        <a href="/pricing.html">Pricing</a>
+        <a href="/about.html">About us</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/login.html">Login</a>
+        <a href="/register.html">Register</a>
+        <a href="/privacy.html">Privacy</a>
+        <a href="/terms.html">Terms</a>
+      `;
     }
+  }
 
-    function logout() {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('userName');
-      localStorage.removeItem('userEmail');
-      localStorage.removeItem('userType');
-      localStorage.removeItem('candidateProfile');
-      localStorage.removeItem('profileCompleted');
-      window.location.href = '/index.html';
-    }
+  function logout() {
+    localStorage.clear();
+    window.location.href = '/index.html';
+  }
 
-    window.onload = function() {
-      createParticles();
-      checkLoginStatus();
-      populateForm();
-      setupDragAndDrop();
-      
-      // Add event listeners for progress tracking
-      const form = document.getElementById('profileForm');
-      const inputs = form.querySelectorAll('input, select, textarea');
-      inputs.forEach(input => {
-        input.addEventListener('input', updateProgress);
-        input.addEventListener('change', updateProgress);
-      });
-      
-      updateProgress();
-    };
-  </script>
+  window.onload = function() {
+    createParticles();
+    checkLoginStatus();
+    populateForm();
+    setupDragAndDrop();
+
+    const form = document.getElementById('profileForm');
+    const inputs = form.querySelectorAll('input, select, textarea');
+    inputs.forEach(input => {
+      input.addEventListener('input', updateProgress);
+      input.addEventListener('change', updateProgress);
+    });
+
+    updateProgress();
+  };
+</script>
 </head>
 <body>
   <div class="bg-particles"></div>
@@ -1230,17 +1194,13 @@
         </div>
       </div>
     </div>
-    <nav class="nav" id="desktopNav">
-      <!-- Navigation will be populated by JavaScript -->
-    </nav>
+    <nav class="nav" id="desktopNav"></nav>
     <button class="hamburger" onclick="toggleMenu()">
       <span></span>
       <span></span>
       <span></span>
     </button>
-    <div class="mobile-menu" id="mobileMenu">
-      <!-- Mobile menu will be populated by JavaScript -->
-    </div>
+    <div class="mobile-menu" id="mobileMenu"></div>
   </header>
 
   <main class="main">
@@ -1254,31 +1214,30 @@
       <div class="profile-form-container">
         <div id="errorMessage" class="error-message"></div>
         <div id="successMessage" class="success-message"></div>
-        
+
         <form class="profile-form" id="profileForm" onsubmit="handleSubmit(event)">
-          <!-- Personal Information -->
+          <!-- PERSONAL INFO -->
           <div class="form-section">
             <h2 class="section-title">Personal Information</h2>
-            
             <div class="form-row">
               <div class="form-group">
                 <label for="firstName" class="form-label">First Name *</label>
-                <input type="text" id="firstName" class="form-input" placeholder="Enter your first name" required />
+                <input type="text" id="firstName" class="form-input" required />
               </div>
               <div class="form-group">
                 <label for="lastName" class="form-label">Last Name *</label>
-                <input type="text" id="lastName" class="form-input" placeholder="Enter your last name" required />
+                <input type="text" id="lastName" class="form-input" required />
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group">
-                <label for="email" class="form-label">Email Address *</label>
-                <input type="email" id="email" class="form-input" placeholder="Enter your email" required />
+                <label for="email" class="form-label">Email *</label>
+                <input type="email" id="email" class="form-input" required />
               </div>
               <div class="form-group">
-                <label for="phone" class="form-label">Phone Number *</label>
-                <input type="tel" id="phone" class="form-input" placeholder="Enter your phone number" required />
+                <label for="phone" class="form-label">Phone *</label>
+                <input type="tel" id="phone" class="form-input" required />
               </div>
             </div>
 
@@ -1294,11 +1253,6 @@
               <div class="birth-date-group">
                 <select id="birthDay" class="form-select" required>
                   <option value="">Day</option>
-                  <script>
-                    for (let i = 1; i <= 31; i++) {
-                      document.write(`<option value="${i}">${i}</option>`);
-                    }
-                  </script>
                 </select>
                 <select id="birthMonth" class="form-select" required>
                   <option value="">Month</option>
@@ -1317,1235 +1271,10 @@
                 </select>
                 <select id="birthYear" class="form-select" required>
                   <option value="">Year</option>
-                  <script>
-                    const currentYear = new Date().getFullYear();
-                    for (let i = currentYear - 16; i >= currentYear - 80; i--) {
-                      document.write(`<option value="${i}">${i}</option>`);
-                    }
-                  </script>
                 </select>
               </div>
             </div>
           </div>
-
-          <!-- Avatar & Photo -->
-          <div class="form-section">
-            <h2 class="section-title">Profile Picture</h2>
-            
-            <div class="form-group">
-              <label class="form-label">Choose Avatar *</label>
-              <div class="avatar-selection">
-                <label class="avatar-option">
-                  <input type="radio" name="avatar" value="male" required />
-                  <div class="avatar-card">
-                    <div class="avatar-icon">👨</div>
-                    <div class="avatar-label">Male</div>
-                  </div>
-                </label>
-                <label class="avatar-option">
-                  <input type="radio" name="avatar" value="female" required />
-                  <div class="avatar-card">
-                    <div class="avatar-icon">👩</div>
-                    <div class="avatar-label">Female</div>
-                  </div>
-                </label>
-                <label class="avatar-option">
-                  <input type="radio" name="avatar" value="professional" required />
-                  <div class="avatar-card">
-                    <div class="avatar-icon">👔</div>
-                    <div class="avatar-label">Professional</div>
-                  </div>
-                </label>
-                <label class="avatar-option">
-                  <input type="radio" name="avatar" value="neutral" required />
-                  <div class="avatar-card">
-                    <div class="avatar-icon">😊</div>
-                    <div class="avatar-label">Neutral</div>
-                  </div>
-                </label>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Upload Your Photo (Optional)</label>
-              <div class="photo-upload-container">
-                <div class="photo-preview" id="photoPreview">
-                  <div class="photo-placeholder">📷</div>
-                </div>
-                <button type="button" class="photo-upload-btn" onclick="document.getElementById('photoInput').click()">
-                  Choose Photo
-                </button>
-                <button type="button" class="photo-remove-btn" id="photoRemoveBtn" onclick="removePhoto()" style="display: none;">
-                  Remove Photo
-                </button>
-                <input type="file" id="photoInput" class="photo-input" accept="image/*" onchange="handlePhotoUpload(event)" />
-              </div>
-            </div>
-          </div>
-
-          <!-- Professional Information -->
-          <div class="form-section">
-            <h2 class="section-title">Professional Information</h2>
-            
-            <div class="form-row">
-              <div class="form-group">
-                <label for="jobRole" class="form-label">Job Role *</label>
-                <select id="jobRole" class="form-select" required onchange="toggleOtherJobRole()">
-                  <option value="">Select your role</option>
-                  <option value="CFO">CFO (Chief Financial Officer)</option>
-                  <option value="Controller">Controller</option>
-                  <option value="Treasurer">Treasurer</option>
-                  <option value="Accountant">Accountant</option>
-                  <option value="Auditor">Auditor</option>
-                  <option value="Financial Analyst">Financial Analyst</option>
-                  <option value="Investment Analyst">Investment Analyst</option>
-                  <option value="Risk Manager">Risk Manager</option>
-                  <option value="Tax Specialist">Tax Specialist</option>
-                  <option value="Budget Analyst">Budget Analyst</option>
-                  <option value="Credit Analyst">Credit Analyst</option>
-                  <option value="Compliance Officer">Compliance Officer</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-              <div class="form-group" id="otherJobRoleGroup" style="display: none;">
-                <label for="otherJobRole" class="form-label">Please specify your role *</label>
-                <input type="text" id="otherJobRole" class="form-input" placeholder="Enter your specific job role" />
-              </div>
-              <div class="form-group">
-                <label for="experience" class="form-label">Experience Level *</label>
-                <select id="experience" class="form-select" required>
-                  <option value="">Select experience</option>
-                  <option value="Entry Level (0-2 years)">Entry Level (0-2 years)</option>
-                  <option value="Mid Level (2-5 years)">Mid Level (2-5 years)</option>
-                  <option value="Senior Level (5-10 years)">Senior Level (5-10 years)</option>
-                  <option value="Expert Level (10+ years)">Expert Level (10+ years)</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-row single">
-              <div class="form-group">
-                <label for="education" class="form-label">Education *</label>
-                <select id="education" class="form-select" required>
-                  <option value="">Select education level</option>
-                  <option value="High School">High School</option>
-                  <option value="Associate Degree">Associate Degree</option>
-                  <option value="Bachelor's Degree">Bachelor's Degree</option>
-                  <option value="Master's Degree">Master's Degree</option>
-                  <option value="PhD">PhD</option>
-                  <option value="Professional Certification">Professional Certification</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <!-- Languages -->
-          <div class="form-section">
-            <h2 class="section-title">Languages</h2>
-            
-            <div class="form-row single">
-              <div class="form-group">
-                <label for="nativeLanguage" class="form-label">Native Language *</label>
-                <select id="nativeLanguage" class="form-select" required>
-                  <option value="">Select your native language</option>
-                  <option value="English">English</option>
-                  <option value="Spanish">Spanish</option>
-                  <option value="French">French</option>
-                  <option value="German">German</option>
-                  <option value="Italian">Italian</option>
-                  <option value="Portuguese">Portuguese</option>
-                  <option value="Russian">Russian</option>
-                  <option value="Chinese">Chinese</option>
-                  <option value="Japanese">Japanese</option>
-                  <option value="Korean">Korean</option>
-                  <option value="Arabic">Arabic</option>
-                  <option value="Hindi">Hindi</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Second Language</label>
-              <div class="language-group">
-                <select id="secondLanguage" class="form-select">
-                  <option value="">Select second language</option>
-                  <option value="English">English</option>
-                  <option value="Spanish">Spanish</option>
-                  <option value="French">French</option>
-                  <option value="German">German</option>
-                  <option value="Italian">Italian</option>
-                  <option value="Portuguese">Portuguese</option>
-                  <option value="Russian">Russian</option>
-                  <option value="Chinese">Chinese</option>
-                  <option value="Japanese">Japanese</option>
-                  <option value="Korean">Korean</option>
-                  <option value="Arabic">Arabic</option>
-                  <option value="Hindi">Hindi</option>
-                  <option value="Other">Other</option>
-                </select>
-                <select id="secondLanguageLevel" class="form-select">
-                  <option value="">Level</option>
-                  <option value="Beginner">Beginner</option>
-                  <option value="Intermediate">Intermediate</option>
-                  <option value="Advanced">Advanced</option>
-                  <option value="Native">Native</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Third Language</label>
-              <div class="language-group">
-                <select id="thirdLanguage" class="form-select">
-                  <option value="">Select third language</option>
-                  <option value="English">English</option>
-                  <option value="Spanish">Spanish</option>
-                  <option value="French">French</option>
-                  <option value="German">German</option>
-                  <option value="Italian">Italian</option>
-                  <option value="Portuguese">Portuguese</option>
-                  <option value="Russian">Russian</option>
-                  <option value="Chinese">Chinese</option>
-                  <option value="Japanese">Japanese</option>
-                  <option value="Korean">Korean</option>
-                  <option value="Arabic">Arabic</option>
-                  <option value="Hindi">Hindi</option>
-                  <option value="Other">Other</option>
-                </select>
-                <select id="thirdLanguageLevel" class="form-select">
-                  <option value="">Level</option>
-                  <option value="Beginner">Beginner</option>
-                  <option value="Intermediate">Intermediate</option>
-                  <option value="Advanced">Advanced</option>
-                  <option value="Native">Native</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <!-- Salary Expectations -->
-          <div class="form-section">
-            <h2 class="section-title">Salary Expectations</h2>
-            
-            <div class="form-row">
-              <div class="form-group">
-                <label for="salaryMin" class="form-label">Minimum Salary (€) *</label>
-                <select id="salaryMin" class="form-select" required>
-                  <option value="">Select minimum</option>
-                  <option value="30000">€30,000</option>
-                  <option value="35000">€35,000</option>
-                  <option value="40000">€40,000</option>
-                  <option value="45000">€45,000</option>
-                  <option value="50000">€50,000</option>
-                  <option value="55000">€55,000</option>
-                  <option value="60000">€60,000</option>
-                  <option value="65000">€65,000</option>
-                  <option value="70000">€70,000</option>
-                  <option value="75000">€75,000</option>
-                  <option value="80000">€80,000</option>
-                  <option value="85000">€85,000</option>
-                  <option value="90000">€90,000</option>
-                  <option value="95000">€95,000</option>
-                  <option value="100000">€100,000</option>
-                  <option value="110000">€110,000</option>
-                  <option value="120000">€120,000</option>
-                  <option value="130000">€130,000</option>
-                  <option value="140000">€140,000</option>
-                  <option value="150000">€150,000+</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="salaryMax" class="form-label">Maximum Salary (€) *</label>
-                <select id="salaryMax" class="form-select" required>
-                  <option value="">Select maximum</option>
-                  <option value="40000">€40,000</option>
-                  <option value="45000">€45,000</option>
-                  <option value="50000">€50,000</option>
-                  <option value="55000">€55,000</option>
-                  <option value="60000">€60,000</option>
-                  <option value="65000">€65,000</option>
-                  <option value="70000">€70,000</option>
-                  <option value="75000">€75,000</option>
-                  <option value="80000">€80,000</option>
-                  <option value="85000">€85,000</option>
-                  <option value="90000">€90,000</option>
-                  <option value="95000">€95,000</option>
-                  <option value="100000">€100,000</option>
-                  <option value="110000">€110,000</option>
-                  <option value="120000">€120,000</option>
-                  <option value="130000">€130,000</option>
-                  <option value="140000">€140,000</option>
-                  <option value="150000">€150,000</option>
-                  <option value="200000">€200,000</option>
-                  <option value="250000">€250,000+</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <!-- Work Preferences -->
-          <div class="form-section">
-            <h2 class="section-title">Work Preferences</h2>
-            
-            <div class="form-row">
-              <div class="form-group">
-                <label for="availability" class="form-label">Availability *</label>
-                <select id="availability" class="form-select" required>
-                  <option value="">Select availability</option>
-                  <option value="Immediately">Immediately</option>
-                  <option value="Within 2 weeks">Within 2 weeks</option>
-                  <option value="Within 1 month">Within 1 month</option>
-                  <option value="Within 2 months">Within 2 months</option>
-                  <option value="Within 3 months">Within 3 months</option>
-                  <option value="More than 3 months">More than 3 months</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="remoteWork" class="form-label">Remote Work *</label>
-                <select id="remoteWork" class="form-select" required>
-                  <option value="">Select preference</option>
-                  <option value="Remote only">Remote only</option>
-                  <option value="Hybrid">Hybrid</option>
-                  <option value="On-site only">On-site only</option>
-                  <option value="No preference">No preference</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-row single">
-              <div class="form-group">
-                <label for="relocation" class="form-label">Willing to Relocate *</label>
-                <select id="relocation" class="form-select" required>
-                  <option value="">Select option</option>
-                  <option value="Yes">Yes</option>
-                  <option value="No">No</option>
-                  <option value="Depends on opportunity">Depends on opportunity</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <!-- Professional Summary -->
-          <div class="form-section">
-            <h2 class="section-title">Professional Summary</h2>
-            
-            <div class="form-group">
-              <label for="summary" class="form-label">Summary *</label>
-              <textarea 
-                id="summary" 
-                class="form-textarea" 
-                placeholder="Write a brief summary about your professional background, skills, and career goals..."
-                required
-              ></textarea>
-            </div>
-          </div>
-
-          <!-- Sectors & Software -->
-          <div class="form-section">
-            <h2 class="section-title">Sectors & Software</h2>
-            
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">Sectors of Interest</label>
-                <div class="multi-select-container" id="sectorsContainer">
-                  <input 
-                    type="text" 
-                    id="sectorsInput" 
-                    class="multi-select-input" 
-                    placeholder="Type a sector and press Enter (e.g., Technology, Healthcare, Finance...)"
-                    onkeypress="handleKeyPress(event, 'sectors', 'sectorsInput', 'sectorsContainer')"
-                  />
-                  <div class="selected-items"></div>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Software & Tools</label>
-                <div class="multi-select-container" id="softwareContainer">
-                  <input 
-                    type="text" 
-                    id="softwareInput" 
-                    class="multi-select-input" 
-                    placeholder="Type software/tools and press Enter (e.g., Excel, SAP, QuickBooks...)"
-                    onkeypress="handleKeyPress(event, 'software', 'softwareInput', 'softwareContainer')"
-                  />
-                  <div class="selected-items"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- CV Upload -->
-          <div class="form-section">
-            <h2 class="section-title">Upload CV</h2>
-            
-            <div class="form-group">
-              <label class="form-label">CV/Resume (Optional)</label>
-              <div class="file-upload-container" id="cvUploadContainer">
-                <div class="file-upload-icon">📄</div>
-                <div class="file-upload-text">Upload your CV</div>
-                <div class="file-upload-subtext">Drag and drop your CV here, or click to browse</div>
-                <button type="button" class="file-upload-btn" onclick="document.getElementById('cvInput').click()">
-                  Choose File
-                </button>
-              </div>
-              <input type="file" id="cvInput" class="file-input" accept=".pdf,.doc,.docx" onchange="handleCVUpload(event)" />
-            </div>
-          </div>
-
-          <button type="submit" id="submitButton" class="submit-button">
-            Complete Profile
-          </button>
-        </form>
-      </div>
-    </div>
-  </main>
-
-  <footer class="footer" style="background: rgba(0, 0, 0, 0.1); backdrop-filter: blur(10px); padding: 2rem; text-align: center; color: rgba(255, 255, 255, 0.8); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-    <div class="footer-center" style="flex: 1; text-align: center;">&copy; 2025 Talfy. All rights reserved.</div>
-    <div class="footer-right" style="display: flex; gap: 1rem;">
-      <a href="/privacy.html" style="color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: color 0.3s ease;">Privacy</a>
-      <span style="color: rgba(255, 255, 255, 0.5);">·</span>
-      <a href="/terms.html" style="color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: color 0.3s ease;">Terms</a>
-    </div>
-  </footer>
-
-    <script>
-        // Global variables
-        let isEditMode = true; // Default to edit mode for candidate
-        let isCandidate = true; // Default to candidate view
-        let hasCv = false; // Track if CV is uploaded
-        let userData = null; // Store user data
-        
-        // DOM elements
-        const profileForm = document.getElementById('profileForm');
-        const editProfileBtn = document.getElementById('editProfileBtn');
-        const cancelBtn = document.getElementById('cancelBtn');
-        const saveBtn = document.getElementById('saveBtn');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const downloadCvBtn = document.getElementById('downloadCvBtn');
-        const cvUploadContainer = document.getElementById('cvUploadContainer');
-        const cvFileInput = document.getElementById('cvFileInput');
-        const cvFileInfo = document.getElementById('cvFileInfo');
-        const cvFileName = document.getElementById('cvFileName');
-        const cvFileSize = document.getElementById('cvFileSize');
-        const cvDownloadBtn = document.getElementById('cvDownloadBtn');
-        const cvDeleteBtn = document.getElementById('cvDeleteBtn');
-        const avatarInput = document.getElementById('avatarInput');
-        const profileAvatar = document.getElementById('profileAvatar');
-        const avatarUploadBtn = document.getElementById('avatarUploadBtn');
-        const completionBar = document.getElementById('completionBar');
-        const completionPercentage = document.getElementById('completionPercentage');
-        
-        // Initialize the page
-        document.addEventListener('DOMContentLoaded', function() {
-            // Populate days dropdown
-            const birthDay = document.getElementById('birthDay');
-            for (let i = 1; i <= 31; i++) {
-                const option = document.createElement('option');
-                option.value = i;
-                option.textContent = i;
-                birthDay.appendChild(option);
-            }
-            
-            // Populate years dropdown
-            const birthYear = document.getElementById('birthYear');
-            const currentYear = new Date().getFullYear();
-            for (let i = currentYear - 80; i <= currentYear - 18; i++) {
-                const option = document.createElement('option');
-                option.value = i;
-                option.textContent = i;
-                birthYear.appendChild(option);
-            }
-            
-            // Check if user is logged in
-            checkUserSession();
-            
-            // Set up event listeners
-            setupEventListeners();
-        });
-        
-        // Check user session
-        function checkUserSession() {
-            // In a real app, this would check with the server
-            // For this demo, we'll use localStorage
-            const storedUserData = localStorage.getItem('talfyUserData');
-            
-            if (storedUserData) {
-                userData = JSON.parse(storedUserData);
-                
-                // Update navigation based on login status
-                updateNavigation(userData);
-                
-                // Check if user is a candidate or company
-                isCandidate = userData.userType === 'candidate';
-                
-                // If company, set to view-only mode
-                if (!isCandidate) {
-                    setViewOnlyMode();
-                    document.getElementById('profileSubtitle').textContent = 'Candidate profile details';
-                } else {
-                    // Load candidate profile data
-                    loadProfileData();
-                }
-                
-                // Update profile completion
-                updateProfileCompletion();
-            } else {
-                // No user logged in, redirect to login page
-                // window.location.href = '/login.html';
-                
-                // For demo purposes, we'll just show sample data
-                loadSampleData();
-            }
-        }
-        
-        // Update navigation based on login status
-        function updateNavigation(user) {
-            const nav = document.querySelector('.nav');
-            const mobileMenu = document.getElementById('mobileMenu');
-            
-            if (user) {
-                // Replace login/register with user menu for desktop
-                nav.innerHTML = `
-                    <a href="/pricing.html">Pricing</a>
-                    <a href="/about.html">About us</a>
-                    <a href="/contact.html">Contact</a>
-                    <a href="/dashboard.html">Dashboard</a>
-                    <a href="#" onclick="logout()">Logout</a>
-                `;
-                
-                // Update mobile menu
-                mobileMenu.innerHTML = `
-                    <a href="/pricing.html">Pricing</a>
-                    <a href="/about.html">About us</a>
-                    <a href="/contact.html">Contact</a>
-                    <a href="/dashboard.html">Dashboard</a>
-                    <a href="#" onclick="logout()">Logout</a>
-                    <a href="/privacy.html">Privacy</a>
-                    <a href="/terms.html">Terms</a>
-                `;
-            }
-        }
-        
-        // Set up event listeners
-        function setupEventListeners() {
-            // Toggle mobile menu
-            document.querySelector('.hamburger').addEventListener('click', toggleMenu);
-            
-            // Profile form submission
-            profileForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                saveProfileData();
-            });
-            
-            // Edit profile button
-            editProfileBtn.addEventListener('click', function() {
-                if (isCandidate) {
-                    toggleEditMode();
-                }
-            });
-            
-            // Cancel button
-            cancelBtn.addEventListener('click', function() {
-                // Reload the current profile data
-                loadProfileData();
-                toggleEditMode();
-            });
-            
-            // Logout button
-            logoutBtn.addEventListener('click', logout);
-            
-            // Download CV button
-            downloadCvBtn.addEventListener('click', downloadCV);
-            
-            // CV file input change
-            cvFileInput.addEventListener('change', handleCvUpload);
-            
-            // CV upload container click
-            cvUploadContainer.addEventListener('click', function() {
-                if (isEditMode && isCandidate) {
-                    cvFileInput.click();
-                }
-            });
-            
-            // CV delete button
-            cvDeleteBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                deleteCv();
-            });
-            
-            // Avatar input change
-            avatarInput.addEventListener('change', handleAvatarUpload);
-            
-            // Second language change
-            document.getElementById('secondLanguage').addEventListener('change', function() {
-                const secondLanguageLevel = document.getElementById('secondLanguageLevel');
-                if (this.value) {
-                    secondLanguageLevel.setAttribute('required', 'required');
-                } else {
-                    secondLanguageLevel.removeAttribute('required');
-                }
-            });
-            
-            // Third language change
-            document.getElementById('thirdLanguage').addEventListener('change', function() {
-                const thirdLanguageLevel = document.getElementById('thirdLanguageLevel');
-                if (this.value) {
-                    thirdLanguageLevel.setAttribute('required', 'required');
-                } else {
-                    thirdLanguageLevel.removeAttribute('required');
-                }
-            });
-        }
-        
-        // Toggle mobile menu
-        function toggleMenu() {
-            document.getElementById('mobileMenu').classList.toggle('active');
-        }
-        
-        // Toggle edit mode
-        function toggleEditMode() {
-            isEditMode = !isEditMode;
-            
-            if (isEditMode) {
-                // Switch to edit mode
-                document.querySelectorAll('.form-input, .form-select, .form-textarea, .form-checkbox-item input').forEach(el => {
-                    el.removeAttribute('disabled');
-                });
-                
-                editProfileBtn.textContent = 'Cancel';
-                saveBtn.style.display = 'block';
-                cancelBtn.style.display = 'block';
-                avatarUploadBtn.style.display = 'flex';
-                
-                // Show CV upload if no CV
-                if (!hasCv) {
-                    cvUploadContainer.style.display = 'block';
-                }
-            } else {
-                // Switch to view mode
-                document.querySelectorAll('.form-input, .form-select, .form-textarea, .form-checkbox-item input').forEach(el => {
-                    el.setAttribute('disabled', 'disabled');
-                });
-                
-                editProfileBtn.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
-                    </svg>
-                    Edit Profile
-                `;
-                saveBtn.style.display = 'none';
-                cancelBtn.style.display = 'none';
-                avatarUploadBtn.style.display = 'none';
-                
-                // Hide CV upload container
-                if (!hasCv) {
-                    cvUploadContainer.style.display = 'none';
-                }
-            }
-        }
-        
-        // Set view-only mode for company users
-        function setViewOnlyMode() {
-            isEditMode = false;
-            
-            // Disable all form elements
-            document.querySelectorAll('.form-input, .form-select, .form-textarea, .form-checkbox-item input').forEach(el => {
-                el.setAttribute('disabled', 'disabled');
-            });
-            
-            // Hide edit-related buttons
-            editProfileBtn.style.display = 'none';
-            saveBtn.style.display = 'none';
-            cancelBtn.style.display = 'none';
-            avatarUploadBtn.style.display = 'none';
-            cvDeleteBtn.style.display = 'none';
-            
-            // Add view-only class to main container
-            document.querySelector('.profile-main').classList.add('view-only');
-        }
-        
-        // Load profile data
-        function loadProfileData() {
-            // In a real app, this would fetch data from the server
-            // For this demo, we'll use localStorage or sample data
-            
-            const profileData = localStorage.getItem('talfyProfileData');
-            
-            if (profileData) {
-                const data = JSON.parse(profileData);
-                
-                // Fill form fields
-                document.getElementById('firstName').value = data.firstName || '';
-                document.getElementById('lastName').value = data.lastName || '';
-                document.getElementById('email').value = data.email || '';
-                document.getElementById('phone').value = data.phone || '';
-                document.getElementById('location').value = data.location || '';
-                document.getElementById('birthDay').value = data.birthDay || '';
-                document.getElementById('birthMonth').value = data.birthMonth || '';
-                document.getElementById('birthYear').value = data.birthYear || '';
-                document.getElementById('jobRole').value = data.jobRole || '';
-                document.getElementById('experience').value = data.experience || '';
-                document.getElementById('education').value = data.education || '';
-                document.getElementById('nativeLanguage').value = data.nativeLanguage || '';
-                document.getElementById('secondLanguage').value = data.secondLanguage || '';
-                document.getElementById('secondLanguageLevel').value = data.secondLanguageLevel || '';
-                document.getElementById('thirdLanguage').value = data.thirdLanguage || '';
-                document.getElementById('thirdLanguageLevel').value = data.thirdLanguageLevel || '';
-                document.getElementById('availability').value = data.availability || '';
-                document.getElementById('remoteWork').value = data.remoteWork || '';
-                document.getElementById('relocation').value = data.relocation || '';
-                document.getElementById('summary').value = data.summary || '';
-                
-                // Set checkboxes
-                if (data.sectors) {
-                    data.sectors.forEach(sector => {
-                        const checkbox = document.querySelector(`input[name="sectors"][value="${sector}"]`);
-                        if (checkbox) checkbox.checked = true;
-                    });
-                }
-                
-                if (data.software) {
-                    data.software.forEach(sw => {
-                        const checkbox = document.querySelector(`input[name="software"][value="${sw}"]`);
-                        if (checkbox) checkbox.checked = true;
-                    });
-                }
-                
-                // Update profile header
-                updateProfileHeader(data);
-                
-                // Check if CV exists
-                if (data.cv) {
-                    showCvInfo(data.cv);
-                }
-                
-                // Update avatar if exists
-                if (data.avatar) {
-                    updateAvatar(data.avatar);
-                }
-                
-                // If not in edit mode, disable form fields
-                if (!isEditMode) {
-                    document.querySelectorAll('.form-input, .form-select, .form-textarea, .form-checkbox-item input').forEach(el => {
-                        el.setAttribute('disabled', 'disabled');
-                    });
-                }
-            } else {
-                // No profile data, load sample data
-                loadSampleData();
-            }
-        }
-        
-        // Load sample data
-        function loadSampleData() {
-            const sampleData = {
-                firstName: 'John',
-                lastName: 'Doe',
-                email: 'john.doe@example.com',
-                phone: '+39 123 456 7890',
-                location: 'Milan, Italy',
-                birthDay: '15',
-                birthMonth: '6',
-                birthYear: '1990',
-                jobRole: 'Software Developer',
-                experience: 'middle',
-                education: 'bachelor',
-                sectors: ['it', 'consultant'],
-                software: ['microsoft', 'aws', 'jira'],
-                nativeLanguage: 'italian',
-                secondLanguage: 'english',
-                secondLanguageLevel: 'c1',
-                thirdLanguage: 'spanish',
-                thirdLanguageLevel: 'b1',
-                availability: '1month',
-                remoteWork: 'hybrid',
-                relocation: 'depends',
-                summary: 'Experienced software developer with a focus on web technologies and cloud solutions. Passionate about creating efficient and user-friendly applications.',
-                cv: {
-                    name: 'john_doe_resume.pdf',
-                    size: '215 KB',
-                    date: 'May 15, 2023'
-                }
-            };
-            
-            // Fill form fields
-            document.getElementById('firstName').value = sampleData.firstName;
-            document.getElementById('lastName').value = sampleData.lastName;
-            document.getElementById('email').value = sampleData.email;
-            document.getElementById('phone').value = sampleData.phone;
-            document.getElementById('location').value = sampleData.location;
-            document.getElementById('birthDay').value = sampleData.birthDay;
-            document.getElementById('birthMonth').value = sampleData.birthMonth;
-            document.getElementById('birthYear').value = sampleData.birthYear;
-            document.getElementById('jobRole').value = sampleData.jobRole;
-            document.getElementById('experience').value = sampleData.experience;
-            document.getElementById('education').value = sampleData.education;
-            document.getElementById('nativeLanguage').value = sampleData.nativeLanguage;
-            document.getElementById('secondLanguage').value = sampleData.secondLanguage;
-            document.getElementById('secondLanguageLevel').value = sampleData.secondLanguageLevel;
-            document.getElementById('thirdLanguage').value = sampleData.thirdLanguage;
-            document.getElementById('thirdLanguageLevel').value = sampleData.thirdLanguageLevel;
-            document.getElementById('availability').value = sampleData.availability;
-            document.getElementById('remoteWork').value = sampleData.remoteWork;
-            document.getElementById('relocation').value = sampleData.relocation;
-            document.getElementById('summary').value = sampleData.summary;
-            
-            // Set checkboxes
-            sampleData.sectors.forEach(sector => {
-                const checkbox = document.querySelector(`input[name="sectors"][value="${sector}"]`);
-                if (checkbox) checkbox.checked = true;
-            });
-            
-            sampleData.software.forEach(sw => {
-                const checkbox = document.querySelector(`input[name="software"][value="${sw}"]`);
-                if (checkbox) checkbox.checked = true;
-            });
-            
-            // Update profile header
-            updateProfileHeader(sampleData);
-            
-            // Show CV info
-            showCvInfo(sampleData.cv);
-            
-            // If not in edit mode, disable form fields
-            if (!isEditMode) {
-                document.querySelectorAll('.form-input, .form-select, .form-textarea, .form-checkbox-item input').forEach(el => {
-                    el.setAttribute('disabled', 'disabled');
-                });
-            }
-        }
-        
-        // Save profile data
-        function saveProfileData() {
-            // Collect form data
-            const formData = {
-                firstName: document.getElementById('firstName').value,
-                lastName: document.getElementById('lastName').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                location: document.getElementById('location').value,
-                birthDay: document.getElementById('birthDay').value,
-                birthMonth: document.getElementById('birthMonth').value,
-                birthYear: document.getElementById('birthYear').value,
-                jobRole: document.getElementById('jobRole').value,
-                experience: document.getElementById('experience').value,
-                education: document.getElementById('education').value,
-                nativeLanguage: document.getElementById('nativeLanguage').value,
-                secondLanguage: document.getElementById('secondLanguage').value,
-                secondLanguageLevel: document.getElementById('secondLanguageLevel').value,
-                thirdLanguage: document.getElementById('thirdLanguage').value,
-                thirdLanguageLevel: document.getElementById('thirdLanguageLevel').value,
-                availability: document.getElementById('availability').value,
-                remoteWork: document.getElementById('remoteWork').value,
-                relocation: document.getElementById('relocation').value,
-                summary: document.getElementById('summary').value,
-                sectors: [],
-                software: []
-            };
-            
-            // Get selected sectors
-            document.querySelectorAll('input[name="sectors"]:checked').forEach(checkbox => {
-                formData.sectors.push(checkbox.value);
-            });
-            
-            // Get selected software
-            document.querySelectorAll('input[name="software"]:checked').forEach(checkbox => {
-                formData.software.push(checkbox.value);
-            });
-            
-            // Get CV data if exists
-            const existingData = localStorage.getItem('talfyProfileData');
-            if (existingData) {
-                const parsedData = JSON.parse(existingData);
-                if (parsedData.cv) {
-                    formData.cv = parsedData.cv;
-                }
-                if (parsedData.avatar) {
-                    formData.avatar = parsedData.avatar;
-                }
-            }
-            
-            // Save to localStorage (in a real app, this would be sent to a server)
-            localStorage.setItem('talfyProfileData', JSON.stringify(formData));
-            
-            // Update profile header
-            updateProfileHeader(formData);
-            
-            // Update profile completion
-            updateProfileCompletion();
-            
-            // Show success message
-            showToast('Profile saved successfully!');
-            
-            // Switch back to view mode
-            toggleEditMode();
-            
-            // Update candidate data in candidates list
-            updateCandidateInList(formData);
-        }
-        
-        // Update profile header
-        function updateProfileHeader(data) {
-            document.getElementById('profileNameDisplay').textContent = `${data.firstName} ${data.lastName}`;
-            document.getElementById('profileRoleDisplay').textContent = data.jobRole;
-            document.getElementById('profileLocationDisplay').innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
-                </svg>
-                ${data.location}
-            `;
-        }
-        
-        // Handle CV upload
-        function handleCvUpload(e) {
-            const file = e.target.files[0];
-            
-            if (file) {
-                // Check file type
-                const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-                if (!validTypes.includes(file.type)) {
-                    showToast('Please upload a PDF or Word document', 'error');
-                    return;
-                }
-                
-                // Check file size (max 5MB)
-                if (file.size > 5 * 1024 * 1024) {
-                    showToast('File size should be less than 5MB', 'error');
-                    return;
-                }
-                
-                // In a real app, this would upload the file to a server
-                // For this demo, we'll just store the file info
-                
-                const fileInfo = {
-                    name: file.name,
-                    size: formatFileSize(file.size),
-                    date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-                };
-                
-                // Show file info
-                showCvInfo(fileInfo);
-                
-                // Save CV info to profile data
-                const profileData = localStorage.getItem('talfyProfileData');
-                if (profileData) {
-                    const data = JSON.parse(profileData);
-                    data.cv = fileInfo;
-                    localStorage.setItem('talfyProfileData', JSON.stringify(data));
-                }
-                
-                // Show success message
-                showToast('CV uploaded successfully!');
-            }
-        }
-        
-        // Show CV info
-        function showCvInfo(fileInfo) {
-            cvFileName.textContent = fileInfo.name;
-            cvFileSize.textContent = `${fileInfo.size} • Uploaded on ${fileInfo.date}`;
-            
-            cvUploadContainer.style.display = 'none';
-            cvFileInfo.style.display = 'flex';
-            
-            hasCv = true;
-        }
-        
-        // Delete CV
-        function deleteCv() {
-            if (!isEditMode || !isCandidate) return;
-            
-            // In a real app, this would delete the file from the server
-            // For this demo, we'll just remove the file info
-            
-            cvUploadContainer.style.display = 'block';
-            cvFileInfo.style.display = 'none';
-            
-            hasCv = false;
-            
-            // Remove CV info from profile data
-            const profileData = localStorage.getItem('talfyProfileData');
-            if (profileData) {
-                const data = JSON.parse(profileData);
-                delete data.cv;
-                localStorage.setItem('talfyProfileData', JSON.stringify(data));
-            }
-            
-            // Show success message
-            showToast('CV deleted successfully!');
-        }
-        
-        // Handle avatar upload
-        function handleAvatarUpload(e) {
-            const file = e.target.files[0];
-            
-            if (file) {
-                // Check file type
-                const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
-                if (!validTypes.includes(file.type)) {
-                    showToast('Please upload a JPEG, PNG, or GIF image', 'error');
-                    return;
-                }
-                
-                // Check file size (max 2MB)
-                if (file.size > 2 * 1024 * 1024) {
-                    showToast('File size should be less than 2MB', 'error');
-                    return;
-                }
-                
-                // In a real app, this would upload the file to a server
-                // For this demo, we'll use FileReader to display the image
-                
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    updateAvatar(event.target.result);
-                    
-                    // Save avatar to profile data
-                    const profileData = localStorage.getItem('talfyProfileData');
-                    if (profileData) {
-                        const data = JSON.parse(profileData);
-                        data.avatar = event.target.result;
-                        localStorage.setItem('talfyProfileData', JSON.stringify(data));
-                    }
-                };
-                reader.readAsDataURL(file);
-                
-                // Show success message
-                showToast('Profile picture updated!');
-            }
-        }
-        
-        // Update avatar
-        function updateAvatar(imageData) {
-            profileAvatar.innerHTML = `<img src="${imageData}" alt="Profile Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
-        }
-        
-        // Download CV
-        function downloadCV() {
-            // In a real app, this would download the actual file
-            // For this demo, we'll just show a message
-            
-            showToast('Downloading CV...');
-            
-            // Simulate download delay
-            setTimeout(() => {
-                alert('In a real application, this would download the candidate\'s CV file.');
-            }, 1000);
-        }
-        
-        // Format file size
-        function formatFileSize(bytes) {
-            if (bytes < 1024) return bytes + ' B';
-            else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
-            else return (bytes / 1048576).toFixed(1) + ' MB';
-        }
-        
-        // Update profile completion percentage
-        function updateProfileCompletion() {
-            // Count filled fields
-            let filledFields = 0;
-            let totalFields = 0;
-            
-            // Required fields
-            const requiredFields = [
-                'firstName', 'lastName', 'email', 'location', 
-                'birthDay', 'birthMonth', 'birthYear',
-                'jobRole', 'experience', 'education', 'nativeLanguage'
-            ];
-            
-            requiredFields.forEach(field => {
-                totalFields++;
-                if (document.getElementById(field).value) {
-                    filledFields++;
-                }
-            });
-            
-            // Check sectors
-            totalFields++;
-            if (document.querySelectorAll('input[name="sectors"]:checked').length > 0) {
-                filledFields++;
-            }
-            
-            // Check software
-            totalFields++;
-            if (document.querySelectorAll('input[name="software"]:checked').length > 0) {
-                filledFields++;
-            }
-            
-            // Optional fields
-            const optionalFields = [
-                'phone', 'secondLanguage', 'secondLanguageLevel',
-                'thirdLanguage', 'thirdLanguageLevel', 'availability',
-                'remoteWork', 'relocation', 'summary'
-            ];
-            
-            optionalFields.forEach(field => {
-                totalFields++;
-                if (document.getElementById(field).value) {
-                    filledFields++;
-                }
-            });
-            
-            // CV
-            totalFields++;
-            if (hasCv) {
-                filledFields++;
-            }
-            
-            // Calculate percentage
-            const percentage = Math.round((filledFields / totalFields) * 100);
-            
-            // Update UI
-            completionBar.style.width = percentage + '%';
-            completionPercentage.textContent = percentage + '%';
-        }
-        
-        // Show toast notification
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toastMessage');
-            
-            toastMessage.textContent = message;
-            
-            if (type === 'error') {
-                toast.style.backgroundColor = '#ef4444';
-            } else {
-                toast.style.backgroundColor = 'var(--primary-color)';
-            }
-            
-            toast.classList.add('show');
-            
-            // Hide after 3 seconds
-            setTimeout(hideToast, 3000);
-        }
-        
-        // Hide toast notification
-        function hideToast() {
-            document.getElementById('toast').classList.remove('show');
-        }
-        
-        // Logout function
-        function logout() {
-            // Clear user data
-            localStorage.removeItem('talfyUserData');
-            
-            // Redirect to home page
-            window.location.href = '/index.html';
-        }
-        
-        // Update candidate in candidates list
-        function updateCandidateInList(formData) {
-            // In a real app, this would update the candidate in the database
-            // For this demo, we'll update the candidate in localStorage
-            
-            const candidatesData = localStorage.getItem('talfyRegisteredCandidates');
-            if (candidatesData) {
-                const candidates = JSON.parse(candidatesData);
-                
-                // Find candidate by email
-                const candidateIndex = candidates.findIndex(c => c.email === formData.email);
-                
-                if (candidateIndex !== -1) {
-                    // Update candidate
-                    candidates[candidateIndex] = {
-                        ...candidates[candidateIndex],
-                        name: `${formData.firstName} ${formData.lastName}`,
-                        location: formData.location,
-                        role: formData.jobRole,
-                        experience: formData.experience === 'junior' ? 2 : 
-                                   formData.experience === 'middle' ? 5 : 10,
-                        gender: Math.random() > 0.5 ? 'male' : 'female'
-                    };
-                    
-                    // Save updated candidates
-                    localStorage.setItem('talfyRegisteredCandidates', JSON.stringify(candidates));
-                } else {
-                    // Add new candidate
-                    const newCandidate = {
-                        email: formData.email,
-                        name: `${formData.firstName} ${formData.lastName}`,
-                        location: formData.location,
-                        role: formData.jobRole,
-                        experience: formData.experience === 'junior' ? 2 : 
-                                   formData.experience === 'middle' ? 5 : 10,
-                        gender: Math.random() > 0.5 ? 'male' : 'female'
-                    };
-                    
-                    candidates.push(newCandidate);
-                    
-                    // Save updated candidates
-                    localStorage.setItem('talfyRegisteredCandidates', JSON.stringify(candidates));
-                }
-            } else {
-                // Create new candidates list
-                const newCandidate = {
-                    email: formData.email,
-                    name: `${formData.firstName} ${formData.lastName}`,
-                    location: formData.location,
-                    role: formData.jobRole,
-                    experience: formData.experience === 'junior' ? 2 : 
-                               formData.experience === 'middle' ? 5 : 10,
-                    gender: Math.random() > 0.5 ? 'male' : 'female'
-                };
-                
-                localStorage.setItem('talfyRegisteredCandidates', JSON.stringify([newCandidate]));
-            }
-        }
-document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('candidate-profile-form');
-    const token = localStorage.getItem('authToken');
-    const userId = localStorage.getItem('userId'); // Salvato in fase di login/registrazione
-
-    if (!token || !userId) {
-        alert('Session expired. Please log in again.');
-        window.location.href = 'login.html';
-        return;
-    }
-
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const formData = {
-            first_name: document.getElementById('first_name').value,
-            last_name: document.getElementById('last_name').value,
-            native_language: document.getElementById('native_language').value,
-            other_languages: Array.from(document.querySelectorAll('input[name="other_languages[]"]:checked')).map(el => el.value),
-            job_titles: Array.from(document.querySelectorAll('input[name="job_titles[]"]:checked')).map(el => el.value),
-            tools: Array.from(document.querySelectorAll('input[name="tools[]"]:checked')).map(el => el.value),
-            sector: Array.from(document.querySelectorAll('input[name="sector[]"]:checked')).map(el => el.value),
-            education_area: Array.from(document.querySelectorAll('input[name="education_area[]"]:checked')).map(el => el.value),
-            experience_years: document.getElementById('experience_years').value,
-            salary_expectation: document.getElementById('salary_expectation').value
-        };
-
-        try {
-            const response = await fetch('/api/update-profile', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ user_id: userId, ...formData })
-            });
-
-            const result = await response.json();
-
-            if (result.success) {
-                alert('Profile updated successfully!');
-                window.location.href = `candidate.html?id=${userId}`;
-            } else {
-                alert('Error: ' + (result.error || 'Update failed.'));
-            }
-        } catch (error) {
-            console.error('Error updating profile:', error);
-            alert('Server error. Please try again later.');
-        }
-    });
-});
-    
-    
-    </script>
 </body>
 </html>
+

@@ -1,2108 +1,1770 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Candidate Profile – Talfy</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* RESET E BASE */
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-        }
-
-        :root {
-          --primary-color: #134e3a;
-          --primary-light: #1a6b4a;
-          --primary-dark: #0d3a2a;
-          --accent-color: #2dd4bf;
-          --text-primary: #0f172a;
-          --text-secondary: #64748b;
-          --text-muted: #94a3b8;
-          --background: #ffffff;
-          --surface: #f8fafc;
-          --border: #e2e8f0;
-          --border-light: #f1f5f9;
-          --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-          --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-          --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-          --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-          --radius-sm: 0.375rem;
-          --radius-md: 0.5rem;
-          --radius-lg: 0.75rem;
-          --radius-xl: 1rem;
-        }
-
-        body {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-          line-height: 1.6;
-          color: var(--text-primary);
-          background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
-          font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
-          min-height: 100vh;
-          display: flex;
-          flex-direction: column;
-        }
-
-        /* HEADER */
-        .header {
-          position: sticky;
-          top: 0;
-          z-index: 1000;
-          background: rgba(255, 255, 255, 0.95);
-          backdrop-filter: blur(20px);
-          border-bottom: 1px solid var(--border-light);
-          transition: all 0.3s ease;
-          padding: 1rem 2rem;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          position: relative;
-        }
-
-        .logo {
-          font-size: 2.25rem;
-          font-weight: 700;
-          color: var(--primary-color);
-          text-transform: lowercase;
-          text-decoration: none;
-          transition: all 0.3s ease;
-          position: relative;
-        }
-
-        .logo:hover {
-          transform: translateY(-2px);
-        }
-
-        .nav {
-          display: flex;
-          gap: 0.5rem;
-          align-items: center;
-        }
-
-        .nav a {
-          text-decoration: none;
-          color: var(--text-secondary);
-          font-size: 0.95rem;
-          font-weight: 500;
-          padding: 0.5rem 1rem;
-          border-radius: var(--radius-md);
-          transition: all 0.2s ease;
-          position: relative;
-        }
-
-        .nav a:hover {
-          color: var(--primary-color);
-          background-color: var(--surface);
-          transform: translateY(-1px);
-        }
-
-        /* Login button without background */
-        .nav a:nth-last-child(2) {
-          color: var(--text-primary);
-          font-weight: 600;
-        }
-
-        .nav a:nth-last-child(2):hover {
-          color: var(--primary-color);
-          background-color: var(--surface);
-        }
-
-        /* Register button with background */
-        .nav a:last-child {
-          background-color: var(--primary-color);
-          color: white;
-          margin-left: 0.5rem;
-        }
-
-        .nav a:last-child:hover {
-          background-color: var(--primary-dark);
-          color: white;
-          box-shadow: var(--shadow-md);
-        }
-
-        .hamburger {
-          display: none;
-          flex-direction: column;
-          background: none;
-          border: none;
-          cursor: pointer;
-          padding: 0.5rem;
-          border-radius: var(--radius-md);
-          transition: all 0.2s ease;
-        }
-
-        .hamburger span {
-          width: 20px;
-          height: 2px;
-          background-color: var(--text-primary);
-          margin: 2px 0;
-          transition: all 0.3s ease;
-          border-radius: 1px;
-        }
-
-        .hamburger:hover {
-          background-color: var(--surface);
-        }
-
-        .mobile-menu {
-          display: none;
-          position: absolute;
-          top: 100%;
-          right: 2rem;
-          background: white;
-          border: 1px solid var(--border);
-          border-radius: var(--radius-lg);
-          box-shadow: var(--shadow-xl);
-          flex-direction: column;
-          z-index: 10;
-          min-width: 200px;
-          overflow: hidden;
-        }
-
-        .mobile-menu.active {
-          display: flex;
-          animation: slideDown 0.3s ease;
-        }
-
-        .mobile-menu a {
-          padding: 1rem 1.5rem;
-          text-decoration: none;
-          color: var(--text-secondary);
-          font-size: 0.95rem;
-          font-weight: 500;
-          border-bottom: 1px solid var(--border-light);
-          transition: all 0.2s ease;
-        }
-
-        .mobile-menu a:hover {
-          color: var(--primary-color);
-          background-color: var(--surface);
-        }
-
-        .mobile-menu a:last-child {
-          border-bottom: none;
-        }
-
-        /* Main content styles */
-        .main {
-            flex: 1;
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .page-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-        }
-
-        .page-subtitle {
-            font-size: 1rem;
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
-        }
-
-        /* Profile container */
-        .profile-container {
-            display: flex;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .profile-sidebar {
-            width: 300px;
-            flex-shrink: 0;
-        }
-
-        .profile-main {
-            flex: 1;
-        }
-
-        /* Profile card */
-        .profile-card {
-            background: white;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-md);
-            overflow: hidden;
-            margin-bottom: 1.5rem;
-        }
-
-        .profile-header {
-            padding: 1.5rem;
-            text-align: center;
-            border-bottom: 1px solid var(--border-light);
-        }
-
-        .profile-avatar-container {
-            position: relative;
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 1rem;
-        }
-
-        .profile-avatar {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            background-color: var(--primary-light);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            font-weight: 600;
-        }
-
-        .profile-avatar.female {
-            background-color: var(--accent-color);
-        }
-
-        .profile-avatar-upload {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            background: var(--primary-color);
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border: 3px solid white;
-        }
-
-        .profile-avatar-upload:hover {
-            background: var(--primary-dark);
-            transform: scale(1.05);
-        }
-
-        .profile-avatar-upload input {
-            display: none;
-        }
-
-        .profile-name {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 0.3rem;
-            color: var(--text-primary);
-        }
-
-        .profile-role {
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
-        }
-
-        .profile-location {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.3rem;
-        }
-
-        .profile-actions {
-            padding: 1rem 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        .profile-action-button {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1rem;
-            border-radius: var(--radius-md);
-            font-weight: 500;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            border: none;
-            text-align: left;
-        }
-
-        .action-primary {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .action-primary:hover {
-            background-color: var(--primary-dark);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .action-secondary {
-            background-color: var(--surface);
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
-        }
-
-        .action-secondary:hover {
-            background-color: var(--border-light);
-            color: var(--text-primary);
-        }
-
-        .action-danger {
-            background-color: #fee2e2;
-            color: #b91c1c;
-            border: 1px solid #fecaca;
-        }
-
-        .action-danger:hover {
-            background-color: #fecaca;
-            color: #991b1b;
-        }
-
-        /* Profile sections */
-        .profile-section {
-            background: white;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-md);
-            overflow: hidden;
-            margin-bottom: 1.5rem;
-        }
-
-        .profile-section-header {
-            padding: 1.25rem 1.5rem;
-            border-bottom: 1px solid var(--border-light);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .profile-section-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .profile-section-title svg {
-            color: var(--primary-color);
-        }
-
-        .profile-section-content {
-            padding: 1.5rem;
-        }
-
-        /* Form styles */
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-        }
-
-        .form-full {
-            grid-column: 1 / -1;
-        }
-
-        .form-group {
-            margin-bottom: 1.25rem;
-        }
-
-        .form-group:last-child {
-            margin-bottom: 0;
-        }
-
-        .form-label {
-            display: block;
-            font-weight: 500;
-            font-size: 0.95rem;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-        }
-
-        .form-input,
-        .form-select,
-        .form-textarea {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            font-size: 0.95rem;
-            color: var(--text-primary);
-            background-color: white;
-            transition: all 0.2s ease;
-        }
-
-        .form-input:focus,
-        .form-select:focus,
-        .form-textarea:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(19, 78, 58, 0.1);
-        }
-
-        .form-textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        .form-select {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            padding-right: 2.5rem;
-        }
-
-        .form-date-group {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .form-date-group .form-select {
-            flex: 1;
-        }
-
-        .form-checkbox-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            margin-top: 0.5rem;
-        }
-
-        .form-checkbox-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-        }
-
-        .form-checkbox-item input {
-            width: 16px;
-            height: 16px;
-            accent-color: var(--primary-color);
-        }
-
-        .form-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .form-button {
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--radius-md);
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border: none;
-        }
-
-        .form-button-primary {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .form-button-primary:hover {
-            background-color: var(--primary-dark);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .form-button-secondary {
-            background-color: var(--surface);
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
-        }
-
-        .form-button-secondary:hover {
-            background-color: var(--border-light);
-            color: var(--text-primary);
-        }
-
-        /* CV upload section */
-        .cv-upload-container {
-            border: 2px dashed var(--border);
-            border-radius: var(--radius-lg);
-            padding: 2rem;
-            text-align: center;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-
-        .cv-upload-container:hover {
-            border-color: var(--primary-color);
-            background-color: rgba(19, 78, 58, 0.02);
-        }
-
-        .cv-upload-icon {
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-        }
-
-        .cv-upload-title {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-        }
-
-        .cv-upload-subtitle {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-        }
-
-        .cv-upload-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background-color: var(--surface);
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
-            padding: 0.5rem 1rem;
-            border-radius: var(--radius-md);
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-        }
-
-        .cv-upload-button:hover {
-            background-color: var(--border-light);
-            color: var(--text-primary);
-        }
-
-        .cv-upload-input {
-            display: none;
-        }
-
-        .cv-file-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            margin-top: 1rem;
-        }
-
-        .cv-file-icon {
-            font-size: 2rem;
-            color: var(--primary-color);
-        }
-
-        .cv-file-details {
-            flex: 1;
-            text-align: left;
-        }
-
-        .cv-file-name {
-            font-weight: 500;
-            margin-bottom: 0.25rem;
-            color: var(--text-primary);
-        }
-
-        .cv-file-meta {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        .cv-file-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .cv-file-action {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: color 0.2s ease;
-            padding: 0.25rem;
-        }
-
-        .cv-file-action:hover {
-            color: var(--text-primary);
-        }
-
-        .cv-file-action.delete:hover {
-            color: #b91c1c;
-        }
-
-        /* View-only mode */
-        .view-only .profile-avatar-upload,
-        .view-only .form-input,
-        .view-only .form-select,
-        .view-only .form-textarea,
-        .view-only .form-checkbox-item input {
-            pointer-events: none;
-        }
-
-        .view-only .form-input,
-        .view-only .form-select,
-        .view-only .form-textarea {
-            background-color: var(--surface);
-            border-color: transparent;
-        }
-
-        .view-only .form-actions,
-        .view-only .cv-upload-button,
-        .view-only .cv-file-action.delete {
-            display: none;
-        }
-
-        /* FOOTER */
-        .footer {
-          background: var(--surface);
-          border-top: 1px solid var(--border);
-          padding: 2rem;
-          font-size: 0.9rem;
-          color: var(--text-muted);
-          text-align: center;
-          margin-top: auto;
-          display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
-
-        .footer-links {
-          display: flex;
-          justify-content: center;
-          gap: 1rem;
-        }
-
-        .footer a {
-          text-decoration: none;
-          color: var(--text-secondary);
-          font-weight: 500;
-          transition: color 0.2s ease;
-        }
-
-        .footer a:hover {
-          color: var(--primary-color);
-        }
-
-        /* Toast notification */
-        .toast {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background-color: var(--primary-color);
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-lg);
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            z-index: 1100;
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.3s ease;
-        }
-
-        .toast.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .toast-icon {
-            font-size: 1.25rem;
-        }
-
-        .toast-message {
-            font-weight: 500;
-        }
-
-        .toast-close {
-            background: none;
-            border: none;
-            color: white;
-            opacity: 0.7;
-            cursor: pointer;
-            margin-left: 1rem;
-            transition: opacity 0.2s ease;
-        }
-
-        .toast-close:hover {
-            opacity: 1;
-        }
-
-        /* ANIMATIONS */
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes slideDown {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        /* Responsive */
-        @media (max-width: 992px) {
-            .profile-container {
-                flex-direction: column;
-            }
-            
-            .profile-sidebar {
-                width: 100%;
-            }
-            
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .nav {
-                display: none;
-            }
-            .hamburger {
-                display: flex;
-            }
-            .main {
-                padding: 1.5rem 1rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Candidate Profile - Talfy</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #047857 0%, #064e3b 100%);
+    min-height: 100vh;
+    color: #333;
+    overflow-x: hidden;
+  }
+
+  .bg-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .particle {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+  }
+
+  .header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #047857;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+  }
+
+  .logo:hover {
+    transform: scale(1.05);
+  }
+
+  .header-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 2rem;
+  }
+
+  .progress-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 200px;
+  }
+
+  .progress-indicator {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #555;
+    font-size: 0.9rem;
+  }
+
+  .progress-bar {
+    width: 200px;
+    height: 8px;
+    background: rgba(4, 120, 87, 0.2);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(135deg, #047857, #064e3b);
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 4px;
+  }
+
+  .nav {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .nav a {
+    text-decoration: none;
+    color: #555;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .nav a:hover {
+    color: #047857;
+    background: rgba(4, 120, 87, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .nav a.nav-active {
+    color: #047857;
+    background: rgba(4, 120, 87, 0.1);
+  }
+
+  .nav a:last-child {
+    background: linear-gradient(135deg, #047857, #064e3b);
+    color: white;
+    box-shadow: 0 4px 15px rgba(4, 120, 87, 0.3);
+  }
+
+  .nav a:last-child:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(4, 120, 87, 0.4);
+  }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+  }
+
+  .hamburger span {
+    width: 25px;
+    height: 3px;
+    background: white;
+    margin: 3px 0;
+    transition: 0.3s;
+    border-radius: 2px;
+  }
+
+  .mobile-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .mobile-menu.active {
+    display: block;
+  }
+
+  .mobile-menu a {
+    display: block;
+    padding: 1rem;
+    text-decoration: none;
+    color: #555;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+
+  .mobile-menu a:hover {
+    background: rgba(4, 120, 87, 0.1);
+    color: #047857;
+  }
+
+  .main {
+    position: relative;
+    z-index: 10;
+    min-height: calc(100vh - 200px);
+    padding: 2rem;
+  }
+
+  .profile-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .profile-hero {
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+  }
+
+  .profile-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .profile-underline {
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(135deg, #047857, #064e3b);
+    margin: 0 auto 1.5rem;
+    border-radius: 2px;
+  }
+
+  .profile-subtitle {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .edit-button {
+    background: linear-gradient(135deg, #047857, #064e3b);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(4, 120, 87, 0.3);
+  }
+
+  .edit-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(4, 120, 87, 0.4);
+  }
+
+  .profile-form-container {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    padding: 3rem;
+    border-radius: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: fadeInUp 1s ease-out 0.4s both;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .profile-form-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s;
+  }
+
+  .profile-form-container:hover::before {
+    left: 100%;
+  }
+
+  .error-message, .success-message {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-weight: 500;
+    display: none;
+  }
+
+  .error-message {
+    background: rgba(239, 68, 68, 0.1);
+    color: #fca5a5;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+  }
+
+  .success-message {
+    background: rgba(16, 185, 129, 0.1);
+    color: #6ee7b7;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  .profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .form-section {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .section-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .form-row.single {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-label {
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+  }
+
+  .form-input, .form-select, .form-textarea {
+    width: 100%;
+    padding: 1rem 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+  }
+
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    outline: none;
+    border-color: #047857;
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.2);
+  }
+
+  .form-input::placeholder, .form-textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .form-textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  .birth-date-group {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .avatar-selection {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .avatar-option {
+    cursor: pointer;
+  }
+
+  .avatar-option input[type="radio"] {
+    display: none;
+  }
+
+  .avatar-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+  }
+
+  .avatar-option input[type="radio"]:checked + .avatar-card {
+    background: rgba(4, 120, 87, 0.3);
+    border-color: #047857;
+    box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.2);
+  }
+
+  .avatar-card:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+  }
+
+  .avatar-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .avatar-label {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .photo-upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .photo-preview {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .photo-placeholder {
+    font-size: 3rem;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .photo-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .photo-upload-btn {
+    background: rgba(4, 120, 87, 0.3);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .photo-upload-btn:hover {
+    background: rgba(4, 120, 87, 0.4);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-1px);
+  }
+
+  .photo-remove-btn {
+    background: rgba(239, 68, 68, 0.3);
+    color: white;
+    border: 1px solid rgba(239, 68, 68, 0.5);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+  }
+
+  .photo-remove-btn:hover {
+    background: rgba(239, 68, 68, 0.4);
+  }
+
+  .photo-input {
+    display: none;
+  }
+
+  .language-group {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .multi-select-container {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 0.5rem;
+    backdrop-filter: blur(5px);
+  }
+
+  .multi-select-input {
+    width: 100%;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    padding: 0.25rem;
+    outline: none;
+  }
+
+  .multi-select-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .selected-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .selected-item {
+    background: rgba(4, 120, 87, 0.3);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .remove-item {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    padding: 0;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+  }
+
+  .remove-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .file-upload-container {
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .file-upload-container:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .file-upload-container.dragover {
+    border-color: #047857;
+    background: rgba(4, 120, 87, 0.1);
+  }
+
+  .file-upload-icon {
+    font-size: 3rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 1rem;
+  }
+
+  .file-upload-text {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .file-upload-subtext {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .file-upload-btn {
+    background: linear-gradient(135deg, #047857, #064e3b);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(4, 120, 87, 0.3);
+  }
+
+  .file-upload-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(4, 120, 87, 0.4);
+  }
+
+  .file-input {
+    display: none;
+  }
+
+  .file-preview {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    margin-top: 1rem;
+  }
+
+  .file-info {
+    flex: 1;
+  }
+
+  .file-name {
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+  }
+
+  .file-size {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.8rem;
+  }
+
+  .remove-file {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .remove-file:hover {
+    transform: translateY(-1px);
+  }
+
+  .submit-button {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    display: none;
+  }
+
+  .submit-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+  }
+
+  .submit-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .footer {
+    background: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    position: relative;
+    z-index: 10;
+  }
+
+  .footer-center {
+    flex: 1;
+    text-align: center;
+  }
+
+  .footer-right {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .footer-right a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .footer-right a:hover {
+    color: white;
+  }
+
+  /* View Mode Styles */
+  .form-input[readonly], .form-select[disabled], .form-textarea[readonly] {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    cursor: default;
+  }
+
+  .form-input[readonly]:focus, .form-select[disabled]:focus, .form-textarea[readonly]:focus {
+    box-shadow: none;
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .header {
+      padding: 1rem;
+    }
+
+    .nav {
+      display: none;
+    }
+
+    .hamburger {
+      display: flex;
+    }
+
+    .header-center {
+      margin: 0 1rem;
+    }
+
+    .progress-indicator {
+      min-width: 150px;
+    }
+
+    .progress-bar {
+      width: 150px;
+    }
+
+    .main {
+      padding: 1rem;
+    }
+
+    .profile-title {
+      font-size: 2rem;
+    }
+
+    .profile-form-container {
+      padding: 1.5rem;
+    }
+
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+
+    .birth-date-group {
+      grid-template-columns: 1fr;
+    }
+
+    .avatar-selection {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .language-group {
+      grid-template-columns: 1fr;
+    }
+
+    .footer {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .footer-right {
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .profile-title {
+      font-size: 1.5rem;
+    }
+
+    .avatar-selection {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  let selectedSectors = [];
+  let selectedSoftware = [];
+  let isEditMode = false;
+
+  function createParticles() {
+    const container = document.querySelector('.bg-particles');
+    const particleCount = 50;
+
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      
+      const size = Math.random() * 4 + 2;
+      const x = Math.random() * 100;
+      const y = Math.random() * 100;
+      const delay = Math.random() * 6;
+      
+      particle.style.width = size + 'px';
+      particle.style.height = size + 'px';
+      particle.style.left = x + '%';
+      particle.style.top = y + '%';
+      particle.style.animationDelay = delay + 's';
+      
+      container.appendChild(particle);
+    }
+  }
+
+  function updateProgress() {
+    const form = document.getElementById('profileForm');
+    const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
+    const radioGroups = {};
+    
+    let totalFields = 0;
+    let filledFields = 0;
+
+    inputs.forEach(input => {
+      if (input.type === 'radio') {
+        if (!radioGroups[input.name]) {
+          radioGroups[input.name] = false;
+          totalFields++;
+        }
+        if (input.checked) {
+          radioGroups[input.name] = true;
+        }
+      } else {
+        totalFields++;
+        if (input.value.trim() !== '') {
+          filledFields++;
+        }
+      }
+    });
+
+    Object.values(radioGroups).forEach(isChecked => {
+      if (isChecked) filledFields++;
+    });
+
+    const progress = Math.round((filledFields / totalFields) * 100);
+    document.querySelector('.progress-fill').style.width = progress + '%';
+    document.querySelector('.progress-text').textContent = progress + '% Complete';
+  }
+
+  function showMessage(message, type = 'error') {
+    const errorDiv = document.getElementById('errorMessage');
+    const successDiv = document.getElementById('successMessage');
+    
+    if (type === 'success') {
+      successDiv.textContent = message;
+      successDiv.style.display = 'block';
+      errorDiv.style.display = 'none';
+    } else {
+      errorDiv.textContent = message;
+      errorDiv.style.display = 'block';
+      successDiv.style.display = 'none';
+    }
+
+    setTimeout(() => {
+      errorDiv.style.display = 'none';
+      successDiv.style.display = 'none';
+    }, 5000);
+  }
+
+  function handleKeyPress(event, arrayName, inputId, containerId) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      const input = document.getElementById(inputId);
+      const value = input.value.trim();
+      
+      if (value && !window[arrayName].includes(value)) {
+        window[arrayName].push(value);
+        updateSelectedItems(arrayName, containerId);
+        input.value = '';
+      }
+    }
+  }
+
+  function updateSelectedItems(arrayName, containerId) {
+    const container = document.getElementById(containerId);
+    const selectedDiv = container.querySelector('.selected-items');
+    
+    selectedDiv.innerHTML = '';
+    window[arrayName].forEach((item, index) => {
+      const itemDiv = document.createElement('div');
+      itemDiv.className = 'selected-item';
+      itemDiv.innerHTML = `
+        ${item}
+        <button type="button" class="remove-item" onclick="removeItem('${arrayName}', ${index}, '${containerId}')">×</button>
+      `;
+      selectedDiv.appendChild(itemDiv);
+    });
+  }
+
+  function removeItem(arrayName, index, containerId) {
+    window[arrayName].splice(index, 1);
+    updateSelectedItems(arrayName, containerId);
+  }
+
+  function handlePhotoUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        showMessage('File size must be less than 5MB');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const preview = document.getElementById('photoPreview');
+        preview.innerHTML = `<img src="${e.target.result}" alt="Profile Photo">`;
+        document.getElementById('photoRemoveBtn').style.display = 'inline-block';
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  function removePhoto() {
+    document.getElementById('photoPreview').innerHTML = '<div class="photo-placeholder">📷</div>';
+    document.getElementById('photoInput').value = '';
+    document.getElementById('photoRemoveBtn').style.display = 'none';
+  }
+
+  function setupDragAndDrop() {
+    const uploadContainer = document.getElementById('cvUploadContainer');
+    
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      uploadContainer.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      uploadContainer.addEventListener(eventName, highlight, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      uploadContainer.addEventListener(eventName, unhighlight, false);
+    });
+
+    function highlight(e) {
+      uploadContainer.classList.add('dragover');
+    }
+
+    function unhighlight(e) {
+      uploadContainer.classList.remove('dragover');
+    }
+
+    uploadContainer.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      handleCVUpload({ target: { files: files } });
+    }
+  }
+
+  function handleCVUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+      if (file.size > 10 * 1024 * 1024) {
+        showMessage('File size must be less than 10MB');
+        return;
+      }
+
+      const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+      if (!allowedTypes.includes(file.type)) {
+        showMessage('Please upload a PDF or Word document');
+        return;
+      }
+
+      const container = document.getElementById('cvUploadContainer');
+      container.innerHTML = `
+        <div class="file-preview">
+          <div class="file-info">
+            <div class="file-name">${file.name}</div>
+            <div class="file-size">${(file.size / 1024 / 1024).toFixed(2)} MB</div>
+          </div>
+          <button type="button" class="remove-file" onclick="removeCVFile()">Remove</button>
+        </div>
+      `;
+    }
+  }
+
+  function removeCVFile() {
+    document.getElementById('cvInput').value = '';
+    const container = document.getElementById('cvUploadContainer');
+    container.innerHTML = `
+      <div class="file-upload-icon">📄</div>
+      <div class="file-upload-text">Upload your CV</div>
+      <div class="file-upload-subtext">Drag and drop your CV here, or click to browse</div>
+      <button type="button" class="file-upload-btn" onclick="document.getElementById('cvInput').click()">
+        Choose File
+      </button>
+    `;
+  }
+
+  function toggleEditMode() {
+    isEditMode = !isEditMode;
+    const editButton = document.getElementById('editButton');
+    const submitButton = document.getElementById('submitButton');
+    const form = document.getElementById('profileForm');
+    const inputs = form.querySelectorAll('input, select, textarea');
+    
+    if (isEditMode) {
+      editButton.textContent = '❌ Cancel Edit';
+      editButton.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+      submitButton.style.display = 'block';
+      
+      inputs.forEach(input => {
+        if (input.type !== 'file') {
+          input.removeAttribute('readonly');
+          input.removeAttribute('disabled');
+        }
+      });
+    } else {
+      editButton.textContent = '✏️ Edit Profile';
+      editButton.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+      submitButton.style.display = 'none';
+      
+      inputs.forEach(input => {
+        if (input.tagName === 'SELECT') {
+          input.setAttribute('disabled', 'true');
+        } else if (input.type !== 'file') {
+          input.setAttribute('readonly', 'true');
+        }
+      });
+    }
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    
+    if (!isEditMode) return;
+    
+    const submitButton = document.getElementById('submitButton');
+    submitButton.disabled = true;
+    submitButton.textContent = 'Saving...';
+
+    const formData = new FormData();
+    const form = document.getElementById('profileForm');
+    const inputs = form.querySelectorAll('input, select, textarea');
+
+    inputs.forEach(input => {
+      if (input.type === 'file') {
+        if (input.files[0]) {
+          formData.append(input.name || input.id, input.files[0]);
+        }
+      } else if (input.type === 'radio') {
+        if (input.checked) {
+          formData.append(input.name, input.value);
+        }
+      } else {
+        formData.append(input.name || input.id, input.value);
+      }
+    });
+
+    formData.append('sectors', JSON.stringify(selectedSectors));
+    formData.append('software', JSON.stringify(selectedSoftware));
+
+    try {
+      const response = await fetch('/api/profile', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.ok) {
+        showMessage('Profile updated successfully!', 'success');
+        toggleEditMode();
+      } else {
+        const errorText = await response.text();
+        showMessage('Error saving profile: ' + errorText);
+      }
+    } catch (error) {
+      showMessage('Network error: ' + error.message);
+    }
+
+    submitButton.disabled = false;
+    submitButton.textContent = 'Save Profile';
+  }
+
+  function toggleOtherJobRole() {
+    const jobRole = document.getElementById('jobRole').value;
+    const otherGroup = document.getElementById('otherJobRoleGroup');
+    const otherInput = document.getElementById('otherJobRole');
+
+    if (jobRole === 'Other') {
+      otherGroup.style.display = 'block';
+      otherInput.required = true;
+    } else {
+      otherGroup.style.display = 'none';
+      otherInput.required = false;
+      otherInput.value = '';
+    }
+    updateProgress();
+  }
+
+  function populateForm() {
+    // Sample data - in real app this would come from API
+    const sampleData = {
+      firstName: 'Marco',
+      lastName: 'Rossi',
+      email: 'marco.rossi@email.com',
+      phone: '+39 123 456 7890',
+      location: 'Milano, Italy',
+      birthDay: '15',
+      birthMonth: 'March',
+      birthYear: '1990',
+      avatar: 'professional',
+      jobRole: 'Financial Analyst',
+      experience: 'Senior Level (5-10 years)',
+      education: "Master's Degree",
+      nativeLanguage: 'Italian',
+      secondLanguage: 'English',
+      secondLanguageLevel: 'Advanced',
+      thirdLanguage: 'Spanish',
+      thirdLanguageLevel: 'Intermediate',
+      salaryMin: '60000',
+      salaryMax: '80000',
+      availability: 'Within 1 month',
+      remoteWork: 'Hybrid',
+      relocation: 'Depends on opportunity',
+      summary: 'Experienced Financial Analyst with 7+ years in corporate finance, specializing in financial modeling, budgeting, and strategic planning. Strong analytical skills with expertise in Excel, SAP, and financial reporting systems.'
+    };
+
+    // Populate form fields
+    Object.keys(sampleData).forEach(key => {
+      const element = document.getElementById(key);
+      if (element) {
+        if (element.type === 'radio') {
+          const radio = document.querySelector(`input[name="${key}"][value="${sampleData[key]}"]`);
+          if (radio) radio.checked = true;
+        } else {
+          element.value = sampleData[key];
+        }
+      }
+    });
+
+    // Sample sectors and software
+    selectedSectors = ['Finance', 'Technology', 'Healthcare'];
+    selectedSoftware = ['Excel', 'SAP', 'QuickBooks', 'Power BI'];
+    
+    updateSelectedItems('selectedSectors', 'sectorsContainer');
+    updateSelectedItems('selectedSoftware', 'softwareContainer');
+
+    // Set all fields to readonly initially
+    toggleEditMode();
+    toggleEditMode(); // This will set to view mode
+  }
+
+  function toggleMenu() {
+    document.getElementById("mobileMenu").classList.toggle("active");
+  }
+
+  function checkLoginStatus() {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    const userName = localStorage.getItem('userName') || 'User';
+
+    const desktopNav = document.getElementById('desktopNav');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    if (isLoggedIn) {
+      desktopNav.innerHTML = `
+        <a href="/dashboard.html">Dashboard</a>
+        <a href="/profile.html">Profile</a>
+        <a href="/messages.html">Messages</a>
+        <a href="#" onclick="logout()" style="color: #ef4444;">Logout (${userName})</a>
+      `;
+
+      mobileMenu.innerHTML = `
+        <a href="/dashboard.html">Dashboard</a>
+        <a href="/profile.html">Profile</a>
+        <a href="/messages.html">Messages</a>
+        <a href="/settings.html">Settings</a>
+        <a href="#" onclick="logout()" style="color: #ef4444;">Logout (${userName})</a>
+      `;
+    } else {
+      desktopNav.innerHTML = `
+        <a href="/pricing.html">Pricing</a>
+        <a href="/about.html">About us</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/login.html">Login</a>
+        <a href="/register.html">Register</a>
+      `;
+
+      mobileMenu.innerHTML = `
+        <a href="/pricing.html">Pricing</a>
+        <a href="/about.html">About us</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/login.html">Login</a>
+        <a href="/register.html">Register</a>
+        <a href="/privacy.html">Privacy</a>
+        <a href="/terms.html">Terms</a>
+      `;
+    }
+  }
+
+  function logout() {
+    localStorage.clear();
+    window.location.href = '/index.html';
+  }
+
+  window.onload = function() {
+    createParticles();
+    checkLoginStatus();
+    populateForm();
+    setupDragAndDrop();
+
+    const form = document.getElementById('profileForm');
+    const inputs = form.querySelectorAll('input, select, textarea');
+    inputs.forEach(input => {
+      input.addEventListener('input', updateProgress);
+      input.addEventListener('change', updateProgress);
+    });
+
+    updateProgress();
+  };
+</script>
 </head>
 <body>
-    <header class="header">
-        <a href="/index.html" class="logo">talfy</a>
-        <nav class="nav">
-            <a href="/pricing.html">Pricing</a>
-            <a href="/about.html">About us</a>
-            <a href="/contact.html">Contact</a>
-            <a href="/login.html">Login</a>
-            <a href="/register.html">Register</a>
-        </nav>
-        <button class="hamburger" onclick="toggleMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-        <div class="mobile-menu" id="mobileMenu">
-            <a href="/pricing.html">Pricing</a>
-            <a href="/about.html">About us</a>
-            <a href="/contact.html">Contact</a>
-            <a href="/login.html">Login</a>
-            <a href="/register.html">Register</a>
-            <a href="/privacy.html">Privacy</a>
-            <a href="/terms.html">Terms</a>
-        </div>
-    </header>
+  <div class="bg-particles"></div>
 
-    <main class="main">
-        <h1 class="page-title">Candidate Profile</h1>
-        <p class="page-subtitle" id="profileSubtitle">Complete your profile to increase your visibility to potential employers</p>
-        
-        <div class="profile-container">
-            <div class="profile-sidebar">
-                <div class="profile-card">
-                    <div class="profile-header">
-                        <div class="profile-avatar-container">
-                            <div class="profile-avatar" id="profileAvatar">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" viewBox="0 0 16 16">
-                                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-                                </svg>
-                            </div>
-                            <label class="profile-avatar-upload" id="avatarUploadBtn">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                    <path d="M6.502 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
-                                    <path d="M14 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5V14zM4 1a1 1 0 0 0-1 1v10l2.224-2.224a.5.5 0 0 1 .61-.075L8 11l2.157-3.02a.5.5 0 0 1 .76-.063L13 10V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4z"/>
-                                </svg>
-                                <input type="file" id="avatarInput" accept="image/*">
-                            </label>
-                        </div>
-                        <h2 class="profile-name" id="profileNameDisplay">John Doe</h2>
-                        <div class="profile-role" id="profileRoleDisplay">Software Developer</div>
-                        <div class="profile-location" id="profileLocationDisplay">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
-                            </svg>
-                            Milan, Italy
-                        </div>
-                    </div>
-                    <div class="profile-actions">
-                        <button class="profile-action-button action-primary" id="downloadCvBtn">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
-                            </svg>
-                            Download CV
-                        </button>
-                        <button class="profile-action-button action-secondary" id="editProfileBtn">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
-                            </svg>
-                            Edit Profile
-                        </button>
-                        <button class="profile-action-button action-secondary" id="logoutBtn">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
-                                <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
-                            </svg>
-                            Logout
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="profile-card">
-                    <div class="profile-header">
-                        <h3>Profile Completion</h3>
-                    </div>
-                    <div class="profile-actions">
-                        <div style="height: 8px; width: 100%; background-color: var(--border-light); border-radius: 4px; overflow: hidden; margin-bottom: 0.5rem;">
-                            <div id="completionBar" style="height: 100%; width: 65%; background-color: var(--primary-color); border-radius: 4px;"></div>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-secondary);">
-                            <span>Profile completion</span>
-                            <span id="completionPercentage">65%</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="profile-main">
-                <form id="profileForm">
-                    <div class="profile-section">
-                        <div class="profile-section-header">
-                            <h3 class="profile-section-title">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-                                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-                                    <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
-                                </svg>
-                                Personal Information
-                            </h3>
-                        </div>
-                        <div class="profile-section-content">
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label class="form-label" for="firstName">First Name*</label>
-                                    <input type="text" id="firstName" class="form-input" required>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="lastName">Last Name*</label>
-                                    <input type="text" id="lastName" class="form-input" required>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="email">Email Address*</label>
-                                    <input type="email" id="email" class="form-input" required>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="phone">Phone Number</label>
-                                    <input type="tel" id="phone" class="form-input">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="location">Location*</label>
-                                    <input type="text" id="location" class="form-input" placeholder="City, Country" required>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Date of Birth*</label>
-                                    <div class="form-date-group">
-                                        <select id="birthDay" class="form-select" required>
-                                            <option value="">Day</option>
-                                            <!-- Days will be populated by JavaScript -->
-                                        </select>
-                                        <select id="birthMonth" class="form-select" required>
-                                            <option value="">Month</option>
-                                            <option value="1">January</option>
-                                            <option value="2">February</option>
-                                            <option value="3">March</option>
-                                            <option value="4">April</option>
-                                            <option value="5">May</option>
-                                            <option value="6">June</option>
-                                            <option value="7">July</option>
-                                            <option value="8">August</option>
-                                            <option value="9">September</option>
-                                            <option value="10">October</option>
-                                            <option value="11">November</option>
-                                            <option value="12">December</option>
-                                        </select>
-                                        <select id="birthYear" class="form-select" required>
-                                            <option value="">Year</option>
-                                            <!-- Years will be populated by JavaScript -->
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="profile-section">
-                        <div class="profile-section-header">
-                            <h3 class="profile-section-title">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-                                    <path d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v1.384l7.614 2.03a1.5 1.5 0 0 0 .772 0L16 5.884V4.5A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1h-3zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5z"/>
-                                    <path d="M0 12.5A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5V6.85L8.129 8.947a.5.5 0 0 1-.258 0L0 6.85v5.65z"/>
-                                </svg>
-                                Professional Information
-                            </h3>
-                        </div>
-                        <div class="profile-section-content">
-                            <div class="form-grid">
-                                <div class="form-group form-full">
-                                    <label class="form-label" for="jobRole">Job Role/Title*</label>
-                                    <input type="text" id="jobRole" class="form-input" required>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="experience">Experience Level*</label>
-                                    <select id="experience" class="form-select" required>
-                                        <option value="">Select experience level</option>
-                                        <option value="junior">Junior (< 3 years)</option>
-                                        <option value="middle">Middle (3-8 years)</option>
-                                        <option value="senior">Senior (> 8 years)</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="education">Education Level*</label>
-                                    <select id="education" class="form-select" required>
-                                        <option value="">Select education level</option>
-                                        <option value="high_school">High School</option>
-                                        <option value="associate">Associate Degree</option>
-                                        <option value="bachelor">Bachelor's Degree</option>
-                                        <option value="master">Master's Degree</option>
-                                        <option value="phd">PhD/Doctorate</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                </div>
-                                <div class="form-group form-full">
-                                    <label class="form-label">Industry Sectors*</label>
-                                    <div class="form-checkbox-group">
-                                        <label class="form-checkbox-item">
-                                            <input type="checkbox" name="sectors" value="banking"> Banking
-                                        </label>
-                                        <label class="form-checkbox-item">
-                                            <input type="checkbox" name="sectors" value="manufacturing"> Manufacturing
-                                        </label>
-                                        <label class="form-checkbox-item">
-                                            <input type="checkbox" name="sectors" value="insurance"> Insurance
-                                        </label>
-                                        <label class="form-checkbox-item">
-                                            <input type="checkbox" name="sectors" value="it"> IT
-                                        </label>
-                                        <label class="form-checkbox-item">
-                                            <input type="checkbox" name="sectors" value="consultant"> Consulting
-                                        </label>
-                                        <label class="form-checkbox-item">
-                                            <input type="checkbox" name="sectors" value="healthcare"> Healthcare
-                                        </label>
-                                        <label class="form-checkbox-item">
-                                            <input type="checkbox" name="sectors" value="retail"> Retail
-                                        </label>
-                                        <label class="form-checkbox-item">
-                                            <input type="checkbox" name="sectors" value="education"> Education
-                                        </label>
-                                        <label class="form-checkbox-item">
-                                            <input type="checkbox" name="sectors" value="government"> Government
-                                        </label>
-                                        <label class="form-checkbox-item">
-                                            <input type="checkbox" name="sectors" value="nonprofit"> Non-profit
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="form-group form-full">
-                                    <label class="form-label">Software Knowledge*</label>
-                                    <div class="form-checkbox-group">
-                                        <label class="form-checkbox-item">
-                                            <input type="checkbox" name="software" value="sap"> SAP
-                                        </label>
-                                        <label class="form-checkbox-item">
-                                            <input type="checkbox" name="software" value="oracle"> Oracle
-                                        </label>
-                                        <label class="form-checkbox-item">
-                                            <input type="checkbox" name="software" value="zucchetti"> Zucchetti
-                                        </label>
-                                        <label class="form-checkbox-item">
-                                            <input type="checkbox" name="software" value="microsoft"> Microsoft Office
-                                        </label>
-                                        <label class="form-checkbox-item">
-                                            <input type="checkbox" name="software" value="adobe"> Adobe Creative Suite
-                                        </label>
-                                        <label class="form-checkbox-item">
-                                            <input type="checkbox" name="software" value="salesforce"> Salesforce
-                                        </label>
-                                        <label class="form-checkbox-item">
-                                            <input type="checkbox" name="software" value="aws"> AWS
-                                        </label>
-                                        <label class="form-checkbox-item">
-                                            <input type="checkbox" name="software" value="azure"> Microsoft Azure
-                                        </label>
-                                        <label class="form-checkbox-item">
-                                            <input type="checkbox" name="software" value="google"> Google Workspace
-                                        </label>
-                                        <label class="form-checkbox-item">
-                                            <input type="checkbox" name="software" value="jira"> Jira
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="profile-section">
-                        <div class="profile-section-header">
-                            <h3 class="profile-section-title">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-                                    <path d="M4.545 6.714 4.11 8H3l1.862-5h1.284L8 8H6.833l-.435-1.286H4.545zm1.634-.736L5.5 3.956h-.049l-.679 2.022H6.18z"/>
-                                    <path d="M0 2a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v3h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-3H2a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H2zm7.138 9.995c.193.301.402.583.63.846-.748.575-1.673 1.001-2.768 1.292.178.217.451.635.555.867 1.125-.359 2.08-.844 2.886-1.494.777.665 1.739 1.165 2.93 1.472.133-.254.414-.673.629-.89-1.125-.253-2.057-.694-2.82-1.284.681-.747 1.222-1.651 1.621-2.757H14V8h-3v1.047h.765c-.318.844-.74 1.546-1.272 2.13a6.066 6.066 0 0 1-.415-.492 1.988 1.988 0 0 1-.94.31z"/>
-                                </svg>
-                                Language Skills
-                            </h3>
-                        </div>
-                        <div class="profile-section-content">
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label class="form-label" for="nativeLanguage">Native Language*</label>
-                                    <select id="nativeLanguage" class="form-select" required>
-                                        <option value="">Select language</option>
-                                        <option value="english">English</option>
-                                        <option value="italian">Italian</option>
-                                        <option value="spanish">Spanish</option>
-                                        <option value="french">French</option>
-                                        <option value="german">German</option>
-                                        <option value="portuguese">Portuguese</option>
-                                        <option value="russian">Russian</option>
-                                        <option value="chinese">Chinese</option>
-                                        <option value="japanese">Japanese</option>
-                                        <option value="arabic">Arabic</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="secondLanguage">Second Language</label>
-                                    <select id="secondLanguage" class="form-select">
-                                        <option value="">None</option>
-                                        <option value="english">English</option>
-                                        <option value="italian">Italian</option>
-                                        <option value="spanish">Spanish</option>
-                                        <option value="french">French</option>
-                                        <option value="german">German</option>
-                                        <option value="portuguese">Portuguese</option>
-                                        <option value="russian">Russian</option>
-                                        <option value="chinese">Chinese</option>
-                                        <option value="japanese">Japanese</option>
-                                        <option value="arabic">Arabic</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="secondLanguageLevel">Second Language Level</label>
-                                    <select id="secondLanguageLevel" class="form-select">
-                                        <option value="">Select level</option>
-                                        <option value="a1">A1 - Beginner</option>
-                                        <option value="a2">A2 - Elementary</option>
-                                        <option value="b1">B1 - Intermediate</option>
-                                        <option value="b2">B2 - Upper Intermediate</option>
-                                        <option value="c1">C1 - Advanced</option>
-                                        <option value="c2">C2 - Proficient</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="thirdLanguage">Third Language</label>
-                                    <select id="thirdLanguage" class="form-select">
-                                        <option value="">None</option>
-                                        <option value="english">English</option>
-                                        <option value="italian">Italian</option>
-                                        <option value="spanish">Spanish</option>
-                                        <option value="french">French</option>
-                                        <option value="german">German</option>
-                                        <option value="portuguese">Portuguese</option>
-                                        <option value="russian">Russian</option>
-                                        <option value="chinese">Chinese</option>
-                                        <option value="japanese">Japanese</option>
-                                        <option value="arabic">Arabic</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="thirdLanguageLevel">Third Language Level</label>
-                                    <select id="thirdLanguageLevel" class="form-select">
-                                        <option value="">Select level</option>
-                                        <option value="a1">A1 - Beginner</option>
-                                        <option value="a2">A2 - Elementary</option>
-                                        <option value="b1">B1 - Intermediate</option>
-                                        <option value="b2">B2 - Upper Intermediate</option>
-                                        <option value="c1">C1 - Advanced</option>
-                                        <option value="c2">C2 - Proficient</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="profile-section">
-                        <div class="profile-section-header">
-                            <h3 class="profile-section-title">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-                                    <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
-                                    <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"/>
-                                </svg>
-                                Additional Information
-                            </h3>
-                        </div>
-                        <div class="profile-section-content">
-                            <div class="form-grid">
-                                <div class="form-group form-full">
-                                    <label class="form-label" for="availability">Availability</label>
-                                    <select id="availability" class="form-select">
-                                        <option value="">Select availability</option>
-                                        <option value="immediate">Immediate</option>
-                                        <option value="2weeks">2 weeks notice</option>
-                                        <option value="1month">1 month notice</option>
-                                        <option value="2months">2 months notice</option>
-                                        <option value="3months">3+ months notice</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="remoteWork">Remote Work Preference</label>
-                                    <select id="remoteWork" class="form-select">
-                                        <option value="">Select preference</option>
-                                        <option value="onsite">On-site only</option>
-                                        <option value="hybrid">Hybrid</option>
-                                        <option value="remote">Remote only</option>
-                                        <option value="flexible">Flexible</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="relocation">Willing to Relocate</label>
-                                    <select id="relocation" class="form-select">
-                                        <option value="">Select option</option>
-                                        <option value="yes">Yes</option>
-                                        <option value="no">No</option>
-                                        <option value="depends">Depends on location</option>
-                                    </select>
-                                </div>
-                                <div class="form-group form-full">
-                                    <label class="form-label" for="summary">Professional Summary</label>
-                                    <textarea id="summary" class="form-textarea" placeholder="Brief description of your professional background, skills, and career goals..."></textarea>
-                                </div>
-                            </div>
-                            
-                            <div class="form-actions">
-                                <button type="button" class="form-button form-button-secondary" id="cancelBtn">Cancel</button>
-                                <button type="submit" class="form-button form-button-primary" id="saveBtn">Save Changes</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                
-                <div class="profile-section">
-                    <div class="profile-section-header">
-                        <h3 class="profile-section-title">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
-                                <path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293V6.5z"/>
-                            </svg>
-                            CV Upload
-                        </h3>
-                    </div>
-                    <div class="profile-section-content">
-                        <div id="cvUploadContainer" class="cv-upload-container">
-                            <div class="cv-upload-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 16 16">
-                                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                                    <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
-                                </svg>
-                            </div>
-                            <h3 class="cv-upload-title">Upload your CV</h3>
-                            <p class="cv-upload-subtitle">Supported formats: PDF, DOC, DOCX (Max 5MB)</p>
-                            <label class="cv-upload-button">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                                    <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
-                                </svg>
-                                Choose File
-                                <input type="file" id="cvFileInput" class="cv-upload-input" accept=".pdf,.doc,.docx">
-                            </label>
-                        </div>
-                        
-                        <div id="cvFileInfo" class="cv-file-info" style="display: none;">
-                            <div class="cv-file-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
-                                    <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V9H3V2a1 1 0 0 1 1-1h5.5v2zM3 12v-2h2v2H3zm0 1h2v2H4a1 1 0 0 1-1-1v-1zm3 2v-2h3v2H6zm4 0v-2h3v1a1 1 0 0 1-1 1h-2zm3-3h-3v-2h3v2zm-7 0v-2h3v2H6z"/>
-                                </svg>
-                            </div>
-                            <div class="cv-file-details">
-                                <div class="cv-file-name" id="cvFileName">resume.pdf</div>
-                                <div class="cv-file-meta" id="cvFileSize">215 KB • Uploaded on May 15, 2023</div>
-                            </div>
-                            <div class="cv-file-actions">
-                                <button class="cv-file-action" id="cvDownloadBtn" title="Download">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                                        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                                        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
-                                    </svg>
-                                </button>
-                                <button class="cv-file-action delete" id="cvDeleteBtn" title="Delete">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                                        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <header class="header">
+    <a href="/index.html" class="logo">talfy</a>
+    <div class="header-center">
+      <div class="progress-indicator">
+        <span class="progress-text">100% Complete</span>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 100%;"></div>
         </div>
-    </main>
-
-    <div class="toast" id="toast">
-        <div class="toast-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-            </svg>
-        </div>
-        <div class="toast-message" id="toastMessage">Profile saved successfully!</div>
-        <button class="toast-close" onclick="hideToast()">×</button>
+      </div>
     </div>
+    <nav class="nav" id="desktopNav">
+      <!-- Navigation will be populated by JavaScript -->
+    </nav>
+    <button class="hamburger" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="mobile-menu" id="mobileMenu">
+      <!-- Mobile menu will be populated by JavaScript -->
+    </div>
+  </header>
 
-    <footer class="footer">
-        <div>&copy; 2025 Talfy. All rights reserved.</div>
-        <div class="footer-links">
-            <a href="/privacy.html">Privacy</a>
-            <a href="/terms.html">Terms</a>
-        </div>
-    </footer>
+  <!-- Download Counters -->
+  <div style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); padding: 1rem; margin: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;">
+      <div style="text-align: center; color: rgba(255, 255, 255, 0.9);">
+        <div style="font-size: 1.5rem; font-weight: bold; color: #2ecc71;">247</div>
+        <div style="font-size: 0.8rem; opacity: 0.8;">Total Downloads</div>
+      </div>
+      <div style="text-align: center; color: rgba(255, 255, 255, 0.9);">
+        <div style="font-size: 1.5rem; font-weight: bold; color: #27ae60;">18</div>
+        <div style="font-size: 0.8rem; opacity: 0.8;">Last 30 Days</div>
+      </div>
+      <div style="text-align: center; color: rgba(255, 255, 255, 0.9);">
+        <div style="font-size: 1.5rem; font-weight: bold; color: #1abc9c;">5</div>
+        <div style="font-size: 0.8rem; opacity: 0.8;">Last 7 Days</div>
+      </div>
+    </div>
+  </div>
 
-    <script>
-        // Global variables
-        let isEditMode = true; // Default to edit mode for candidate
-        let isCandidate = true; // Default to candidate view
-        let hasCv = false; // Track if CV is uploaded
-        let userData = null; // Store user data
+  <main class="main">
+    <div class="profile-content">
+      <div class="profile-hero">
+        <h1 class="profile-title">Candidate Profile</h1>
+        <div class="profile-underline"></div>
+        <p class="profile-subtitle">View and manage candidate information</p>
+        <button type="button" id="editButton" class="edit-button" onclick="toggleEditMode()">
+          ✏️ Edit Profile
+        </button>
+      </div>
+
+      <div class="profile-form-container">
+        <div id="errorMessage" class="error-message"></div>
+        <div id="successMessage" class="success-message"></div>
         
-        // DOM elements
-        const profileForm = document.getElementById('profileForm');
-        const editProfileBtn = document.getElementById('editProfileBtn');
-        const cancelBtn = document.getElementById('cancelBtn');
-        const saveBtn = document.getElementById('saveBtn');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const downloadCvBtn = document.getElementById('downloadCvBtn');
-        const cvUploadContainer = document.getElementById('cvUploadContainer');
-        const cvFileInput = document.getElementById('cvFileInput');
-        const cvFileInfo = document.getElementById('cvFileInfo');
-        const cvFileName = document.getElementById('cvFileName');
-        const cvFileSize = document.getElementById('cvFileSize');
-        const cvDownloadBtn = document.getElementById('cvDownloadBtn');
-        const cvDeleteBtn = document.getElementById('cvDeleteBtn');
-        const avatarInput = document.getElementById('avatarInput');
-        const profileAvatar = document.getElementById('profileAvatar');
-        const avatarUploadBtn = document.getElementById('avatarUploadBtn');
-        const completionBar = document.getElementById('completionBar');
-        const completionPercentage = document.getElementById('completionPercentage');
-        
-        // Initialize the page
-        document.addEventListener('DOMContentLoaded', function() {
-            // Populate days dropdown
-            const birthDay = document.getElementById('birthDay');
-            for (let i = 1; i <= 31; i++) {
-                const option = document.createElement('option');
-                option.value = i;
-                option.textContent = i;
-                birthDay.appendChild(option);
-            }
+        <form class="profile-form" id="profileForm" onsubmit="handleSubmit(event)">
+          <!-- Personal Information -->
+          <div class="form-section">
+            <h2 class="section-title">Personal Information</h2>
             
-            // Populate years dropdown
-            const birthYear = document.getElementById('birthYear');
-            const currentYear = new Date().getFullYear();
-            for (let i = currentYear - 80; i <= currentYear - 18; i++) {
-                const option = document.createElement('option');
-                option.value = i;
-                option.textContent = i;
-                birthYear.appendChild(option);
-            }
-            
-            // Check if user is logged in
-            checkUserSession();
-            
-            // Set up event listeners
-            setupEventListeners();
-        });
-        
-        // Check user session
-        function checkUserSession() {
-            // In a real app, this would check with the server
-            // For this demo, we'll use localStorage
-            const storedUserData = localStorage.getItem('talfyUserData');
-            
-            if (storedUserData) {
-                userData = JSON.parse(storedUserData);
-                
-                // Update navigation based on login status
-                updateNavigation(userData);
-                
-                // Check if user is a candidate or company
-                isCandidate = userData.userType === 'candidate';
-                
-                // If company, set to view-only mode
-                if (!isCandidate) {
-                    setViewOnlyMode();
-                    document.getElementById('profileSubtitle').textContent = 'Candidate profile details';
-                } else {
-                    // Load candidate profile data
-                    loadProfileData();
-                }
-                
-                // Update profile completion
-                updateProfileCompletion();
-            } else {
-                // No user logged in, redirect to login page
-                // window.location.href = '/login.html';
-                
-                // For demo purposes, we'll just show sample data
-                loadSampleData();
-            }
-        }
-        
-        // Update navigation based on login status
-        function updateNavigation(user) {
-            const nav = document.querySelector('.nav');
-            const mobileMenu = document.getElementById('mobileMenu');
-            
-            if (user) {
-                // Replace login/register with user menu for desktop
-                nav.innerHTML = `
-                    <a href="/pricing.html">Pricing</a>
-                    <a href="/about.html">About us</a>
-                    <a href="/contact.html">Contact</a>
-                    <a href="/dashboard.html">Dashboard</a>
-                    <a href="#" onclick="logout()">Logout</a>
-                `;
-                
-                // Update mobile menu
-                mobileMenu.innerHTML = `
-                    <a href="/pricing.html">Pricing</a>
-                    <a href="/about.html">About us</a>
-                    <a href="/contact.html">Contact</a>
-                    <a href="/dashboard.html">Dashboard</a>
-                    <a href="#" onclick="logout()">Logout</a>
-                    <a href="/privacy.html">Privacy</a>
-                    <a href="/terms.html">Terms</a>
-                `;
-            }
-        }
-        
-        // Set up event listeners
-        function setupEventListeners() {
-            // Toggle mobile menu
-            document.querySelector('.hamburger').addEventListener('click', toggleMenu);
-            
-            // Profile form submission
-            profileForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                saveProfileData();
-            });
-            
-            // Edit profile button
-            editProfileBtn.addEventListener('click', function() {
-                if (isCandidate) {
-                    toggleEditMode();
-                }
-            });
-            
-            // Cancel button
-            cancelBtn.addEventListener('click', function() {
-                // Reload the current profile data
-                loadProfileData();
-                toggleEditMode();
-            });
-            
-            // Logout button
-            logoutBtn.addEventListener('click', logout);
-            
-            // Download CV button
-            downloadCvBtn.addEventListener('click', downloadCV);
-            
-            // CV file input change
-            cvFileInput.addEventListener('change', handleCvUpload);
-            
-            // CV upload container click
-            cvUploadContainer.addEventListener('click', function() {
-                if (isEditMode && isCandidate) {
-                    cvFileInput.click();
-                }
-            });
-            
-            // CV delete button
-            cvDeleteBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                deleteCv();
-            });
-            
-            // Avatar input change
-            avatarInput.addEventListener('change', handleAvatarUpload);
-            
-            // Second language change
-            document.getElementById('secondLanguage').addEventListener('change', function() {
-                const secondLanguageLevel = document.getElementById('secondLanguageLevel');
-                if (this.value) {
-                    secondLanguageLevel.setAttribute('required', 'required');
-                } else {
-                    secondLanguageLevel.removeAttribute('required');
-                }
-            });
-            
-            // Third language change
-            document.getElementById('thirdLanguage').addEventListener('change', function() {
-                const thirdLanguageLevel = document.getElementById('thirdLanguageLevel');
-                if (this.value) {
-                    thirdLanguageLevel.setAttribute('required', 'required');
-                } else {
-                    thirdLanguageLevel.removeAttribute('required');
-                }
-            });
-        }
-        
-        // Toggle mobile menu
-        function toggleMenu() {
-            document.getElementById('mobileMenu').classList.toggle('active');
-        }
-        
-        // Toggle edit mode
-        function toggleEditMode() {
-            isEditMode = !isEditMode;
-            
-            if (isEditMode) {
-                // Switch to edit mode
-                document.querySelectorAll('.form-input, .form-select, .form-textarea, .form-checkbox-item input').forEach(el => {
-                    el.removeAttribute('disabled');
-                });
-                
-                editProfileBtn.textContent = 'Cancel';
-                saveBtn.style.display = 'block';
-                cancelBtn.style.display = 'block';
-                avatarUploadBtn.style.display = 'flex';
-                
-                // Show CV upload if no CV
-                if (!hasCv) {
-                    cvUploadContainer.style.display = 'block';
-                }
-            } else {
-                // Switch to view mode
-                document.querySelectorAll('.form-input, .form-select, .form-textarea, .form-checkbox-item input').forEach(el => {
-                    el.setAttribute('disabled', 'disabled');
-                });
-                
-                editProfileBtn.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
-                    </svg>
-                    Edit Profile
-                `;
-                saveBtn.style.display = 'none';
-                cancelBtn.style.display = 'none';
-                avatarUploadBtn.style.display = 'none';
-                
-                // Hide CV upload container
-                if (!hasCv) {
-                    cvUploadContainer.style.display = 'none';
-                }
-            }
-        }
-        
-        // Set view-only mode for company users
-        function setViewOnlyMode() {
-            isEditMode = false;
-            
-            // Disable all form elements
-            document.querySelectorAll('.form-input, .form-select, .form-textarea, .form-checkbox-item input').forEach(el => {
-                el.setAttribute('disabled', 'disabled');
-            });
-            
-            // Hide edit-related buttons
-            editProfileBtn.style.display = 'none';
-            saveBtn.style.display = 'none';
-            cancelBtn.style.display = 'none';
-            avatarUploadBtn.style.display = 'none';
-            cvDeleteBtn.style.display = 'none';
-            
-            // Add view-only class to main container
-            document.querySelector('.profile-main').classList.add('view-only');
-        }
-        
-        // Load profile data
-        function loadProfileData() {
-            // In a real app, this would fetch data from the server
-            // For this demo, we'll use localStorage or sample data
-            
-            const profileData = localStorage.getItem('talfyProfileData');
-            
-            if (profileData) {
-                const data = JSON.parse(profileData);
-                
-                // Fill form fields
-                document.getElementById('firstName').value = data.firstName || '';
-                document.getElementById('lastName').value = data.lastName || '';
-                document.getElementById('email').value = data.email || '';
-                document.getElementById('phone').value = data.phone || '';
-                document.getElementById('location').value = data.location || '';
-                document.getElementById('birthDay').value = data.birthDay || '';
-                document.getElementById('birthMonth').value = data.birthMonth || '';
-                document.getElementById('birthYear').value = data.birthYear || '';
-                document.getElementById('jobRole').value = data.jobRole || '';
-                document.getElementById('experience').value = data.experience || '';
-                document.getElementById('education').value = data.education || '';
-                document.getElementById('nativeLanguage').value = data.nativeLanguage || '';
-                document.getElementById('secondLanguage').value = data.secondLanguage || '';
-                document.getElementById('secondLanguageLevel').value = data.secondLanguageLevel || '';
-                document.getElementById('thirdLanguage').value = data.thirdLanguage || '';
-                document.getElementById('thirdLanguageLevel').value = data.thirdLanguageLevel || '';
-                document.getElementById('availability').value = data.availability || '';
-                document.getElementById('remoteWork').value = data.remoteWork || '';
-                document.getElementById('relocation').value = data.relocation || '';
-                document.getElementById('summary').value = data.summary || '';
-                
-                // Set checkboxes
-                if (data.sectors) {
-                    data.sectors.forEach(sector => {
-                        const checkbox = document.querySelector(`input[name="sectors"][value="${sector}"]`);
-                        if (checkbox) checkbox.checked = true;
-                    });
-                }
-                
-                if (data.software) {
-                    data.software.forEach(sw => {
-                        const checkbox = document.querySelector(`input[name="software"][value="${sw}"]`);
-                        if (checkbox) checkbox.checked = true;
-                    });
-                }
-                
-                // Update profile header
-                updateProfileHeader(data);
-                
-                // Check if CV exists
-                if (data.cv) {
-                    showCvInfo(data.cv);
-                }
-                
-                // Update avatar if exists
-                if (data.avatar) {
-                    updateAvatar(data.avatar);
-                }
-                
-                // If not in edit mode, disable form fields
-                if (!isEditMode) {
-                    document.querySelectorAll('.form-input, .form-select, .form-textarea, .form-checkbox-item input').forEach(el => {
-                        el.setAttribute('disabled', 'disabled');
-                    });
-                }
-            } else {
-                // No profile data, load sample data
-                loadSampleData();
-            }
-        }
-        
-        // Load sample data
-        function loadSampleData() {
-            const sampleData = {
-                firstName: 'John',
-                lastName: 'Doe',
-                email: 'john.doe@example.com',
-                phone: '+39 123 456 7890',
-                location: 'Milan, Italy',
-                birthDay: '15',
-                birthMonth: '6',
-                birthYear: '1990',
-                jobRole: 'Software Developer',
-                experience: 'middle',
-                education: 'bachelor',
-                sectors: ['it', 'consultant'],
-                software: ['microsoft', 'aws', 'jira'],
-                nativeLanguage: 'italian',
-                secondLanguage: 'english',
-                secondLanguageLevel: 'c1',
-                thirdLanguage: 'spanish',
-                thirdLanguageLevel: 'b1',
-                availability: '1month',
-                remoteWork: 'hybrid',
-                relocation: 'depends',
-                summary: 'Experienced software developer with a focus on web technologies and cloud solutions. Passionate about creating efficient and user-friendly applications.',
-                cv: {
-                    name: 'john_doe_resume.pdf',
-                    size: '215 KB',
-                    date: 'May 15, 2023'
-                }
-            };
-            
-            // Fill form fields
-            document.getElementById('firstName').value = sampleData.firstName;
-            document.getElementById('lastName').value = sampleData.lastName;
-            document.getElementById('email').value = sampleData.email;
-            document.getElementById('phone').value = sampleData.phone;
-            document.getElementById('location').value = sampleData.location;
-            document.getElementById('birthDay').value = sampleData.birthDay;
-            document.getElementById('birthMonth').value = sampleData.birthMonth;
-            document.getElementById('birthYear').value = sampleData.birthYear;
-            document.getElementById('jobRole').value = sampleData.jobRole;
-            document.getElementById('experience').value = sampleData.experience;
-            document.getElementById('education').value = sampleData.education;
-            document.getElementById('nativeLanguage').value = sampleData.nativeLanguage;
-            document.getElementById('secondLanguage').value = sampleData.secondLanguage;
-            document.getElementById('secondLanguageLevel').value = sampleData.secondLanguageLevel;
-            document.getElementById('thirdLanguage').value = sampleData.thirdLanguage;
-            document.getElementById('thirdLanguageLevel').value = sampleData.thirdLanguageLevel;
-            document.getElementById('availability').value = sampleData.availability;
-            document.getElementById('remoteWork').value = sampleData.remoteWork;
-            document.getElementById('relocation').value = sampleData.relocation;
-            document.getElementById('summary').value = sampleData.summary;
-            
-            // Set checkboxes
-            sampleData.sectors.forEach(sector => {
-                const checkbox = document.querySelector(`input[name="sectors"][value="${sector}"]`);
-                if (checkbox) checkbox.checked = true;
-            });
-            
-            sampleData.software.forEach(sw => {
-                const checkbox = document.querySelector(`input[name="software"][value="${sw}"]`);
-                if (checkbox) checkbox.checked = true;
-            });
-            
-            // Update profile header
-            updateProfileHeader(sampleData);
-            
-            // Show CV info
-            showCvInfo(sampleData.cv);
-            
-            // If not in edit mode, disable form fields
-            if (!isEditMode) {
-                document.querySelectorAll('.form-input, .form-select, .form-textarea, .form-checkbox-item input').forEach(el => {
-                    el.setAttribute('disabled', 'disabled');
-                });
-            }
-        }
-        
-        // Save profile data
-        function saveProfileData() {
-            // Collect form data
-            const formData = {
-                firstName: document.getElementById('firstName').value,
-                lastName: document.getElementById('lastName').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                location: document.getElementById('location').value,
-                birthDay: document.getElementById('birthDay').value,
-                birthMonth: document.getElementById('birthMonth').value,
-                birthYear: document.getElementById('birthYear').value,
-                jobRole: document.getElementById('jobRole').value,
-                experience: document.getElementById('experience').value,
-                education: document.getElementById('education').value,
-                nativeLanguage: document.getElementById('nativeLanguage').value,
-                secondLanguage: document.getElementById('secondLanguage').value,
-                secondLanguageLevel: document.getElementById('secondLanguageLevel').value,
-                thirdLanguage: document.getElementById('thirdLanguage').value,
-                thirdLanguageLevel: document.getElementById('thirdLanguageLevel').value,
-                availability: document.getElementById('availability').value,
-                remoteWork: document.getElementById('remoteWork').value,
-                relocation: document.getElementById('relocation').value,
-                summary: document.getElementById('summary').value,
-                sectors: [],
-                software: []
-            };
-            
-            // Get selected sectors
-            document.querySelectorAll('input[name="sectors"]:checked').forEach(checkbox => {
-                formData.sectors.push(checkbox.value);
-            });
-            
-            // Get selected software
-            document.querySelectorAll('input[name="software"]:checked').forEach(checkbox => {
-                formData.software.push(checkbox.value);
-            });
-            
-            // Get CV data if exists
-            const existingData = localStorage.getItem('talfyProfileData');
-            if (existingData) {
-                const parsedData = JSON.parse(existingData);
-                if (parsedData.cv) {
-                    formData.cv = parsedData.cv;
-                }
-                if (parsedData.avatar) {
-                    formData.avatar = parsedData.avatar;
-                }
-            }
-            
-            // Save to localStorage (in a real app, this would be sent to a server)
-            localStorage.setItem('talfyProfileData', JSON.stringify(formData));
-            
-            // Update profile header
-            updateProfileHeader(formData);
-            
-            // Update profile completion
-            updateProfileCompletion();
-            
-            // Show success message
-            showToast('Profile saved successfully!');
-            
-            // Switch back to view mode
-            toggleEditMode();
-            
-            // Update candidate data in candidates list
-            updateCandidateInList(formData);
-        }
-        
-        // Update profile header
-        function updateProfileHeader(data) {
-            document.getElementById('profileNameDisplay').textContent = `${data.firstName} ${data.lastName}`;
-            document.getElementById('profileRoleDisplay').textContent = data.jobRole;
-            document.getElementById('profileLocationDisplay').innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
-                </svg>
-                ${data.location}
-            `;
-        }
-        
-        // Handle CV upload
-        function handleCvUpload(e) {
-            const file = e.target.files[0];
-            
-            if (file) {
-                // Check file type
-                const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-                if (!validTypes.includes(file.type)) {
-                    showToast('Please upload a PDF or Word document', 'error');
-                    return;
-                }
-                
-                // Check file size (max 5MB)
-                if (file.size > 5 * 1024 * 1024) {
-                    showToast('File size should be less than 5MB', 'error');
-                    return;
-                }
-                
-                // In a real app, this would upload the file to a server
-                // For this demo, we'll just store the file info
-                
-                const fileInfo = {
-                    name: file.name,
-                    size: formatFileSize(file.size),
-                    date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-                };
-                
-                // Show file info
-                showCvInfo(fileInfo);
-                
-                // Save CV info to profile data
-                const profileData = localStorage.getItem('talfyProfileData');
-                if (profileData) {
-                    const data = JSON.parse(profileData);
-                    data.cv = fileInfo;
-                    localStorage.setItem('talfyProfileData', JSON.stringify(data));
-                }
-                
-                // Show success message
-                showToast('CV uploaded successfully!');
-            }
-        }
-        
-        // Show CV info
-        function showCvInfo(fileInfo) {
-            cvFileName.textContent = fileInfo.name;
-            cvFileSize.textContent = `${fileInfo.size} • Uploaded on ${fileInfo.date}`;
-            
-            cvUploadContainer.style.display = 'none';
-            cvFileInfo.style.display = 'flex';
-            
-            hasCv = true;
-        }
-        
-        // Delete CV
-        function deleteCv() {
-            if (!isEditMode || !isCandidate) return;
-            
-            // In a real app, this would delete the file from the server
-            // For this demo, we'll just remove the file info
-            
-            cvUploadContainer.style.display = 'block';
-            cvFileInfo.style.display = 'none';
-            
-            hasCv = false;
-            
-            // Remove CV info from profile data
-            const profileData = localStorage.getItem('talfyProfileData');
-            if (profileData) {
-                const data = JSON.parse(profileData);
-                delete data.cv;
-                localStorage.setItem('talfyProfileData', JSON.stringify(data));
-            }
-            
-            // Show success message
-            showToast('CV deleted successfully!');
-        }
-        
-        // Handle avatar upload
-        function handleAvatarUpload(e) {
-            const file = e.target.files[0];
-            
-            if (file) {
-                // Check file type
-                const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
-                if (!validTypes.includes(file.type)) {
-                    showToast('Please upload a JPEG, PNG, or GIF image', 'error');
-                    return;
-                }
-                
-                // Check file size (max 2MB)
-                if (file.size > 2 * 1024 * 1024) {
-                    showToast('File size should be less than 2MB', 'error');
-                    return;
-                }
-                
-                // In a real app, this would upload the file to a server
-                // For this demo, we'll use FileReader to display the image
-                
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    updateAvatar(event.target.result);
-                    
-                    // Save avatar to profile data
-                    const profileData = localStorage.getItem('talfyProfileData');
-                    if (profileData) {
-                        const data = JSON.parse(profileData);
-                        data.avatar = event.target.result;
-                        localStorage.setItem('talfyProfileData', JSON.stringify(data));
+            <div class="form-row">
+              <div class="form-group">
+                <label for="firstName" class="form-label">First Name *</label>
+                <input type="text" id="firstName" class="form-input" placeholder="Enter your first name" required readonly />
+              </div>
+              <div class="form-group">
+                <label for="lastName" class="form-label">Last Name *</label>
+                <input type="text" id="lastName" class="form-input" placeholder="Enter your last name" required readonly />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email" class="form-label">Email Address *</label>
+                <input type="email" id="email" class="form-input" placeholder="Enter your email" required readonly />
+              </div>
+              <div class="form-group">
+                <label for="phone" class="form-label">Phone Number *</label>
+                <input type="tel" id="phone" class="form-input" placeholder="Enter your phone number" required readonly />
+              </div>
+            </div>
+
+            <div class="form-row single">
+              <div class="form-group">
+                <label for="location" class="form-label">Location *</label>
+                <input type="text" id="location" class="form-input" placeholder="City, Country" required readonly />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Date of Birth *</label>
+              <div class="birth-date-group">
+                <select id="birthDay" class="form-select" required disabled>
+                  <option value="">Day</option>
+                  <script>
+                    for (let i = 1; i <= 31; i++) {
+                      document.write(`<option value="${i}">${i}</option>`);
                     }
-                };
-                reader.readAsDataURL(file);
-                
-                // Show success message
-                showToast('Profile picture updated!');
-            }
-        }
-        
-        // Update avatar
-        function updateAvatar(imageData) {
-            profileAvatar.innerHTML = `<img src="${imageData}" alt="Profile Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
-        }
-        
-        // Download CV
-        function downloadCV() {
-            // In a real app, this would download the actual file
-            // For this demo, we'll just show a message
-            
-            showToast('Downloading CV...');
-            
-            // Simulate download delay
-            setTimeout(() => {
-                alert('In a real application, this would download the candidate\'s CV file.');
-            }, 1000);
-        }
-        
-        // Format file size
-        function formatFileSize(bytes) {
-            if (bytes < 1024) return bytes + ' B';
-            else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
-            else return (bytes / 1048576).toFixed(1) + ' MB';
-        }
-        
-        // Update profile completion percentage
-        function updateProfileCompletion() {
-            // Count filled fields
-            let filledFields = 0;
-            let totalFields = 0;
-            
-            // Required fields
-            const requiredFields = [
-                'firstName', 'lastName', 'email', 'location', 
-                'birthDay', 'birthMonth', 'birthYear',
-                'jobRole', 'experience', 'education', 'nativeLanguage'
-            ];
-            
-            requiredFields.forEach(field => {
-                totalFields++;
-                if (document.getElementById(field).value) {
-                    filledFields++;
-                }
-            });
-            
-            // Check sectors
-            totalFields++;
-            if (document.querySelectorAll('input[name="sectors"]:checked').length > 0) {
-                filledFields++;
-            }
-            
-            // Check software
-            totalFields++;
-            if (document.querySelectorAll('input[name="software"]:checked').length > 0) {
-                filledFields++;
-            }
-            
-            // Optional fields
-            const optionalFields = [
-                'phone', 'secondLanguage', 'secondLanguageLevel',
-                'thirdLanguage', 'thirdLanguageLevel', 'availability',
-                'remoteWork', 'relocation', 'summary'
-            ];
-            
-            optionalFields.forEach(field => {
-                totalFields++;
-                if (document.getElementById(field).value) {
-                    filledFields++;
-                }
-            });
-            
-            // CV
-            totalFields++;
-            if (hasCv) {
-                filledFields++;
-            }
-            
-            // Calculate percentage
-            const percentage = Math.round((filledFields / totalFields) * 100);
-            
-            // Update UI
-            completionBar.style.width = percentage + '%';
-            completionPercentage.textContent = percentage + '%';
-        }
-        
-        // Show toast notification
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toastMessage');
-            
-            toastMessage.textContent = message;
-            
-            if (type === 'error') {
-                toast.style.backgroundColor = '#ef4444';
-            } else {
-                toast.style.backgroundColor = 'var(--primary-color)';
-            }
-            
-            toast.classList.add('show');
-            
-            // Hide after 3 seconds
-            setTimeout(hideToast, 3000);
-        }
-        
-        // Hide toast notification
-        function hideToast() {
-            document.getElementById('toast').classList.remove('show');
-        }
-        
-        // Logout function
-        function logout() {
-            // Clear user data
-            localStorage.removeItem('talfyUserData');
-            
-            // Redirect to home page
-            window.location.href = '/index.html';
-        }
-        
-        // Update candidate in candidates list
-        function updateCandidateInList(formData) {
-            // In a real app, this would update the candidate in the database
-            // For this demo, we'll update the candidate in localStorage
-            
-            const candidatesData = localStorage.getItem('talfyRegisteredCandidates');
-            if (candidatesData) {
-                const candidates = JSON.parse(candidatesData);
-                
-                // Find candidate by email
-                const candidateIndex = candidates.findIndex(c => c.email === formData.email);
-                
-                if (candidateIndex !== -1) {
-                    // Update candidate
-                    candidates[candidateIndex] = {
-                        ...candidates[candidateIndex],
-                        name: `${formData.firstName} ${formData.lastName}`,
-                        location: formData.location,
-                        role: formData.jobRole,
-                        experience: formData.experience === 'junior' ? 2 : 
-                                   formData.experience === 'middle' ? 5 : 10,
-                        gender: Math.random() > 0.5 ? 'male' : 'female'
-                    };
-                    
-                    // Save updated candidates
-                    localStorage.setItem('talfyRegisteredCandidates', JSON.stringify(candidates));
-                } else {
-                    // Add new candidate
-                    const newCandidate = {
-                        email: formData.email,
-                        name: `${formData.firstName} ${formData.lastName}`,
-                        location: formData.location,
-                        role: formData.jobRole,
-                        experience: formData.experience === 'junior' ? 2 : 
-                                   formData.experience === 'middle' ? 5 : 10,
-                        gender: Math.random() > 0.5 ? 'male' : 'female'
-                    };
-                    
-                    candidates.push(newCandidate);
-                    
-                    // Save updated candidates
-                    localStorage.setItem('talfyRegisteredCandidates', JSON.stringify(candidates));
-                }
-            } else {
-                // Create new candidates list
-                const newCandidate = {
-                    email: formData.email,
-                    name: `${formData.firstName} ${formData.lastName}`,
-                    location: formData.location,
-                    role: formData.jobRole,
-                    experience: formData.experience === 'junior' ? 2 : 
-                               formData.experience === 'middle' ? 5 : 10,
-                    gender: Math.random() > 0.5 ? 'male' : 'female'
-                };
-                
-                localStorage.setItem('talfyRegisteredCandidates', JSON.stringify([newCandidate]));
-            }
-        }
-    </script>
+                  </script>
+                </select>
+                <select id="birthMonth" class="form-select" required disabled>
+                  <option value="">Month</option>
+                  <option value="January">January</option>
+                  <option value="February">February</option>
+                  <option value="March">March</option>
+                  <option value="April">April</option>
+                  <option value="May">May</option>
+                  <option value="June">June</option>
+                  <option value="July">July</option>
+                  <option value="August">August</option>
+                  <option value="September">September</option>
+                  <option value="October">October</option>
+                  <option value="November">November</option>
+                  <option value="December">December</option>
+                </select>
+                <select id="birthYear" class="form-select" required disabled>
+                  <option value="">Year</option>
+                  <script>
+                    const currentYear = new Date().getFullYear();
+                    for (let i = currentYear - 16; i >= currentYear - 80; i--) {
+                      document.write(`<option value="${i}">${i}</option>`);
+                    }
+                  </script>
+                </select>
+              </div>
+            </div>
+          </div>
 
-    <form id="candidateForm" enctype="multipart/form-data">
-    <h2>Complete Your Profile</h2>
-    
-    <label>First Name</label>
-    <input type="text" name="first_name" required>
-    
-    <label>Last Name</label>
-    <input type="text" name="last_name" required>
-    
-    <label>Email</label>
-    <input type="email" name="email" required>
-    
-    <label>Upload Avatar (or choose default)</label>
-    <input type="file" name="avatar" accept="image/*" required>
-    
-    <label>Upload CV (PDF only)</label>
-    <input type="file" name="cv" accept="application/pdf" required>
-    
-    <button type="submit">Save Profile</button>
-</form>
+          <!-- Avatar & Photo -->
+          <div class="form-section">
+            <h2 class="section-title">Profile Picture</h2>
+            
+            <div class="form-group">
+              <label class="form-label">Choose Avatar *</label>
+              <div class="avatar-selection">
+                <label class="avatar-option">
+                  <input type="radio" name="avatar" value="male" required />
+                  <div class="avatar-card">
+                    <div class="avatar-icon">👨</div>
+                    <div class="avatar-label">Male</div>
+                  </div>
+                </label>
+                <label class="avatar-option">
+                  <input type="radio" name="avatar" value="female" required />
+                  <div class="avatar-card">
+                    <div class="avatar-icon">👩</div>
+                    <div class="avatar-label">Female</div>
+                  </div>
+                </label>
+                <label class="avatar-option">
+                  <input type="radio" name="avatar" value="professional" required />
+                  <div class="avatar-card">
+                    <div class="avatar-icon">👔</div>
+                    <div class="avatar-label">Professional</div>
+                  </div>
+                </label>
+                <label class="avatar-option">
+                  <input type="radio" name="avatar" value="neutral" required />
+                  <div class="avatar-card">
+                    <div class="avatar-icon">😊</div>
+                    <div class="avatar-label">Neutral</div>
+                  </div>
+                </label>
+              </div>
+            </div>
 
-<div id="profileView" style="display:none;">
-    <h3>Candidate Profile</h3>
-    <img id="avatarPreview" src="" alt="Avatar" width="120">
-    <p id="namePreview"></p>
-    <p id="emailPreview"></p>
-    <a id="cvDownloadBtn" href="#" download>Download CV</a>
-</div>
+            <div class="form-group">
+              <label class="form-label">Upload Your Photo (Optional)</label>
+              <div class="photo-upload-container">
+                <div class="photo-preview" id="photoPreview">
+                  <div class="photo-placeholder">📷</div>
+                </div>
+                <button type="button" class="photo-upload-btn" onclick="document.getElementById('photoInput').click()">
+                  Choose Photo
+                </button>
+                <button type="button" class="photo-remove-btn" id="photoRemoveBtn" onclick="removePhoto()" style="display: none;">
+                  Remove Photo
+                </button>
+                <input type="file" id="photoInput" class="photo-input" accept="image/*" onchange="handlePhotoUpload(event)" />
+              </div>
+            </div>
+          </div>
 
-<script src="candidate.js"></script>
+          <!-- Professional Information -->
+          <div class="form-section">
+            <h2 class="section-title">Professional Information</h2>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="jobRole" class="form-label">Job Role *</label>
+                <select id="jobRole" class="form-select" required onchange="toggleOtherJobRole()" disabled>
+                  <option value="">Select your role</option>
+                  <option value="CFO">CFO (Chief Financial Officer)</option>
+                  <option value="Controller">Controller</option>
+                  <option value="Treasurer">Treasurer</option>
+                  <option value="Accountant">Accountant</option>
+                  <option value="Auditor">Auditor</option>
+                  <option value="Financial Analyst">Financial Analyst</option>
+                  <option value="Investment Analyst">Investment Analyst</option>
+                  <option value="Risk Manager">Risk Manager</option>
+                  <option value="Tax Specialist">Tax Specialist</option>
+                  <option value="Budget Analyst">Budget Analyst</option>
+                  <option value="Credit Analyst">Credit Analyst</option>
+                  <option value="Compliance Officer">Compliance Officer</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="form-group" id="otherJobRoleGroup" style="display: none;">
+                <label for="otherJobRole" class="form-label">Please specify your role *</label>
+                <input type="text" id="otherJobRole" class="form-input" placeholder="Enter your specific job role" readonly />
+              </div>
+              <div class="form-group">
+                <label for="experience" class="form-label">Experience Level *</label>
+                <select id="experience" class="form-select" required disabled>
+                  <option value="">Select experience</option>
+                  <option value="Entry Level (0-2 years)">Entry Level (0-2 years)</option>
+                  <option value="Mid Level (2-5 years)">Mid Level (2-5 years)</option>
+                  <option value="Senior Level (5-10 years)">Senior Level (5-10 years)</option>
+                  <option value="Expert Level (10+ years)">Expert Level (10+ years)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row single">
+              <div class="form-group">
+                <label for="education" class="form-label">Education *</label>
+                <select id="education" class="form-select" required disabled>
+                  <option value="">Select education level</option>
+                  <option value="High School">High School</option>
+                  <option value="Associate Degree">Associate Degree</option>
+                  <option value="Bachelor's Degree">Bachelor's Degree</option>
+                  <option value="Master's Degree">Master's Degree</option>
+                  <option value="PhD">PhD</option>
+                  <option value="Professional Certification">Professional Certification</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Languages -->
+          <div class="form-section">
+            <h2 class="section-title">Languages</h2>
+            
+            <div class="form-row single">
+              <div class="form-group">
+                <label for="nativeLanguage" class="form-label">Native Language *</label>
+                <select id="nativeLanguage" class="form-select" required disabled>
+                  <option value="">Select your native language</option>
+                  <option value="English">English</option>
+                  <option value="Spanish">Spanish</option>
+                  <option value="French">French</option>
+                  <option value="German">German</option>
+                  <option value="Italian">Italian</option>
+                  <option value="Portuguese">Portuguese</option>
+                  <option value="Russian">Russian</option>
+                  <option value="Chinese">Chinese</option>
+                  <option value="Japanese">Japanese</option>
+                  <option value="Korean">Korean</option>
+                  <option value="Arabic">Arabic</option>
+                  <option value="Hindi">Hindi</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Second Language</label>
+              <div class="language-group">
+                <select id="secondLanguage" class="form-select" disabled>
+                  <option value="">Select second language</option>
+                  <option value="English">English</option>
+                  <option value="Spanish">Spanish</option>
+                  <option value="French">French</option>
+                  <option value="German">German</option>
+                  <option value="Italian">Italian</option>
+                  <option value="Portuguese">Portuguese</option>
+                  <option value="Russian">Russian</option>
+                  <option value="Chinese">Chinese</option>
+                  <option value="Japanese">Japanese</option>
+                  <option value="Korean">Korean</option>
+                  <option value="Arabic">Arabic</option>
+                  <option value="Hindi">Hindi</option>
+                  <option value="Other">Other</option>
+                </select>
+                <select id="secondLanguageLevel" class="form-select" disabled>
+                  <option value="">Level</option>
+                  <option value="Beginner">Beginner</option>
+                  <option value="Intermediate">Intermediate</option>
+                  <option value="Advanced">Advanced</option>
+                  <option value="Native">Native</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Third Language</label>
+              <div class="language-group">
+                <select id="thirdLanguage" class="form-select" disabled>
+                  <option value="">Select third language</option>
+                  <option value="English">English</option>
+                  <option value="Spanish">Spanish</option>
+                  <option value="French">French</option>
+                  <option value="German">German</option>
+                  <option value="Italian">Italian</option>
+                  <option value="Portuguese">Portuguese</option>
+                  <option value="Russian">Russian</option>
+                  <option value="Chinese">Chinese</option>
+                  <option value="Japanese">Japanese</option>
+                  <option value="Korean">Korean</option>
+                  <option value="Arabic">Arabic</option>
+                  <option value="Hindi">Hindi</option>
+                  <option value="Other">Other</option>
+                </select>
+                <select id="thirdLanguageLevel" class="form-select" disabled>
+                  <option value="">Level</option>
+                  <option value="Beginner">Beginner</option>
+                  <option value="Intermediate">Intermediate</option>
+                  <option value="Advanced">Advanced</option>
+                  <option value="Native">Native</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Salary Expectations -->
+          <div class="form-section">
+            <h2 class="section-title">Salary Expectations</h2>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="salaryMin" class="form-label">Minimum Salary (€) *</label>
+                <select id="salaryMin" class="form-select" required disabled>
+                  <option value="">Select minimum</option>
+                  <option value="30000">€30,000</option>
+                  <option value="35000">€35,000</option>
+                  <option value="40000">€40,000</option>
+                  <option value="45000">€45,000</option>
+                  <option value="50000">€50,000</option>
+                  <option value="55000">€55,000</option>
+                  <option value="60000">€60,000</option>
+                  <option value="65000">€65,000</option>
+                  <option value="70000">€70,000</option>
+                  <option value="75000">€75,000</option>
+                  <option value="80000">€80,000</option>
+                  <option value="85000">€85,000</option>
+                  <option value="90000">€90,000</option>
+                  <option value="95000">€95,000</option>
+                  <option value="100000">€100,000</option>
+                  <option value="110000">€110,000</option>
+                  <option value="120000">€120,000</option>
+                  <option value="130000">€130,000</option>
+                  <option value="140000">€140,000</option>
+                  <option value="150000">€150,000+</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="salaryMax" class="form-label">Maximum Salary (€) *</label>
+                <select id="salaryMax" class="form-select" required disabled>
+                  <option value="">Select maximum</option>
+                  <option value="40000">€40,000</option>
+                  <option value="45000">€45,000</option>
+                  <option value="50000">€50,000</option>
+                  <option value="55000">€55,000</option>
+                  <option value="60000">€60,000</option>
+                  <option value="65000">€65,000</option>
+                  <option value="70000">€70,000</option>
+                  <option value="75000">€75,000</option>
+                  <option value="80000">€80,000</option>
+                  <option value="85000">€85,000</option>
+                  <option value="90000">€90,000</option>
+                  <option value="95000">€95,000</option>
+                  <option value="100000">€100,000</option>
+                  <option value="110000">€110,000</option>
+                  <option value="120000">€120,000</option>
+                  <option value="130000">€130,000</option>
+                  <option value="140000">€140,000</option>
+                  <option value="150000">€150,000</option>
+                  <option value="200000">€200,000</option>
+                  <option value="250000">€250,000+</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Work Preferences -->
+          <div class="form-section">
+            <h2 class="section-title">Work Preferences</h2>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="availability" class="form-label">Availability *</label>
+                <select id="availability" class="form-select" required disabled>
+                  <option value="">Select availability</option>
+                  <option value="Immediately">Immediately</option>
+                  <option value="Within 2 weeks">Within 2 weeks</option>
+                  <option value="Within 1 month">Within 1 month</option>
+                  <option value="Within 2 months">Within 2 months</option>
+                  <option value="Within 3 months">Within 3 months</option>
+                  <option value="More than 3 months">More than 3 months</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="remoteWork" class="form-label">Remote Work *</label>
+                <select id="remoteWork" class="form-select" required disabled>
+                  <option value="">Select preference</option>
+                  <option value="Remote only">Remote only</option>
+                  <option value="Hybrid">Hybrid</option>
+                  <option value="On-site only">On-site only</option>
+                  <option value="No preference">No preference</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row single">
+              <div class="form-group">
+                <label for="relocation" class="form-label">Willing to Relocate *</label>
+                <select id="relocation" class="form-select" required disabled>
+                  <option value="">Select option</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                  <option value="Depends on opportunity">Depends on opportunity</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Professional Summary -->
+          <div class="form-section">
+            <h2 class="section-title">Professional Summary</h2>
+            
+            <div class="form-group">
+              <label for="summary" class="form-label">Summary *</label>
+              <textarea 
+                id="summary" 
+                class="form-textarea" 
+                placeholder="Write a brief summary about your professional background, skills, and career goals..."
+                required
+                readonly
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- Sectors & Software -->
+          <div class="form-section">
+            <h2 class="section-title">Sectors & Software</h2>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Sectors of Interest</label>
+                <div class="multi-select-container" id="sectorsContainer">
+                  <input 
+                    type="text" 
+                    id="sectorsInput" 
+                    class="multi-select-input" 
+                    placeholder="Type a sector and press Enter (e.g., Technology, Healthcare, Finance...)"
+                    onkeypress="handleKeyPress(event, 'selectedSectors', 'sectorsInput', 'sectorsContainer')"
+                    readonly
+                  />
+                  <div class="selected-items"></div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Software & Tools</label>
+                <div class="multi-select-container" id="softwareContainer">
+                  <input 
+                    type="text" 
+                    id="softwareInput" 
+                    class="multi-select-input" 
+                    placeholder="Type software/tools and press Enter (e.g., Excel, SAP, QuickBooks...)"
+                    onkeypress="handleKeyPress(event, 'selectedSoftware', 'softwareInput', 'softwareContainer')"
+                    readonly
+                  />
+                  <div class="selected-items"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CV Upload -->
+          <div class="form-section">
+            <h2 class="section-title">Upload CV</h2>
+            
+            <div class="form-group">
+              <label class="form-label">CV/Resume (Optional)</label>
+              <div class="file-upload-container" id="cvUploadContainer">
+                <div class="file-upload-icon">📄</div>
+                <div class="file-upload-text">Upload your CV</div>
+                <div class="file-upload-subtext">Drag and drop your CV here, or click to browse</div>
+                <button type="button" class="file-upload-btn" onclick="document.getElementById('cvInput').click()">
+                  Choose File
+                </button>
+              </div>
+              <input type="file" id="cvInput" class="file-input" accept=".pdf,.doc,.docx" onchange="handleCVUpload(event)" />
+            </div>
+          </div>
+
+          <button type="submit" id="submitButton" class="submit-button">
+            Save Profile
+          </button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-center">&copy; 2025 Talfy. All rights reserved.</div>
+    <div class="footer-right">
+      <a href="/privacy.html">Privacy</a>
+      <span style="color: rgba(255, 255, 255, 0.5);">·</span>
+      <a href="/terms.html">Terms</a>
+    </div>
+  </footer>
+
 </body>
 </html>

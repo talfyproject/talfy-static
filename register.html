@@ -666,145 +666,6 @@
         matchDiv.style.display = 'none';
       }
     }
-
-    function isPasswordValid() {
-      const password = document.getElementById('password').value;
-      return password.length >= 8 && 
-             /[A-Z]/.test(password) && 
-             /[0-9]/.test(password) && 
-             /[!@#$%^&*(),.?":{}|<>]/.test(password);
-    }
-
-    function showMessage(message, type = 'error') {
-      const errorMsg = document.getElementById('errorMessage');
-      const successMsg = document.getElementById('successMessage');
-      
-      if (type === 'error') {
-        errorMsg.textContent = message;
-        errorMsg.style.display = 'block';
-        successMsg.style.display = 'none';
-      } else {
-        successMsg.textContent = message;
-        successMsg.style.display = 'block';
-        errorMsg.style.display = 'none';
-      }
-      
-      setTimeout(() => {
-        errorMsg.style.display = 'none';
-        successMsg.style.display = 'none';
-      }, 5000);
-    }
-
-    async function handleRegister(event) {
-      event.preventDefault();
-
-      const userType = document.querySelector('input[name="userType"]:checked');
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const confirmPassword = document.getElementById('confirmPassword').value;
-      const terms = document.getElementById('terms').checked;
-      const registerButton = document.getElementById('registerButton');
-
-      if (!userType) return showMessage('Please select whether you are a candidate or company');
-      if (!email || !password || !confirmPassword) return showMessage('Please fill in all fields');
-      if (!email.includes('@')) return showMessage('Please enter a valid email address');
-      if (!isPasswordValid()) return showMessage('Password must meet all requirements');
-      if (password !== confirmPassword) return showMessage('Passwords do not match');
-      if (!terms) return showMessage('Please accept the Terms of Service and Privacy Policy');
-
-      registerButton.disabled = true;
-      registerButton.textContent = 'Creating Account...';
-
-      try {
-        const response = await fetch('/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password, userType: userType.value })
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-          showMessage('Account created successfully! Redirecting...', 'success');
-          setTimeout(() => {
-            if (data.userType === 'candidate') {
-              window.location.href = '/complete-profile-candidate.html';
-            } else {
-              window.location.href = '/complete-profile-company.html';
-            }
-          }, 1500);
-        } else {
-          showMessage(data.message || 'Registration failed');
-          registerButton.disabled = false;
-          registerButton.textContent = 'Create Account';
-        }
-      } catch (error) {
-        console.error(error);
-        showMessage('Server error, please try again later.');
-        registerButton.disabled = false;
-        registerButton.textContent = 'Create Account';
-      }
-    }
-
-    function createParticles() {
-      const container = document.querySelector('.bg-particles');
-      const particleCount = 50;
-
-      for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-  
-        const size = Math.random() * 4 + 2;
-        particle.style.width = size + 'px';
-        particle.style.height = size + 'px';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.top = Math.random() * 100 + '%';
-        particle.style.animationDelay = Math.random() * 6 + 's';
-        particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
-        
-        container.appendChild(particle);
-      }
-    }
-
-    function checkLoginStatus() {
-      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-      const userType = localStorage.getItem('userType');
-
-      if (isLoggedIn && userType) {
-        if (userType === 'candidate') {
-          window.location.href = '/candidate.html';
-        } else if (userType === 'company') {
-          window.location.href = '/company.html';
-        }
-        return;
-      }
-
-      const desktopNav = document.querySelector('.nav');
-      const mobileMenu = document.getElementById('mobileMenu');
-
-      desktopNav.innerHTML = `
-        <a href="/pricing.html">Pricing</a>
-        <a href="/about.html">About us</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/login.html">Login</a>
-        <a href="/register.html" class="nav-active">Register</a>
-      `;
-
-      mobileMenu.innerHTML = `
-        <a href="/pricing.html">Pricing</a>
-        <a href="/about.html">About us</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/login.html">Login</a>
-        <a href="/register.html">Register</a>
-        <a href="/privacy.html">Privacy</a>
-        <a href="/terms.html">Terms</a>
-      `;
-    }
-
-    window.onload = function() {
-      createParticles();
-      checkLoginStatus();
-    };
   </script>
 </head>
 <body>
@@ -847,7 +708,8 @@
         <div id="errorMessage" class="error-message"></div>
         <div id="successMessage" class="success-message"></div>
         
-        <form class="login-form" onsubmit="handleRegister(event)">
+        <!-- ✅ ID aggiunto -->
+        <form id="registerForm" class="login-form">
           <div class="form-group">
             <label class="form-label">I am a</label>
             <div class="user-type-selection">

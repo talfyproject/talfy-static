@@ -1282,15 +1282,14 @@ function showToast(message, type = 'success') {
   </div>
 
   <main class="main">
-    <div class="profile-content">
-      <div class="profile-hero">
-        <h1 class="profile-title">Candidate Profile</h1>
-        <div class="profile-underline"></div>
-        <p class="profile-subtitle">View and manage candidate information</p>
-        <button type="button" id="editButton" class="edit-button" onclick="toggleEditMode()">
-          ✏️ Edit Profile
-        </button>
-      </div>
+<div class="profile-content" style="text-align:center; color:white;">
+  <h1 class="profile-title" id="candidateName">Candidate Name</h1>
+  <img id="candidatePhoto" src="/default-avatar.png" alt="Profile Photo" style="width:150px;border-radius:50%;margin:1rem auto;">
+  
+  <p><strong>Job Role:</strong> <span id="jobRole">–</span></p>
+  <p><strong>Location:</strong> <span id="location">–</span></p>
+  <p><strong>Experience:</strong> <span id="experience">–</span></p>
+</div>
 
       <div class="profile-form-container">
         <div id="errorMessage" class="error-message"></div>

@@ -806,6 +806,44 @@
       grid-template-columns: 1fr;
     }
   }
+  .toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #047857;
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  font-size: 1rem;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.toast.error {
+  background: #dc2626;
+}
+
+.toast.success {
+  background: #047857;
+}
+
+#toastIcon {
+  font-size: 1.3rem;
+}
+
+
 </style>
 
 <script>
@@ -1008,20 +1046,23 @@ function toggleMenu() {
   document.getElementById('mobileMenu').classList.toggle('active');
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  checkLoginStatus();
-});
-let isEditMode = false;
-let selectedSectors = [];
-let selectedSoftware = [];
-
-// ✅ Check Login & Load Data
 document.addEventListener('DOMContentLoaded', async () => {
   checkLoginStatus();
   await loadUserProfile();
   createParticles();
   setupDragAndDrop();
+
+  const toastClose = document.getElementById('toastClose');
+  if (toastClose) {
+    toastClose.onclick = () => document.getElementById('toast').classList.remove('show');
+  }
+
+
 });
+let isEditMode = false;
+let selectedSectors = [];
+let selectedSoftware = [];
+
 
 // ✅ Load User Profile
 async function loadUserProfile() {
@@ -1127,24 +1168,56 @@ async function handleSubmit(e) {
     });
 
     const data = await res.json();
+
     if (data.success) {
-      showMessage('✅ Profile updated successfully!', 'success');
-      toggleEditMode(); // back to view mode
-    } else {
-      showMessage(data.error || 'Error updating profile');
-    }
+  showToast('✅ Profile updated successfully!', 'success');
+  toggleEditMode();
+} else {
+  showToast(data.error || 'Error updating profile', 'error');
+}
   } catch (err) {
     console.error(err);
     showMessage('Error saving profile');
   }
 }
+
+function showToast(message, type = 'success') {
+  const toast = document.getElementById('toast');
+  const toastMessage = document.getElementById('toastMessage');
+  const toastIcon = document.getElementById('toastIcon');
+
+  toastMessage.textContent = message;
+
+  if (type === 'success') {
+    toast.classList.remove('error');
+    toast.classList.add('success');
+    toastIcon.textContent = '✅';
+  } else {
+    toast.classList.remove('success');
+    toast.classList.add('error');
+    toastIcon.textContent = '❌';
+  }
+
+  toast.classList.add('show');
+
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3000);
+}
+
+
+
 </script>
 
 
 
 </head>
 <body>
-  <div class="bg-particles"></div>
+ <div id="toast" class="toast">
+  <span id="toastIcon">✅</span>
+  <span id="toastMessage"></span>
+  <button id="toastClose" style="background:none;border:none;color:white;font-size:1.2rem;cursor:pointer;">×</button>
+</div>
 
   <header class="header">
     <a href="/index.html" class="logo">talfy</a>

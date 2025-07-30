@@ -1007,7 +1007,139 @@ function logout() {
 function toggleMenu() {
   document.getElementById('mobileMenu').classList.toggle('active');
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  checkLoginStatus();
+});
+let isEditMode = false;
+let selectedSectors = [];
+let selectedSoftware = [];
+
+// ✅ Check Login & Load Data
+document.addEventListener('DOMContentLoaded', async () => {
+  checkLoginStatus();
+  await loadUserProfile();
+  createParticles();
+  setupDragAndDrop();
+});
+
+// ✅ Load User Profile
+async function loadUserProfile() {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    showMessage('You are not logged in. Redirecting...', 'error');
+    setTimeout(() => window.location.href = '/login.html', 2000);
+    return;
+  }
+
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const userId = payload.id;
+
+    const res = await fetch(`/api/user/${userId}`);
+    const data = await res.json();
+
+    if (data.success && data.user.profile) {
+      const profile = data.user.profile;
+
+      document.getElementById('firstName').value = profile.firstName || '';
+      document.getElementById('lastName').value = profile.lastName || '';
+      document.getElementById('email').value = data.user.email || '';
+      document.getElementById('phone').value = profile.phone || '';
+      document.getElementById('location').value = profile.location || '';
+
+      // Birthdate
+      if (profile.birthDate) {
+        const [day, month, year] = profile.birthDate.split('-');
+        document.getElementById('birthDay').value = day;
+        document.getElementById('birthMonth').value = month;
+        document.getElementById('birthYear').value = year;
+      }
+
+      // Avatar
+      if (profile.avatar) {
+        document.querySelector(`input[name="avatar"][value="${profile.avatar}"]`).checked = true;
+      }
+
+      // Languages
+      document.getElementById('nativeLanguage').value = profile.languages?.native || '';
+      document.getElementById('secondLanguage').value = profile.languages?.second?.lang || '';
+      document.getElementById('secondLanguageLevel').value = profile.languages?.second?.level || '';
+      document.getElementById('thirdLanguage').value = profile.languages?.third?.lang || '';
+      document.getElementById('thirdLanguageLevel').value = profile.languages?.third?.level || '';
+
+      // Other fields
+      document.getElementById('jobRole').value = profile.jobRole || '';
+      document.getElementById('experience').value = profile.experience || '';
+      document.getElementById('education').value = profile.education || '';
+      document.getElementById('salaryMin').value = profile.salaryRange?.min || '';
+      document.getElementById('salaryMax').value = profile.salaryRange?.max || '';
+      document.getElementById('availability').value = profile.availability || '';
+      document.getElementById('remoteWork').value = profile.remoteWork || '';
+      document.getElementById('relocation').value = profile.relocation || '';
+      document.getElementById('summary').value = profile.summary || '';
+
+      // Sectors & Software
+      selectedSectors = profile.sectors || [];
+      selectedSoftware = profile.software || [];
+      updateSelectedItems('selectedSectors', 'sectorsContainer');
+      updateSelectedItems('selectedSoftware', 'softwareContainer');
+
+      // Photo preview
+      if (profile.photo) {
+        document.getElementById('photoPreview').innerHTML = `<img src="${profile.photo}" alt="Profile Photo">`;
+      }
+
+      // CV preview
+      if (profile.cv) {
+        const container = document.getElementById('cvUploadContainer');
+        container.innerHTML = `
+          <div class="file-preview">
+            <div class="file-info">
+              <div class="file-name">${profile.cv.split('/').pop()}</div>
+            </div>
+            <a href="${profile.cv}" target="_blank" style="color:white;text-decoration:underline;">View CV</a>
+          </div>
+        `;
+      }
+    }
+  } catch (error) {
+    console.error('Error loading profile:', error);
+  }
+}
+
+// ✅ Handle Submit
+async function handleSubmit(e) {
+  e.preventDefault();
+
+  const token = localStorage.getItem('token');
+  if (!token) return showMessage('You must be logged in', 'error');
+
+  const formData = new FormData(document.getElementById('profileForm'));
+  formData.append('sectors', JSON.stringify(selectedSectors));
+  formData.append('software', JSON.stringify(selectedSoftware));
+
+  try {
+    const res = await fetch('/api/candidate-profile', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: formData
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      showMessage('✅ Profile updated successfully!', 'success');
+      toggleEditMode(); // back to view mode
+    } else {
+      showMessage(data.error || 'Error updating profile');
+    }
+  } catch (err) {
+    console.error(err);
+    showMessage('Error saving profile');
+  }
+}
 </script>
+
 
 
 </head>

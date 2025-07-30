@@ -1046,18 +1046,38 @@ function toggleMenu() {
   document.getElementById('mobileMenu').classList.toggle('active');
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
-  checkLoginStatus();
-  await loadUserProfile();
-  createParticles();
-  setupDragAndDrop();
+document.addEventListener("DOMContentLoaded", async () => {
+  const params = new URLSearchParams(window.location.search);
+  const userId = params.get("id");
 
-  const toastClose = document.getElementById('toastClose');
-  if (toastClose) {
-    toastClose.onclick = () => document.getElementById('toast').classList.remove('show');
+  if (!userId) {
+    document.body.innerHTML = "<h2 style='color:white;text-align:center;'>Invalid user ID</h2>";
+    return;
   }
 
+  try {
+    const res = await fetch(`/api/user/${userId}`);
+    const data = await res.json();
 
+    if (data.success && data.user.profile) {
+      const profile = data.user.profile;
+
+      document.querySelector(".profile-title").textContent = `${profile.firstName} ${profile.lastName}`;
+      document.querySelector("#jobRole").textContent = profile.jobRole || "Not specified";
+      document.querySelector("#location").textContent = profile.location || "Not specified";
+      document.querySelector("#experience").textContent = profile.experience || "Not specified";
+
+      if (profile.photo) {
+        document.querySelector("#candidatePhoto").src = profile.photo;
+      }
+
+    } else {
+      document.body.innerHTML = "<h2 style='color:white;text-align:center;'>Profile not found</h2>";
+    }
+  } catch (err) {
+    console.error("Error loading profile:", err);
+    document.body.innerHTML = "<h2 style='color:white;text-align:center;'>Error loading profile</h2>";
+  }
 });
 let isEditMode = false;
 let selectedSectors = [];

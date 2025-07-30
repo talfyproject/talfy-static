@@ -809,468 +809,232 @@
 </style>
 
 <script>
-  let selectedSectors = [];
-  let selectedSoftware = [];
-  let isEditMode = false;
-
-  function createParticles() {
-    const container = document.querySelector('.bg-particles');
-    const particleCount = 50;
-
-    for (let i = 0; i < particleCount; i++) {
-      const particle = document.createElement('div');
-      particle.className = 'particle';
-      
-      const size = Math.random() * 4 + 2;
-      const x = Math.random() * 100;
-      const y = Math.random() * 100;
-      const delay = Math.random() * 6;
-      
-      particle.style.width = size + 'px';
-      particle.style.height = size + 'px';
-      particle.style.left = x + '%';
-      particle.style.top = y + '%';
-      particle.style.animationDelay = delay + 's';
-      
-      container.appendChild(particle);
-    }
-  }
-
-  function updateProgress() {
-    const form = document.getElementById('profileForm');
-    const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
-    const radioGroups = {};
-    
-    let totalFields = 0;
-    let filledFields = 0;
-
-    inputs.forEach(input => {
-      if (input.type === 'radio') {
-        if (!radioGroups[input.name]) {
-          radioGroups[input.name] = false;
-          totalFields++;
-        }
-        if (input.checked) {
-          radioGroups[input.name] = true;
-        }
-      } else {
-        totalFields++;
-        if (input.value.trim() !== '') {
-          filledFields++;
-        }
-      }
-    });
-
-    Object.values(radioGroups).forEach(isChecked => {
-      if (isChecked) filledFields++;
-    });
-
-    const progress = Math.round((filledFields / totalFields) * 100);
-    document.querySelector('.progress-fill').style.width = progress + '%';
-    document.querySelector('.progress-text').textContent = progress + '% Complete';
-  }
-
-  function showMessage(message, type = 'error') {
-    const errorDiv = document.getElementById('errorMessage');
-    const successDiv = document.getElementById('successMessage');
-    
-    if (type === 'success') {
-      successDiv.textContent = message;
-      successDiv.style.display = 'block';
-      errorDiv.style.display = 'none';
-    } else {
-      errorDiv.textContent = message;
-      errorDiv.style.display = 'block';
-      successDiv.style.display = 'none';
-    }
-
-    setTimeout(() => {
-      errorDiv.style.display = 'none';
-      successDiv.style.display = 'none';
-    }, 5000);
-  }
-
-  function handleKeyPress(event, arrayName, inputId, containerId) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      const input = document.getElementById(inputId);
-      const value = input.value.trim();
-      
-      if (value && !window[arrayName].includes(value)) {
-        window[arrayName].push(value);
-        updateSelectedItems(arrayName, containerId);
-        input.value = '';
-      }
-    }
-  }
-
-  function updateSelectedItems(arrayName, containerId) {
-    const container = document.getElementById(containerId);
-    const selectedDiv = container.querySelector('.selected-items');
-    
-    selectedDiv.innerHTML = '';
-    window[arrayName].forEach((item, index) => {
-      const itemDiv = document.createElement('div');
-      itemDiv.className = 'selected-item';
-      itemDiv.innerHTML = `
-        ${item}
-        <button type="button" class="remove-item" onclick="removeItem('${arrayName}', ${index}, '${containerId}')">×</button>
-      `;
-      selectedDiv.appendChild(itemDiv);
-    });
-  }
-
-  function removeItem(arrayName, index, containerId) {
-    window[arrayName].splice(index, 1);
-    updateSelectedItems(arrayName, containerId);
-  }
-
-  function handlePhotoUpload(event) {
-    const file = event.target.files[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        showMessage('File size must be less than 5MB');
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const preview = document.getElementById('photoPreview');
-        preview.innerHTML = `<img src="${e.target.result}" alt="Profile Photo">`;
-        document.getElementById('photoRemoveBtn').style.display = 'inline-block';
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-
-  function removePhoto() {
-    document.getElementById('photoPreview').innerHTML = '<div class="photo-placeholder">📷</div>';
-    document.getElementById('photoInput').value = '';
-    document.getElementById('photoRemoveBtn').style.display = 'none';
-  }
-
-  function setupDragAndDrop() {
-    const uploadContainer = document.getElementById('cvUploadContainer');
-    
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-      uploadContainer.addEventListener(eventName, preventDefaults, false);
-    });
-
-    function preventDefaults(e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-
-    ['dragenter', 'dragover'].forEach(eventName => {
-      uploadContainer.addEventListener(eventName, highlight, false);
-    });
-
-    ['dragleave', 'drop'].forEach(eventName => {
-      uploadContainer.addEventListener(eventName, unhighlight, false);
-    });
-
-    function highlight(e) {
-      uploadContainer.classList.add('dragover');
-    }
-
-    function unhighlight(e) {
-      uploadContainer.classList.remove('dragover');
-    }
-
-    uploadContainer.addEventListener('drop', handleDrop, false);
-
-    function handleDrop(e) {
-      const dt = e.dataTransfer;
-      const files = dt.files;
-      handleCVUpload({ target: { files: files } });
-    }
-  }
-
-  function handleCVUpload(event) {
-    const file = event.target.files[0];
-    if (file) {
-      if (file.size > 10 * 1024 * 1024) {
-        showMessage('File size must be less than 10MB');
-        return;
-      }
-
-      const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-      if (!allowedTypes.includes(file.type)) {
-        showMessage('Please upload a PDF or Word document');
-        return;
-      }
-
-      const container = document.getElementById('cvUploadContainer');
-      container.innerHTML = `
-        <div class="file-preview">
-          <div class="file-info">
-            <div class="file-name">${file.name}</div>
-            <div class="file-size">${(file.size / 1024 / 1024).toFixed(2)} MB</div>
-          </div>
-          <button type="button" class="remove-file" onclick="removeCVFile()">Remove</button>
-        </div>
-      `;
-    }
-  }
-
-  function removeCVFile() {
-    document.getElementById('cvInput').value = '';
-    const container = document.getElementById('cvUploadContainer');
-    container.innerHTML = `
-      <div class="file-upload-icon">📄</div>
-      <div class="file-upload-text">Upload your CV</div>
-      <div class="file-upload-subtext">Drag and drop your CV here, or click to browse</div>
-      <button type="button" class="file-upload-btn" onclick="document.getElementById('cvInput').click()">
-        Choose File
-      </button>
-    `;
-  }
-
-  function toggleEditMode() {
-    isEditMode = !isEditMode;
-    const editButton = document.getElementById('editButton');
-    const submitButton = document.getElementById('submitButton');
-    const form = document.getElementById('profileForm');
-    const inputs = form.querySelectorAll('input, select, textarea');
-    
+function toggleEditMode() {
+  isEditMode = !isEditMode;
+  const inputs = document.querySelectorAll('.form-input, .form-select, .form-textarea');
+  inputs.forEach(el => {
     if (isEditMode) {
-      editButton.textContent = '❌ Cancel Edit';
-      editButton.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
-      submitButton.style.display = 'block';
-      
-      inputs.forEach(input => {
-        if (input.type !== 'file') {
-          input.removeAttribute('readonly');
-          input.removeAttribute('disabled');
-        }
-      });
+      el.removeAttribute('readonly');
+      el.removeAttribute('disabled');
     } else {
-      editButton.textContent = '✏️ Edit Profile';
-      editButton.style.background = 'linear-gradient(135deg, #10b981, #059669)';
-      submitButton.style.display = 'none';
-      
-      inputs.forEach(input => {
-        if (input.tagName === 'SELECT') {
-          input.setAttribute('disabled', 'true');
-        } else if (input.type !== 'file') {
-          input.setAttribute('readonly', 'true');
-        }
-      });
+      el.setAttribute('readonly', true);
+      el.setAttribute('disabled', true);
     }
+  });
+
+  document.getElementById('submitButton').style.display = isEditMode ? 'block' : 'none';
+  document.getElementById('editButton').textContent = isEditMode ? '✅ Save Mode' : '✏️ Edit Profile';
+}
+
+function showMessage(message, type = 'error') {
+  const errorBox = document.getElementById('errorMessage');
+  const successBox = document.getElementById('successMessage');
+
+  if (type === 'error') {
+    errorBox.style.display = 'block';
+    successBox.style.display = 'none';
+    errorBox.textContent = message;
+  } else {
+    successBox.style.display = 'block';
+    errorBox.style.display = 'none';
+    successBox.textContent = message;
   }
 
-  async function handleSubmit(event) {
-    event.preventDefault();
-    
-    if (!isEditMode) return;
-    
-    const submitButton = document.getElementById('submitButton');
-    submitButton.disabled = true;
-    submitButton.textContent = 'Saving...';
+  setTimeout(() => {
+    errorBox.style.display = 'none';
+    successBox.style.display = 'none';
+  }, 4000);
+}
 
-    const formData = new FormData();
-    const form = document.getElementById('profileForm');
-    const inputs = form.querySelectorAll('input, select, textarea');
+function updateProgress() {
+  const inputs = document.querySelectorAll('#profileForm input, #profileForm select, #profileForm textarea');
+  let filled = 0;
+  inputs.forEach(input => {
+    if (input.value.trim() !== '') filled++;
+  });
 
-    inputs.forEach(input => {
-      if (input.type === 'file') {
-        if (input.files[0]) {
-          formData.append(input.name || input.id, input.files[0]);
-        }
-      } else if (input.type === 'radio') {
-        if (input.checked) {
-          formData.append(input.name, input.value);
-        }
-      } else {
-        formData.append(input.name || input.id, input.value);
-      }
-    });
+  const progress = Math.round((filled / inputs.length) * 100);
+  document.querySelector('.progress-fill').style.width = progress + '%';
+  document.querySelector('.progress-text').textContent = `${progress}% Complete`;
+}
 
-    formData.append('sectors', JSON.stringify(selectedSectors));
-    formData.append('software', JSON.stringify(selectedSoftware));
+function handlePhotoUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
 
-    try {
-      const response = await fetch('/api/profile', {
-        method: 'POST',
-        body: formData
-      });
-
-      if (response.ok) {
-        showMessage('Profile updated successfully!', 'success');
-        toggleEditMode();
-      } else {
-        const errorText = await response.text();
-        showMessage('Error saving profile: ' + errorText);
-      }
-    } catch (error) {
-      showMessage('Network error: ' + error.message);
-    }
-
-    submitButton.disabled = false;
-    submitButton.textContent = 'Save Profile';
-  }
-
-  function toggleOtherJobRole() {
-    const jobRole = document.getElementById('jobRole').value;
-    const otherGroup = document.getElementById('otherJobRoleGroup');
-    const otherInput = document.getElementById('otherJobRole');
-
-    if (jobRole === 'Other') {
-      otherGroup.style.display = 'block';
-      otherInput.required = true;
-    } else {
-      otherGroup.style.display = 'none';
-      otherInput.required = false;
-      otherInput.value = '';
-    }
-    updateProgress();
-  }
-
-  function populateForm() {
-    // Sample data - in real app this would come from API
-    const sampleData = {
-      firstName: 'Marco',
-      lastName: 'Rossi',
-      email: 'marco.rossi@email.com',
-      phone: '+39 123 456 7890',
-      location: 'Milano, Italy',
-      birthDay: '15',
-      birthMonth: 'March',
-      birthYear: '1990',
-      avatar: 'professional',
-      jobRole: 'Financial Analyst',
-      experience: 'Senior Level (5-10 years)',
-      education: "Master's Degree",
-      nativeLanguage: 'Italian',
-      secondLanguage: 'English',
-      secondLanguageLevel: 'Advanced',
-      thirdLanguage: 'Spanish',
-      thirdLanguageLevel: 'Intermediate',
-      salaryMin: '60000',
-      salaryMax: '80000',
-      availability: 'Within 1 month',
-      remoteWork: 'Hybrid',
-      relocation: 'Depends on opportunity',
-      summary: 'Experienced Financial Analyst with 7+ years in corporate finance, specializing in financial modeling, budgeting, and strategic planning. Strong analytical skills with expertise in Excel, SAP, and financial reporting systems.'
-    };
-
-    // Populate form fields
-    Object.keys(sampleData).forEach(key => {
-      const element = document.getElementById(key);
-      if (element) {
-        if (element.type === 'radio') {
-          const radio = document.querySelector(`input[name="${key}"][value="${sampleData[key]}"]`);
-          if (radio) radio.checked = true;
-        } else {
-          element.value = sampleData[key];
-        }
-      }
-    });
-
-    // Sample sectors and software
-    selectedSectors = ['Finance', 'Technology', 'Healthcare'];
-    selectedSoftware = ['Excel', 'SAP', 'QuickBooks', 'Power BI'];
-    
-    updateSelectedItems('selectedSectors', 'sectorsContainer');
-    updateSelectedItems('selectedSoftware', 'softwareContainer');
-
-    // Set all fields to readonly initially
-    toggleEditMode();
-    toggleEditMode(); // This will set to view mode
-  }
-
-  function toggleMenu() {
-    document.getElementById("mobileMenu").classList.toggle("active");
-  }
-
-  function checkLoginStatus() {
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    const userName = localStorage.getItem('userName') || 'User';
-
-    const desktopNav = document.getElementById('desktopNav');
-    const mobileMenu = document.getElementById('mobileMenu');
-
-    if (isLoggedIn) {
-      desktopNav.innerHTML = `
-        <a href="/dashboard.html">Dashboard</a>
-        <a href="/profile.html">Profile</a>
-        <a href="/messages.html">Messages</a>
-        <a href="#" onclick="logout()" style="color: #ef4444;">Logout (${userName})</a>
-      `;
-
-      mobileMenu.innerHTML = `
-        <a href="/dashboard.html">Dashboard</a>
-        <a href="/profile.html">Profile</a>
-        <a href="/messages.html">Messages</a>
-        <a href="/settings.html">Settings</a>
-        <a href="#" onclick="logout()" style="color: #ef4444;">Logout (${userName})</a>
-      `;
-    } else {
-      desktopNav.innerHTML = `
-        <a href="/pricing.html">Pricing</a>
-        <a href="/about.html">About us</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/login.html">Login</a>
-        <a href="/register.html">Register</a>
-      `;
-
-      mobileMenu.innerHTML = `
-        <a href="/pricing.html">Pricing</a>
-        <a href="/about.html">About us</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/login.html">Login</a>
-        <a href="/register.html">Register</a>
-        <a href="/privacy.html">Privacy</a>
-        <a href="/terms.html">Terms</a>
-      `;
-    }
-  }
-
-  function logout() {
-    localStorage.clear();
-    window.location.href = '/index.html';
-  }
-
-  window.onload = function() {
-    createParticles();
-    checkLoginStatus();
-    populateForm();
-    setupDragAndDrop();
-
-    const form = document.getElementById('profileForm');
-    const inputs = form.querySelectorAll('input, select, textarea');
-    inputs.forEach(input => {
-      input.addEventListener('input', updateProgress);
-      input.addEventListener('change', updateProgress);
-    });
-
-    updateProgress();
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('photoPreview').innerHTML = `<img src="${e.target.result}" alt="Profile Photo">`;
+    document.getElementById('photoRemoveBtn').style.display = 'block';
   };
+  reader.readAsDataURL(file);
+}
+
+function removePhoto() {
+  document.getElementById('photoPreview').innerHTML = `<div class="photo-placeholder">📷</div>`;
+  document.getElementById('photoRemoveBtn').style.display = 'none';
+  document.getElementById('photoInput').value = '';
+}
+
+function handleCVUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const container = document.getElementById('cvUploadContainer');
+  container.innerHTML = `
+    <div class="file-preview">
+      <div class="file-info">
+        <div class="file-name">${file.name}</div>
+        <div class="file-size">${(file.size / 1024).toFixed(2)} KB</div>
+      </div>
+      <button type="button" class="remove-file" onclick="removeCV()">Remove</button>
+    </div>
+  `;
+}
+
+function removeCV() {
+  const container = document.getElementById('cvUploadContainer');
+  container.innerHTML = `
+    <div class="file-upload-icon">📄</div>
+    <div class="file-upload-text">Upload your CV</div>
+    <div class="file-upload-subtext">Drag and drop your CV here, or click to browse</div>
+    <button type="button" class="file-upload-btn" onclick="document.getElementById('cvInput').click()">
+      Choose File
+    </button>
+  `;
+  document.getElementById('cvInput').value = '';
+}
+
+function handleKeyPress(event, arrayName, inputId, containerId) {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    const value = document.getElementById(inputId).value.trim();
+    if (value) {
+      if (arrayName === 'selectedSectors') selectedSectors.push(value);
+      if (arrayName === 'selectedSoftware') selectedSoftware.push(value);
+      updateSelectedItems(arrayName, containerId);
+      document.getElementById(inputId).value = '';
+    }
+  }
+}
+
+function updateSelectedItems(arrayName, containerId) {
+  const container = document.querySelector(`#${containerId} .selected-items`);
+  container.innerHTML = '';
+  const arr = arrayName === 'selectedSectors' ? selectedSectors : selectedSoftware;
+
+  arr.forEach((item, index) => {
+    const span = document.createElement('div');
+    span.classList.add('selected-item');
+    span.innerHTML = `${item} <button class="remove-item" onclick="removeItem('${arrayName}', ${index}, '${containerId}')">×</button>`;
+    container.appendChild(span);
+  });
+}
+
+function removeItem(arrayName, index, containerId) {
+  if (arrayName === 'selectedSectors') selectedSectors.splice(index, 1);
+  if (arrayName === 'selectedSoftware') selectedSoftware.splice(index, 1);
+  updateSelectedItems(arrayName, containerId);
+}
+
+function setupDragAndDrop() {
+  const dropArea = document.getElementById('cvUploadContainer');
+  const fileInput = document.getElementById('cvInput');
+
+  dropArea.addEventListener('dragover', e => {
+    e.preventDefault();
+    dropArea.classList.add('dragover');
+  });
+
+  dropArea.addEventListener('dragleave', e => {
+    e.preventDefault();
+    dropArea.classList.remove('dragover');
+  });
+
+  dropArea.addEventListener('drop', e => {
+    e.preventDefault();
+    dropArea.classList.remove('dragover');
+    fileInput.files = e.dataTransfer.files;
+    handleCVUpload({ target: fileInput });
+  });
+}
+
+function createParticles() {
+  const container = document.querySelector('.bg-particles');
+  for (let i = 0; i < 20; i++) {
+    const particle = document.createElement('div');
+    particle.classList.add('particle');
+    const size = Math.random() * 10 + 5;
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+    particle.style.top = `${Math.random() * 100}%`;
+    particle.style.left = `${Math.random() * 100}%`;
+    particle.style.animationDuration = `${Math.random() * 5 + 3}s`;
+    container.appendChild(particle);
+  }
+}
+function checkLoginStatus() {
+  const token = localStorage.getItem('token');
+
+  const desktopNav = document.getElementById('desktopNav');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  // Rimuovo Login/Register esistenti
+  desktopNav.querySelectorAll('.auth-link').forEach(el => el.remove());
+  mobileMenu.querySelectorAll('.auth-link').forEach(el => el.remove());
+
+  // Aggiungo il link corretto
+  const authLink = document.createElement('a');
+  authLink.classList.add('auth-link');
+
+  if (token) {
+    authLink.href = '#';
+    authLink.textContent = 'Logout';
+    authLink.onclick = () => { logout(); };
+  } else {
+    authLink.href = '/login.html';
+    authLink.textContent = 'Login';
+  }
+
+  desktopNav.appendChild(authLink);
+  mobileMenu.appendChild(authLink.cloneNode(true));
+}
+
+function logout() {
+  localStorage.removeItem('token');
+  window.location.href = '/index.html';
+}
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('active');
+}
 </script>
+
+
 </head>
 <body>
   <div class="bg-particles"></div>
 
   <header class="header">
     <a href="/index.html" class="logo">talfy</a>
-    <div class="header-center">
-      <div class="progress-indicator">
-        <span class="progress-text">100% Complete</span>
-        <div class="progress-bar">
-          <div class="progress-fill" style="width: 100%;"></div>
-        </div>
-      </div>
-    </div>
     <nav class="nav" id="desktopNav">
-      <!-- Navigation will be populated by JavaScript -->
-    </nav>
+  <a href="/pricing.html">Pricing</a>
+  <a href="/about.html" class="nav-active">About us</a>
+  <a href="/contact.html">Contact</a>
+  <a href="/register.html" class="auth-link">Register</a>
+</nav>
     <button class="hamburger" onclick="toggleMenu()">
       <span></span>
       <span></span>
       <span></span>
     </button>
     <div class="mobile-menu" id="mobileMenu">
-      <!-- Mobile menu will be populated by JavaScript -->
+      <a href="/pricing.html">Pricing</a>
+      <a href="/about.html">About us</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/login.html">Login</a>
+      <a href="/register.html">Register</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
     </div>
   </header>
 

@@ -1070,10 +1070,11 @@
       });
 
       if (response.ok) {
-        showMessage('Profile completed successfully! Redirecting...', 'success');
-        setTimeout(() => {
-          window.location.href = '/dashboard.html';
-        }, 1500);
+  showMessage('Profile completed successfully! Redirecting...', 'success');
+  const userId = localStorage.getItem('userId');
+  setTimeout(() => {
+    window.location.href = `/candidate.html?id=${userId}`;
+  }, 1500);
       } else {
         const errorText = await response.text();
         showMessage('Error saving profile: ' + errorText);

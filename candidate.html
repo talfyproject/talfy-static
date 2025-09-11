@@ -847,6 +847,12 @@
 </style>
 
 <script>
+/** Imposta qui l'origin del backend se NON è lo stesso della pagina.
+ *  Se il backend è servito da www.talfy.eu, lascialo così.
+ *  Esempio per backend separato: const API_BASE = 'https://api.talfy.eu';
+ */
+const API_BASE = window.location.origin;
+
 function toggleEditMode() {
   isEditMode = !isEditMode;
   const inputs = document.querySelectorAll('.form-input, .form-select, .form-textarea');
@@ -862,6 +868,21 @@ function toggleEditMode() {
 
   document.getElementById('submitButton').style.display = isEditMode ? 'block' : 'none';
   document.getElementById('editButton').textContent = isEditMode ? '✅ Save Mode' : '✏️ Edit Profile';
+}
+
+function toggleOtherJobRole() {
+  const sel = document.getElementById('jobRole');
+  const group = document.getElementById('otherJobRoleGroup');
+  if (sel.value === 'Other') {
+    group.style.display = 'block';
+    document.getElementById('otherJobRole').removeAttribute('readonly');
+    document.getElementById('otherJobRole').setAttribute('required', true);
+  } else {
+    group.style.display = 'none';
+    document.getElementById('otherJobRole').value = '';
+    document.getElementById('otherJobRole').setAttribute('readonly', true);
+    document.getElementById('otherJobRole').removeAttribute('required');
+  }
 }
 
 function showMessage(message, type = 'error') {
@@ -1050,19 +1071,28 @@ document.addEventListener("DOMContentLoaded", async () => {
   const params = new URLSearchParams(window.location.search);
   const userId = params.get("id");
 
+  checkLoginStatus();
+  createParticles();
+  setupDragAndDrop();
+
   if (!userId) {
     document.body.innerHTML = "<h2 style='color:white;text-align:center;'>Invalid user ID</h2>";
     return;
   }
 
   try {
-    const res = await fetch(`/api/user/${userId}`);
+    const res = await fetch(`${API_BASE}/api/user/${userId}`);
+    if (!res.ok) {
+      const txt = await res.text();
+      throw new Error(`GET /api/user/${userId} -> ${res.status}. Body: ${txt.slice(0,120)}...`);
+    }
     const data = await res.json();
 
     if (data.success && data.user.profile) {
       const profile = data.user.profile;
 
-      document.querySelector(".profile-title").textContent = `${profile.firstName} ${profile.lastName}`;
+      document.querySelector(".profile-title").textContent =
+        `${profile.firstName || ''} ${profile.lastName || ''}`.trim() || 'Candidate';
       document.querySelector("#jobRole").textContent = profile.jobRole || "Not specified";
       document.querySelector("#location").textContent = profile.location || "Not specified";
       document.querySelector("#experience").textContent = profile.experience || "Not specified";
@@ -1078,26 +1108,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Error loading profile:", err);
     document.body.innerHTML = "<h2 style='color:white;text-align:center;'>Error loading profile</h2>";
   }
+
+  // Carica nel form i dati dell'utente loggato (se presente)
+  loadUserProfile();
 });
 let isEditMode = false;
 let selectedSectors = [];
 let selectedSoftware = [];
 
 
-// ✅ Load User Profile
+// ✅ Load User Profile (per l'utente loggato)
 async function loadUserProfile() {
   const token = localStorage.getItem('token');
   if (!token) {
-    showMessage('You are not logged in. Redirecting...', 'error');
-    setTimeout(() => window.location.href = '/login.html', 2000);
-    return;
+    return; // visualizzazione pubblica senza redirect
   }
 
   try {
     const payload = JSON.parse(atob(token.split('.')[1]));
     const userId = payload.id;
 
-    const res = await fetch(`/api/user/${userId}`);
+    const res = await fetch(`${API_BASE}/api/user/${userId}`);
     const data = await res.json();
 
     if (data.success && data.user.profile) {
@@ -1119,7 +1150,8 @@ async function loadUserProfile() {
 
       // Avatar
       if (profile.avatar) {
-        document.querySelector(`input[name="avatar"][value="${profile.avatar}"]`).checked = true;
+        const avatarRadio = document.querySelector(`input[name="avatar"][value="${profile.avatar}"]`);
+        if (avatarRadio) avatarRadio.checked = true;
       }
 
       // Languages
@@ -1176,12 +1208,13 @@ async function handleSubmit(e) {
   const token = localStorage.getItem('token');
   if (!token) return showMessage('You must be logged in', 'error');
 
-  const formData = new FormData(document.getElementById('profileForm'));
+  const formElement = document.getElementById('profileForm');
+  const formData = new FormData(formElement);
   formData.append('sectors', JSON.stringify(selectedSectors));
   formData.append('software', JSON.stringify(selectedSoftware));
 
   try {
-    const res = await fetch('/api/candidate-profile', {
+    const res = await fetch(`${API_BASE}/api/candidate-profile`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
       body: formData
@@ -1190,11 +1223,11 @@ async function handleSubmit(e) {
     const data = await res.json();
 
     if (data.success) {
-  showToast('✅ Profile updated successfully!', 'success');
-  toggleEditMode();
-} else {
-  showToast(data.error || 'Error updating profile', 'error');
-}
+      showToast('✅ Profile updated successfully!', 'success');
+      toggleEditMode();
+    } else {
+      showToast(data.error || 'Error updating profile', 'error');
+    }
   } catch (err) {
     console.error(err);
     showMessage('Error saving profile');
@@ -1224,13 +1257,7 @@ function showToast(message, type = 'success') {
     toast.classList.remove('show');
   }, 3000);
 }
-
-
-
 </script>
-
-
-
 </head>
 <body>
  <div id="toast" class="toast">
@@ -1294,8 +1321,12 @@ function showToast(message, type = 'success') {
       <div class="profile-form-container">
         <div id="errorMessage" class="error-message"></div>
         <div id="successMessage" class="success-message"></div>
+
+        <div style="text-align:right; margin-bottom:1rem;">
+          <button id="editButton" class="edit-button" type="button" onclick="toggleEditMode()">✏️ Edit Profile</button>
+        </div>
         
-        <form class="profile-form" id="profileForm" onsubmit="handleSubmit(event)">
+        <form class="profile-form" id="profileForm" onsubmit="handleSubmit(event)" enctype="multipart/form-data">
           <!-- Personal Information -->
           <div class="form-section">
             <h2 class="section-title">Personal Information</h2>
@@ -1303,36 +1334,36 @@ function showToast(message, type = 'success') {
             <div class="form-row">
               <div class="form-group">
                 <label for="firstName" class="form-label">First Name *</label>
-                <input type="text" id="firstName" class="form-input" placeholder="Enter your first name" required readonly />
+                <input name="firstName" type="text" id="firstName" class="form-input" placeholder="Enter your first name" required readonly />
               </div>
               <div class="form-group">
                 <label for="lastName" class="form-label">Last Name *</label>
-                <input type="text" id="lastName" class="form-input" placeholder="Enter your last name" required readonly />
+                <input name="lastName" type="text" id="lastName" class="form-input" placeholder="Enter your last name" required readonly />
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group">
                 <label for="email" class="form-label">Email Address *</label>
-                <input type="email" id="email" class="form-input" placeholder="Enter your email" required readonly />
+                <input name="email" type="email" id="email" class="form-input" placeholder="Enter your email" required readonly />
               </div>
               <div class="form-group">
                 <label for="phone" class="form-label">Phone Number *</label>
-                <input type="tel" id="phone" class="form-input" placeholder="Enter your phone number" required readonly />
+                <input name="phone" type="tel" id="phone" class="form-input" placeholder="Enter your phone number" required readonly />
               </div>
             </div>
 
             <div class="form-row single">
               <div class="form-group">
                 <label for="location" class="form-label">Location *</label>
-                <input type="text" id="location" class="form-input" placeholder="City, Country" required readonly />
+                <input name="location" type="text" id="location" class="form-input" placeholder="City, Country" required readonly />
               </div>
             </div>
 
             <div class="form-group">
               <label class="form-label">Date of Birth *</label>
               <div class="birth-date-group">
-                <select id="birthDay" class="form-select" required disabled>
+                <select name="birthDay" id="birthDay" class="form-select" required disabled>
                   <option value="">Day</option>
                   <script>
                     for (let i = 1; i <= 31; i++) {
@@ -1340,7 +1371,7 @@ function showToast(message, type = 'success') {
                     }
                   </script>
                 </select>
-                <select id="birthMonth" class="form-select" required disabled>
+                <select name="birthMonth" id="birthMonth" class="form-select" required disabled>
                   <option value="">Month</option>
                   <option value="January">January</option>
                   <option value="February">February</option>
@@ -1355,7 +1386,7 @@ function showToast(message, type = 'success') {
                   <option value="November">November</option>
                   <option value="December">December</option>
                 </select>
-                <select id="birthYear" class="form-select" required disabled>
+                <select name="birthYear" id="birthYear" class="form-select" required disabled>
                   <option value="">Year</option>
                   <script>
                     const currentYear = new Date().getFullYear();
@@ -1376,28 +1407,28 @@ function showToast(message, type = 'success') {
               <label class="form-label">Choose Avatar *</label>
               <div class="avatar-selection">
                 <label class="avatar-option">
-                  <input type="radio" name="avatar" value="male" required />
+                  <input name="avatar" type="radio" name="avatar" value="male" required />
                   <div class="avatar-card">
                     <div class="avatar-icon">👨</div>
                     <div class="avatar-label">Male</div>
                   </div>
                 </label>
                 <label class="avatar-option">
-                  <input type="radio" name="avatar" value="female" required />
+                  <input name="avatar" type="radio" name="avatar" value="female" required />
                   <div class="avatar-card">
                     <div class="avatar-icon">👩</div>
                     <div class="avatar-label">Female</div>
                   </div>
                 </label>
                 <label class="avatar-option">
-                  <input type="radio" name="avatar" value="professional" required />
+                  <input name="avatar" type="radio" name="avatar" value="professional" required />
                   <div class="avatar-card">
                     <div class="avatar-icon">👔</div>
                     <div class="avatar-label">Professional</div>
                   </div>
                 </label>
                 <label class="avatar-option">
-                  <input type="radio" name="avatar" value="neutral" required />
+                  <input name="avatar" type="radio" name="avatar" value="neutral" required />
                   <div class="avatar-card">
                     <div class="avatar-icon">😊</div>
                     <div class="avatar-label">Neutral</div>
@@ -1418,7 +1449,7 @@ function showToast(message, type = 'success') {
                 <button type="button" class="photo-remove-btn" id="photoRemoveBtn" onclick="removePhoto()" style="display: none;">
                   Remove Photo
                 </button>
-                <input type="file" id="photoInput" class="photo-input" accept="image/*" onchange="handlePhotoUpload(event)" />
+                <input name="photo" type="file" id="photoInput" class="photo-input" accept="image/*" onchange="handlePhotoUpload(event)" />
               </div>
             </div>
           </div>
@@ -1430,7 +1461,7 @@ function showToast(message, type = 'success') {
             <div class="form-row">
               <div class="form-group">
                 <label for="jobRole" class="form-label">Job Role *</label>
-                <select id="jobRole" class="form-select" required onchange="toggleOtherJobRole()" disabled>
+                <select name="jobRole" id="jobRole" class="form-select" required onchange="toggleOtherJobRole()" disabled>
                   <option value="">Select your role</option>
                   <option value="CFO">CFO (Chief Financial Officer)</option>
                   <option value="Controller">Controller</option>
@@ -1449,11 +1480,11 @@ function showToast(message, type = 'success') {
               </div>
               <div class="form-group" id="otherJobRoleGroup" style="display: none;">
                 <label for="otherJobRole" class="form-label">Please specify your role *</label>
-                <input type="text" id="otherJobRole" class="form-input" placeholder="Enter your specific job role" readonly />
+                <input name="otherJobRole" type="text" id="otherJobRole" class="form-input" placeholder="Enter your specific job role" readonly />
               </div>
               <div class="form-group">
                 <label for="experience" class="form-label">Experience Level *</label>
-                <select id="experience" class="form-select" required disabled>
+                <select name="experience" id="experience" class="form-select" required disabled>
                   <option value="">Select experience</option>
                   <option value="Entry Level (0-2 years)">Entry Level (0-2 years)</option>
                   <option value="Mid Level (2-5 years)">Mid Level (2-5 years)</option>
@@ -1466,7 +1497,7 @@ function showToast(message, type = 'success') {
             <div class="form-row single">
               <div class="form-group">
                 <label for="education" class="form-label">Education *</label>
-                <select id="education" class="form-select" required disabled>
+                <select name="education" id="education" class="form-select" required disabled>
                   <option value="">Select education level</option>
                   <option value="High School">High School</option>
                   <option value="Associate Degree">Associate Degree</option>
@@ -1487,7 +1518,7 @@ function showToast(message, type = 'success') {
             <div class="form-row single">
               <div class="form-group">
                 <label for="nativeLanguage" class="form-label">Native Language *</label>
-                <select id="nativeLanguage" class="form-select" required disabled>
+                <select name="nativeLanguage" id="nativeLanguage" class="form-select" required disabled>
                   <option value="">Select your native language</option>
                   <option value="English">English</option>
                   <option value="Spanish">Spanish</option>
@@ -1509,7 +1540,7 @@ function showToast(message, type = 'success') {
             <div class="form-group">
               <label class="form-label">Second Language</label>
               <div class="language-group">
-                <select id="secondLanguage" class="form-select" disabled>
+                <select name="secondLanguage" id="secondLanguage" class="form-select" disabled>
                   <option value="">Select second language</option>
                   <option value="English">English</option>
                   <option value="Spanish">Spanish</option>
@@ -1525,7 +1556,7 @@ function showToast(message, type = 'success') {
                   <option value="Hindi">Hindi</option>
                   <option value="Other">Other</option>
                 </select>
-                <select id="secondLanguageLevel" class="form-select" disabled>
+                <select name="secondLanguageLevel" id="secondLanguageLevel" class="form-select" disabled>
                   <option value="">Level</option>
                   <option value="Beginner">Beginner</option>
                   <option value="Intermediate">Intermediate</option>
@@ -1538,7 +1569,7 @@ function showToast(message, type = 'success') {
             <div class="form-group">
               <label class="form-label">Third Language</label>
               <div class="language-group">
-                <select id="thirdLanguage" class="form-select" disabled>
+                <select name="thirdLanguage" id="thirdLanguage" class="form-select" disabled>
                   <option value="">Select third language</option>
                   <option value="English">English</option>
                   <option value="Spanish">Spanish</option>
@@ -1554,7 +1585,7 @@ function showToast(message, type = 'success') {
                   <option value="Hindi">Hindi</option>
                   <option value="Other">Other</option>
                 </select>
-                <select id="thirdLanguageLevel" class="form-select" disabled>
+                <select name="thirdLanguageLevel" id="thirdLanguageLevel" class="form-select" disabled>
                   <option value="">Level</option>
                   <option value="Beginner">Beginner</option>
                   <option value="Intermediate">Intermediate</option>
@@ -1572,7 +1603,7 @@ function showToast(message, type = 'success') {
             <div class="form-row">
               <div class="form-group">
                 <label for="salaryMin" class="form-label">Minimum Salary (€) *</label>
-                <select id="salaryMin" class="form-select" required disabled>
+                <select name="salaryMin" id="salaryMin" class="form-select" required disabled>
                   <option value="">Select minimum</option>
                   <option value="30000">€30,000</option>
                   <option value="35000">€35,000</option>
@@ -1598,7 +1629,7 @@ function showToast(message, type = 'success') {
               </div>
               <div class="form-group">
                 <label for="salaryMax" class="form-label">Maximum Salary (€) *</label>
-                <select id="salaryMax" class="form-select" required disabled>
+                <select name="salaryMax" id="salaryMax" class="form-select" required disabled>
                   <option value="">Select maximum</option>
                   <option value="40000">€40,000</option>
                   <option value="45000">€45,000</option>
@@ -1632,7 +1663,7 @@ function showToast(message, type = 'success') {
             <div class="form-row">
               <div class="form-group">
                 <label for="availability" class="form-label">Availability *</label>
-                <select id="availability" class="form-select" required disabled>
+                <select name="availability" id="availability" class="form-select" required disabled>
                   <option value="">Select availability</option>
                   <option value="Immediately">Immediately</option>
                   <option value="Within 2 weeks">Within 2 weeks</option>
@@ -1644,7 +1675,7 @@ function showToast(message, type = 'success') {
               </div>
               <div class="form-group">
                 <label for="remoteWork" class="form-label">Remote Work *</label>
-                <select id="remoteWork" class="form-select" required disabled>
+                <select name="remoteWork" id="remoteWork" class="form-select" required disabled>
                   <option value="">Select preference</option>
                   <option value="Remote only">Remote only</option>
                   <option value="Hybrid">Hybrid</option>
@@ -1657,7 +1688,7 @@ function showToast(message, type = 'success') {
             <div class="form-row single">
               <div class="form-group">
                 <label for="relocation" class="form-label">Willing to Relocate *</label>
-                <select id="relocation" class="form-select" required disabled>
+                <select name="relocation" id="relocation" class="form-select" required disabled>
                   <option value="">Select option</option>
                   <option value="Yes">Yes</option>
                   <option value="No">No</option>
@@ -1674,6 +1705,7 @@ function showToast(message, type = 'success') {
             <div class="form-group">
               <label for="summary" class="form-label">Summary *</label>
               <textarea 
+                name="summary"
                 id="summary" 
                 class="form-textarea" 
                 placeholder="Write a brief summary about your professional background, skills, and career goals..."
@@ -1733,7 +1765,7 @@ function showToast(message, type = 'success') {
                   Choose File
                 </button>
               </div>
-              <input type="file" id="cvInput" class="file-input" accept=".pdf,.doc,.docx" onchange="handleCVUpload(event)" />
+              <input name="cv" type="file" id="cvInput" class="file-input" accept=".pdf,.doc,.docx" onchange="handleCVUpload(event)" />
             </div>
           </div>
 
@@ -1756,3 +1788,5 @@ function showToast(message, type = 'success') {
 
 </body>
 </html>
+
+

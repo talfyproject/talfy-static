@@ -202,8 +202,8 @@
   }
 
   .profile-content {
-    max-width: 800px;
-    margin: 0 auto;
+    max-width: 1000px;
+    margin: 0 auto 1.5rem auto;
   }
 
   .profile-hero {
@@ -303,6 +303,55 @@
     gap: 2rem;
   }
 
+  /* ====== RIEPILOGO “SNELLO” ====== */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 1.5rem;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .summary-photo {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.08);
+  }
+  .summary-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .summary-cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 1rem;
+  }
+
+  .summary-card {
+    padding: 1rem 1.25rem;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.18);
+    color: white;
+  }
+  .summary-card h4 {
+    font-size: 0.8rem;
+    letter-spacing: .02em;
+    opacity: .85;
+    margin-bottom: .25rem;
+    font-weight: 600;
+  }
+  .summary-card p {
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+
+  /* ====== QUICK EDIT (pochi campi) ====== */
   .form-section {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 12px;
@@ -733,117 +782,87 @@
     border-color: rgba(255, 255, 255, 0.1);
   }
 
+  /* ====== COLLASSABILI ====== */
+  details {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  details > summary {
+    cursor: pointer;
+    list-style: none;
+    padding: 1.1rem 1.25rem;
+    color: white;
+    font-weight: 600;
+    position: relative;
+    user-select: none;
+  }
+  details > summary::marker { display:none; }
+  details[open] > summary {
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.04);
+  }
+  .details-body {
+    padding: 1.25rem;
+  }
+
   /* Responsive Design */
+  @media (max-width: 900px) {
+    .summary-grid { grid-template-columns: 1fr; text-align: center; }
+    .summary-cards { grid-template-columns: 1fr; }
+    .summary-photo { margin: 0 auto; }
+  }
+
   @media (max-width: 768px) {
     .header {
       padding: 1rem;
     }
-
-    .nav {
-      display: none;
-    }
-
-    .hamburger {
-      display: flex;
-    }
-
-    .header-center {
-      margin: 0 1rem;
-    }
-
-    .progress-indicator {
-      min-width: 150px;
-    }
-
-    .progress-bar {
-      width: 150px;
-    }
-
-    .main {
-      padding: 1rem;
-    }
-
-    .profile-title {
-      font-size: 2rem;
-    }
-
-    .profile-form-container {
-      padding: 1.5rem;
-    }
-
-    .form-row {
-      grid-template-columns: 1fr;
-    }
-
-    .birth-date-group {
-      grid-template-columns: 1fr;
-    }
-
-    .avatar-selection {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .language-group {
-      grid-template-columns: 1fr;
-    }
-
-    .footer {
-      flex-direction: column;
-      text-align: center;
-    }
-
-    .footer-right {
-      justify-content: center;
-    }
+    .nav { display: none; }
+    .hamburger { display: flex; }
+    .header-center { margin: 0 1rem; }
+    .progress-indicator { min-width: 150px; }
+    .progress-bar { width: 150px; }
+    .main { padding: 1rem; }
+    .profile-title { font-size: 2rem; }
+    .profile-form-container { padding: 1.5rem; }
+    .form-row { grid-template-columns: 1fr; }
+    .birth-date-group { grid-template-columns: 1fr; }
+    .avatar-selection { grid-template-columns: repeat(2, 1fr); }
+    .language-group { grid-template-columns: 1fr; }
+    .footer { flex-direction: column; text-align: center; }
+    .footer-right { justify-content: center; }
   }
 
   @media (max-width: 480px) {
-    .profile-title {
-      font-size: 1.5rem;
-    }
-
-    .avatar-selection {
-      grid-template-columns: 1fr;
-    }
+    .profile-title { font-size: 1.5rem; }
+    .avatar-selection { grid-template-columns: 1fr; }
   }
+
   .toast {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: #047857;
-  color: white;
-  padding: 1rem 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  font-size: 1rem;
-  font-weight: 500;
-  opacity: 0;
-  transform: translateX(100%);
-  transition: opacity 0.4s ease, transform 0.4s ease;
-  z-index: 2000;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #047857;
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    font-size: 1rem;
+    font-weight: 500;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
 
-.toast.show {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.toast.error {
-  background: #dc2626;
-}
-
-.toast.success {
-  background: #047857;
-}
-
-#toastIcon {
-  font-size: 1.3rem;
-}
-
-
+  .toast.show { opacity: 1; transform: translateX(0); }
+  .toast.error { background: #dc2626; }
+  .toast.success { background: #047857; }
+  #toastIcon { font-size: 1.3rem; }
 </style>
 
 <script>
@@ -1093,9 +1112,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       document.querySelector(".profile-title").textContent =
         `${profile.firstName || ''} ${profile.lastName || ''}`.trim() || 'Candidate';
-      document.querySelector("#jobRole").textContent = profile.jobRole || "Not specified";
-      document.querySelector("#location").textContent = profile.location || "Not specified";
-      document.querySelector("#experience").textContent = profile.experience || "Not specified";
+
+      // Riepilogo in alto
+      document.getElementById("sumJobRole").textContent = profile.jobRole || "Not specified";
+      document.getElementById("sumLocation").textContent = profile.location || "Not specified";
+      document.getElementById("sumExperience").textContent = profile.experience || "Not specified";
 
       if (profile.photo) {
         document.querySelector("#candidatePhoto").src = profile.photo;
@@ -1117,7 +1138,11 @@ let selectedSectors = [];
 let selectedSoftware = [];
 
 
-// ✅ Load User Profile (per l'utente loggato)
+/** ===============================================
+ * ✅ Load User Profile (per l'utente loggato)
+ * - Popola i CAMPI RAPIDI (snelli)
+ * - Compila anche i CAMPI NASCOSTI per preservare i dati al salvataggio
+ * ==============================================*/
 async function loadUserProfile() {
   const token = localStorage.getItem('token');
   if (!token) {
@@ -1134,43 +1159,17 @@ async function loadUserProfile() {
     if (data.success && data.user.profile) {
       const profile = data.user.profile;
 
-      document.getElementById('firstName').value = profile.firstName || '';
-      document.getElementById('lastName').value = profile.lastName || '';
-      document.getElementById('email').value = data.user.email || '';
-      document.getElementById('phone').value = profile.phone || '';
-      document.getElementById('location').value = profile.location || '';
-
-      // Birthdate
-      if (profile.birthDate) {
-        const [day, month, year] = profile.birthDate.split('-');
-        document.getElementById('birthDay').value = day;
-        document.getElementById('birthMonth').value = month;
-        document.getElementById('birthYear').value = year;
-      }
+      // ======= CAMPI "SNELLI" (visibili) =======
+      document.getElementById('quickJobRole').value = profile.jobRole || '';
+      document.getElementById('quickLocation').value = profile.location || '';
+      document.getElementById('quickExperience').value = profile.experience || '';
+      document.getElementById('quickSummary').value = profile.summary || '';
 
       // Avatar
       if (profile.avatar) {
         const avatarRadio = document.querySelector(`input[name="avatar"][value="${profile.avatar}"]`);
         if (avatarRadio) avatarRadio.checked = true;
       }
-
-      // Languages
-      document.getElementById('nativeLanguage').value = profile.languages?.native || '';
-      document.getElementById('secondLanguage').value = profile.languages?.second?.lang || '';
-      document.getElementById('secondLanguageLevel').value = profile.languages?.second?.level || '';
-      document.getElementById('thirdLanguage').value = profile.languages?.third?.lang || '';
-      document.getElementById('thirdLanguageLevel').value = profile.languages?.third?.level || '';
-
-      // Other fields
-      document.getElementById('jobRole').value = profile.jobRole || '';
-      document.getElementById('experience').value = profile.experience || '';
-      document.getElementById('education').value = profile.education || '';
-      document.getElementById('salaryMin').value = profile.salaryRange?.min || '';
-      document.getElementById('salaryMax').value = profile.salaryRange?.max || '';
-      document.getElementById('availability').value = profile.availability || '';
-      document.getElementById('remoteWork').value = profile.remoteWork || '';
-      document.getElementById('relocation').value = profile.relocation || '';
-      document.getElementById('summary').value = profile.summary || '';
 
       // Sectors & Software
       selectedSectors = profile.sectors || [];
@@ -1195,13 +1194,54 @@ async function loadUserProfile() {
           </div>
         `;
       }
+
+      // ======= CAMPI NASCOSTI (preserve) =======
+      // Dati anagrafici completi
+      document.getElementById('firstName').value = profile.firstName || '';
+      document.getElementById('lastName').value = profile.lastName || '';
+      document.getElementById('email').value = data.user.email || '';
+      document.getElementById('phone').value = profile.phone || '';
+      // Location già coperta da quickLocation, ma manteniamo hidden duplicati
+      document.getElementById('locationHidden').value = profile.location || '';
+
+      // Birthdate
+      if (profile.birthDate) {
+        const [day, month, year] = profile.birthDate.split('-');
+        document.getElementById('birthDay').value = day || '';
+        document.getElementById('birthMonth').value = month || '';
+        document.getElementById('birthYear').value = year || '';
+      }
+
+      // Education & Salary & Work prefs
+      document.getElementById('education').value = profile.education || '';
+      document.getElementById('salaryMin').value = profile.salaryRange?.min || '';
+      document.getElementById('salaryMax').value = profile.salaryRange?.max || '';
+      document.getElementById('availability').value = profile.availability || '';
+      document.getElementById('remoteWork').value = profile.remoteWork || '';
+      document.getElementById('relocation').value = profile.relocation || '';
+
+      // Languages
+      document.getElementById('nativeLanguage').value = profile.languages?.native || '';
+      document.getElementById('secondLanguage').value = profile.languages?.second?.lang || '';
+      document.getElementById('secondLanguageLevel').value = profile.languages?.second?.level || '';
+      document.getElementById('thirdLanguage').value = profile.languages?.third?.lang || '';
+      document.getElementById('thirdLanguageLevel').value = profile.languages?.third?.level || '';
+
+      // Other job role (se presente)
+      document.getElementById('otherJobRole').value = profile.otherJobRole || '';
+
     }
   } catch (error) {
     console.error('Error loading profile:', error);
   }
 }
 
-// ✅ Handle Submit
+/** ===============================================
+ * ✅ Handle Submit
+ * - Invia i campi rapidi
+ * - Invia anche i campi nascosti per non perdere nulla
+ * - Carica sectors/software come JSON
+ * ==============================================*/
 async function handleSubmit(e) {
   e.preventDefault();
 
@@ -1209,6 +1249,13 @@ async function handleSubmit(e) {
   if (!token) return showMessage('You must be logged in', 'error');
 
   const formElement = document.getElementById('profileForm');
+
+  // Prima di costruire la FormData, copia i valori "Quick" nei campi canonici
+  document.getElementById('jobRole').value = document.getElementById('quickJobRole').value;
+  document.getElementById('locationHidden').value = document.getElementById('quickLocation').value;
+  document.getElementById('experience').value = document.getElementById('quickExperience').value;
+  document.getElementById('summary').value = document.getElementById('quickSummary').value;
+
   const formData = new FormData(formElement);
   formData.append('sectors', JSON.stringify(selectedSectors));
   formData.append('software', JSON.stringify(selectedSoftware));
@@ -1269,11 +1316,11 @@ function showToast(message, type = 'success') {
   <header class="header">
     <a href="/index.html" class="logo">talfy</a>
     <nav class="nav" id="desktopNav">
-  <a href="/pricing.html">Pricing</a>
-  <a href="/about.html" class="nav-active">About us</a>
-  <a href="/contact.html">Contact</a>
-  <a href="/register.html" class="auth-link">Register</a>
-</nav>
+      <a href="/pricing.html">Pricing</a>
+      <a href="/about.html" class="nav-active">About us</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/register.html" class="auth-link">Register</a>
+    </nav>
     <button class="hamburger" onclick="toggleMenu()">
       <span></span>
       <span></span>
@@ -1309,126 +1356,158 @@ function showToast(message, type = 'success') {
   </div>
 
   <main class="main">
-<div class="profile-content" style="text-align:center; color:white;">
-  <h1 class="profile-title" id="candidateName">Candidate Name</h1>
-  <img id="candidatePhoto" src="/default-avatar.png" alt="Profile Photo" style="width:150px;border-radius:50%;margin:1rem auto;">
-  
-  <p><strong>Job Role:</strong> <span id="jobRole">–</span></p>
-  <p><strong>Location:</strong> <span id="location">–</span></p>
-  <p><strong>Experience:</strong> <span id="experience">–</span></p>
-</div>
-
-      <div class="profile-form-container">
-        <div id="errorMessage" class="error-message"></div>
-        <div id="successMessage" class="success-message"></div>
-
-        <div style="text-align:right; margin-bottom:1rem;">
-          <button id="editButton" class="edit-button" type="button" onclick="toggleEditMode()">✏️ Edit Profile</button>
+    <div class="profile-content" style="color:white;">
+      <!-- ======= HERO + RIEPILOGO ======= -->
+      <h1 class="profile-title" id="candidateName">Candidate Name</h1>
+      <div class="summary-grid">
+        <div class="summary-photo">
+          <img id="candidatePhoto" src="/default-avatar.png" alt="Profile Photo">
         </div>
-        
-        <form class="profile-form" id="profileForm" onsubmit="handleSubmit(event)" enctype="multipart/form-data">
-          <!-- Personal Information -->
-          <div class="form-section">
-            <h2 class="section-title">Personal Information</h2>
-            
-            <div class="form-row">
-              <div class="form-group">
-                <label for="firstName" class="form-label">First Name *</label>
-                <input name="firstName" type="text" id="firstName" class="form-input" placeholder="Enter your first name" required readonly />
-              </div>
-              <div class="form-group">
-                <label for="lastName" class="form-label">Last Name *</label>
-                <input name="lastName" type="text" id="lastName" class="form-input" placeholder="Enter your last name" required readonly />
-              </div>
-            </div>
+        <div class="summary-cards">
+          <div class="summary-card">
+            <h4>Job Role</h4>
+            <p id="sumJobRole">–</p>
+          </div>
+          <div class="summary-card">
+            <h4>Location</h4>
+            <p id="sumLocation">–</p>
+          </div>
+          <div class="summary-card">
+            <h4>Experience</h4>
+            <p id="sumExperience">–</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
-            <div class="form-row">
-              <div class="form-group">
-                <label for="email" class="form-label">Email Address *</label>
-                <input name="email" type="email" id="email" class="form-input" placeholder="Enter your email" required readonly />
-              </div>
-              <div class="form-group">
-                <label for="phone" class="form-label">Phone Number *</label>
-                <input name="phone" type="tel" id="phone" class="form-input" placeholder="Enter your phone number" required readonly />
-              </div>
-            </div>
+    <div class="profile-form-container">
+      <div id="errorMessage" class="error-message"></div>
+      <div id="successMessage" class="success-message"></div>
 
-            <div class="form-row single">
-              <div class="form-group">
-                <label for="location" class="form-label">Location *</label>
-                <input name="location" type="text" id="location" class="form-input" placeholder="City, Country" required readonly />
-              </div>
-            </div>
+      <div style="text-align:right; margin-bottom:1rem;">
+        <button id="editButton" class="edit-button" type="button" onclick="toggleEditMode()">✏️ Edit Profile</button>
+      </div>
 
+      <!-- ======================================
+           FORM “SNELLO”: pochi campi + allegati
+           Gli altri campi restano nascosti o in <details>
+      ======================================= -->
+      <form class="profile-form" id="profileForm" onsubmit="handleSubmit(event)" enctype="multipart/form-data">
+
+        <!-- ====== QUICK EDIT ====== -->
+        <div class="form-section">
+          <h2 class="section-title">Quick Edit</h2>
+
+          <div class="form-row">
             <div class="form-group">
-              <label class="form-label">Date of Birth *</label>
-              <div class="birth-date-group">
-                <select name="birthDay" id="birthDay" class="form-select" required disabled>
-                  <option value="">Day</option>
-                  <script>
-                    for (let i = 1; i <= 31; i++) {
-                      document.write(`<option value="${i}">${i}</option>`);
-                    }
-                  </script>
-                </select>
-                <select name="birthMonth" id="birthMonth" class="form-select" required disabled>
-                  <option value="">Month</option>
-                  <option value="January">January</option>
-                  <option value="February">February</option>
-                  <option value="March">March</option>
-                  <option value="April">April</option>
-                  <option value="May">May</option>
-                  <option value="June">June</option>
-                  <option value="July">July</option>
-                  <option value="August">August</option>
-                  <option value="September">September</option>
-                  <option value="October">October</option>
-                  <option value="November">November</option>
-                  <option value="December">December</option>
-                </select>
-                <select name="birthYear" id="birthYear" class="form-select" required disabled>
-                  <option value="">Year</option>
-                  <script>
-                    const currentYear = new Date().getFullYear();
-                    for (let i = currentYear - 16; i >= currentYear - 80; i--) {
-                      document.write(`<option value="${i}">${i}</option>`);
-                    }
-                  </script>
-                </select>
+              <label class="form-label" for="quickJobRole">Job Role *</label>
+              <select id="quickJobRole" class="form-select" required disabled>
+                <option value="">Select your role</option>
+                <option value="CFO">CFO (Chief Financial Officer)</option>
+                <option value="Controller">Controller</option>
+                <option value="Treasurer">Treasurer</option>
+                <option value="Accountant">Accountant</option>
+                <option value="Auditor">Auditor</option>
+                <option value="Financial Analyst">Financial Analyst</option>
+                <option value="Investment Analyst">Investment Analyst</option>
+                <option value="Risk Manager">Risk Manager</option>
+                <option value="Tax Specialist">Tax Specialist</option>
+                <option value="Budget Analyst">Budget Analyst</option>
+                <option value="Credit Analyst">Credit Analyst</option>
+                <option value="Compliance Officer">Compliance Officer</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group" id="otherJobRoleGroup" style="display:none;">
+              <label class="form-label" for="otherJobRole">Please specify your role *</label>
+              <input name="otherJobRole" type="text" id="otherJobRole" class="form-input" placeholder="Enter your specific job role" readonly />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="quickLocation">Location *</label>
+              <input id="quickLocation" type="text" class="form-input" placeholder="City, Country" required readonly />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="quickExperience">Experience Level *</label>
+              <select id="quickExperience" class="form-select" required disabled>
+                <option value="">Select experience</option>
+                <option value="Entry Level (0-2 years)">Entry Level (0-2 years)</option>
+                <option value="Mid Level (2-5 years)">Mid Level (2-5 years)</option>
+                <option value="Senior Level (5-10 years)">Senior Level (5-10 years)</option>
+                <option value="Expert Level (10+ years)">Expert Level (10+ years)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row single">
+            <div class="form-group">
+              <label class="form-label" for="quickSummary">Professional Summary *</label>
+              <textarea id="quickSummary" class="form-textarea" placeholder="Write a brief headline & value proposition..." required readonly></textarea>
+            </div>
+          </div>
+
+          <!-- Sectors & Software rimangono utili e concisi -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Sectors of Interest</label>
+              <div class="multi-select-container" id="sectorsContainer">
+                <input 
+                  type="text" 
+                  id="sectorsInput" 
+                  class="multi-select-input" 
+                  placeholder="Type a sector and press Enter (e.g., Technology)"
+                  onkeypress="handleKeyPress(event, 'selectedSectors', 'sectorsInput', 'sectorsContainer')"
+                  readonly
+                />
+                <div class="selected-items"></div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Software & Tools</label>
+              <div class="multi-select-container" id="softwareContainer">
+                <input 
+                  type="text" 
+                  id="softwareInput" 
+                  class="multi-select-input" 
+                  placeholder="Type tools and press Enter (e.g., Excel, SAP...)"
+                  onkeypress="handleKeyPress(event, 'selectedSoftware', 'softwareInput', 'softwareContainer')"
+                  readonly
+                />
+                <div class="selected-items"></div>
               </div>
             </div>
           </div>
 
-          <!-- Avatar & Photo -->
-          <div class="form-section">
-            <h2 class="section-title">Profile Picture</h2>
-            
+          <!-- Foto e CV rimangono -->
+          <div class="form-row">
             <div class="form-group">
               <label class="form-label">Choose Avatar *</label>
               <div class="avatar-selection">
                 <label class="avatar-option">
-                  <input name="avatar" type="radio" name="avatar" value="male" required />
+                  <input name="avatar" type="radio" value="male" required />
                   <div class="avatar-card">
                     <div class="avatar-icon">👨</div>
                     <div class="avatar-label">Male</div>
                   </div>
                 </label>
                 <label class="avatar-option">
-                  <input name="avatar" type="radio" name="avatar" value="female" required />
+                  <input name="avatar" type="radio" value="female" required />
                   <div class="avatar-card">
                     <div class="avatar-icon">👩</div>
                     <div class="avatar-label">Female</div>
                   </div>
                 </label>
                 <label class="avatar-option">
-                  <input name="avatar" type="radio" name="avatar" value="professional" required />
+                  <input name="avatar" type="radio" value="professional" required />
                   <div class="avatar-card">
                     <div class="avatar-icon">👔</div>
                     <div class="avatar-label">Professional</div>
                   </div>
                 </label>
                 <label class="avatar-option">
-                  <input name="avatar" type="radio" name="avatar" value="neutral" required />
+                  <input name="avatar" type="radio" value="neutral" required />
                   <div class="avatar-card">
                     <div class="avatar-icon">😊</div>
                     <div class="avatar-label">Neutral</div>
@@ -1454,307 +1533,7 @@ function showToast(message, type = 'success') {
             </div>
           </div>
 
-          <!-- Professional Information -->
-          <div class="form-section">
-            <h2 class="section-title">Professional Information</h2>
-            
-            <div class="form-row">
-              <div class="form-group">
-                <label for="jobRole" class="form-label">Job Role *</label>
-                <select name="jobRole" id="jobRole" class="form-select" required onchange="toggleOtherJobRole()" disabled>
-                  <option value="">Select your role</option>
-                  <option value="CFO">CFO (Chief Financial Officer)</option>
-                  <option value="Controller">Controller</option>
-                  <option value="Treasurer">Treasurer</option>
-                  <option value="Accountant">Accountant</option>
-                  <option value="Auditor">Auditor</option>
-                  <option value="Financial Analyst">Financial Analyst</option>
-                  <option value="Investment Analyst">Investment Analyst</option>
-                  <option value="Risk Manager">Risk Manager</option>
-                  <option value="Tax Specialist">Tax Specialist</option>
-                  <option value="Budget Analyst">Budget Analyst</option>
-                  <option value="Credit Analyst">Credit Analyst</option>
-                  <option value="Compliance Officer">Compliance Officer</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-              <div class="form-group" id="otherJobRoleGroup" style="display: none;">
-                <label for="otherJobRole" class="form-label">Please specify your role *</label>
-                <input name="otherJobRole" type="text" id="otherJobRole" class="form-input" placeholder="Enter your specific job role" readonly />
-              </div>
-              <div class="form-group">
-                <label for="experience" class="form-label">Experience Level *</label>
-                <select name="experience" id="experience" class="form-select" required disabled>
-                  <option value="">Select experience</option>
-                  <option value="Entry Level (0-2 years)">Entry Level (0-2 years)</option>
-                  <option value="Mid Level (2-5 years)">Mid Level (2-5 years)</option>
-                  <option value="Senior Level (5-10 years)">Senior Level (5-10 years)</option>
-                  <option value="Expert Level (10+ years)">Expert Level (10+ years)</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-row single">
-              <div class="form-group">
-                <label for="education" class="form-label">Education *</label>
-                <select name="education" id="education" class="form-select" required disabled>
-                  <option value="">Select education level</option>
-                  <option value="High School">High School</option>
-                  <option value="Associate Degree">Associate Degree</option>
-                  <option value="Bachelor's Degree">Bachelor's Degree</option>
-                  <option value="Master's Degree">Master's Degree</option>
-                  <option value="PhD">PhD</option>
-                  <option value="Professional Certification">Professional Certification</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <!-- Languages -->
-          <div class="form-section">
-            <h2 class="section-title">Languages</h2>
-            
-            <div class="form-row single">
-              <div class="form-group">
-                <label for="nativeLanguage" class="form-label">Native Language *</label>
-                <select name="nativeLanguage" id="nativeLanguage" class="form-select" required disabled>
-                  <option value="">Select your native language</option>
-                  <option value="English">English</option>
-                  <option value="Spanish">Spanish</option>
-                  <option value="French">French</option>
-                  <option value="German">German</option>
-                  <option value="Italian">Italian</option>
-                  <option value="Portuguese">Portuguese</option>
-                  <option value="Russian">Russian</option>
-                  <option value="Chinese">Chinese</option>
-                  <option value="Japanese">Japanese</option>
-                  <option value="Korean">Korean</option>
-                  <option value="Arabic">Arabic</option>
-                  <option value="Hindi">Hindi</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Second Language</label>
-              <div class="language-group">
-                <select name="secondLanguage" id="secondLanguage" class="form-select" disabled>
-                  <option value="">Select second language</option>
-                  <option value="English">English</option>
-                  <option value="Spanish">Spanish</option>
-                  <option value="French">French</option>
-                  <option value="German">German</option>
-                  <option value="Italian">Italian</option>
-                  <option value="Portuguese">Portuguese</option>
-                  <option value="Russian">Russian</option>
-                  <option value="Chinese">Chinese</option>
-                  <option value="Japanese">Japanese</option>
-                  <option value="Korean">Korean</option>
-                  <option value="Arabic">Arabic</option>
-                  <option value="Hindi">Hindi</option>
-                  <option value="Other">Other</option>
-                </select>
-                <select name="secondLanguageLevel" id="secondLanguageLevel" class="form-select" disabled>
-                  <option value="">Level</option>
-                  <option value="Beginner">Beginner</option>
-                  <option value="Intermediate">Intermediate</option>
-                  <option value="Advanced">Advanced</option>
-                  <option value="Native">Native</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Third Language</label>
-              <div class="language-group">
-                <select name="thirdLanguage" id="thirdLanguage" class="form-select" disabled>
-                  <option value="">Select third language</option>
-                  <option value="English">English</option>
-                  <option value="Spanish">Spanish</option>
-                  <option value="French">French</option>
-                  <option value="German">German</option>
-                  <option value="Italian">Italian</option>
-                  <option value="Portuguese">Portuguese</option>
-                  <option value="Russian">Russian</option>
-                  <option value="Chinese">Chinese</option>
-                  <option value="Japanese">Japanese</option>
-                  <option value="Korean">Korean</option>
-                  <option value="Arabic">Arabic</option>
-                  <option value="Hindi">Hindi</option>
-                  <option value="Other">Other</option>
-                </select>
-                <select name="thirdLanguageLevel" id="thirdLanguageLevel" class="form-select" disabled>
-                  <option value="">Level</option>
-                  <option value="Beginner">Beginner</option>
-                  <option value="Intermediate">Intermediate</option>
-                  <option value="Advanced">Advanced</option>
-                  <option value="Native">Native</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <!-- Salary Expectations -->
-          <div class="form-section">
-            <h2 class="section-title">Salary Expectations</h2>
-            
-            <div class="form-row">
-              <div class="form-group">
-                <label for="salaryMin" class="form-label">Minimum Salary (€) *</label>
-                <select name="salaryMin" id="salaryMin" class="form-select" required disabled>
-                  <option value="">Select minimum</option>
-                  <option value="30000">€30,000</option>
-                  <option value="35000">€35,000</option>
-                  <option value="40000">€40,000</option>
-                  <option value="45000">€45,000</option>
-                  <option value="50000">€50,000</option>
-                  <option value="55000">€55,000</option>
-                  <option value="60000">€60,000</option>
-                  <option value="65000">€65,000</option>
-                  <option value="70000">€70,000</option>
-                  <option value="75000">€75,000</option>
-                  <option value="80000">€80,000</option>
-                  <option value="85000">€85,000</option>
-                  <option value="90000">€90,000</option>
-                  <option value="95000">€95,000</option>
-                  <option value="100000">€100,000</option>
-                  <option value="110000">€110,000</option>
-                  <option value="120000">€120,000</option>
-                  <option value="130000">€130,000</option>
-                  <option value="140000">€140,000</option>
-                  <option value="150000">€150,000+</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="salaryMax" class="form-label">Maximum Salary (€) *</label>
-                <select name="salaryMax" id="salaryMax" class="form-select" required disabled>
-                  <option value="">Select maximum</option>
-                  <option value="40000">€40,000</option>
-                  <option value="45000">€45,000</option>
-                  <option value="50000">€50,000</option>
-                  <option value="55000">€55,000</option>
-                  <option value="60000">€60,000</option>
-                  <option value="65000">€65,000</option>
-                  <option value="70000">€70,000</option>
-                  <option value="75000">€75,000</option>
-                  <option value="80000">€80,000</option>
-                  <option value="85000">€85,000</option>
-                  <option value="90000">€90,000</option>
-                  <option value="95000">€95,000</option>
-                  <option value="100000">€100,000</option>
-                  <option value="110000">€110,000</option>
-                  <option value="120000">€120,000</option>
-                  <option value="130000">€130,000</option>
-                  <option value="140000">€140,000</option>
-                  <option value="150000">€150,000</option>
-                  <option value="200000">€200,000</option>
-                  <option value="250000">€250,000+</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <!-- Work Preferences -->
-          <div class="form-section">
-            <h2 class="section-title">Work Preferences</h2>
-            
-            <div class="form-row">
-              <div class="form-group">
-                <label for="availability" class="form-label">Availability *</label>
-                <select name="availability" id="availability" class="form-select" required disabled>
-                  <option value="">Select availability</option>
-                  <option value="Immediately">Immediately</option>
-                  <option value="Within 2 weeks">Within 2 weeks</option>
-                  <option value="Within 1 month">Within 1 month</option>
-                  <option value="Within 2 months">Within 2 months</option>
-                  <option value="Within 3 months">Within 3 months</option>
-                  <option value="More than 3 months">More than 3 months</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="remoteWork" class="form-label">Remote Work *</label>
-                <select name="remoteWork" id="remoteWork" class="form-select" required disabled>
-                  <option value="">Select preference</option>
-                  <option value="Remote only">Remote only</option>
-                  <option value="Hybrid">Hybrid</option>
-                  <option value="On-site only">On-site only</option>
-                  <option value="No preference">No preference</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-row single">
-              <div class="form-group">
-                <label for="relocation" class="form-label">Willing to Relocate *</label>
-                <select name="relocation" id="relocation" class="form-select" required disabled>
-                  <option value="">Select option</option>
-                  <option value="Yes">Yes</option>
-                  <option value="No">No</option>
-                  <option value="Depends on opportunity">Depends on opportunity</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <!-- Professional Summary -->
-          <div class="form-section">
-            <h2 class="section-title">Professional Summary</h2>
-            
-            <div class="form-group">
-              <label for="summary" class="form-label">Summary *</label>
-              <textarea 
-                name="summary"
-                id="summary" 
-                class="form-textarea" 
-                placeholder="Write a brief summary about your professional background, skills, and career goals..."
-                required
-                readonly
-              ></textarea>
-            </div>
-          </div>
-
-          <!-- Sectors & Software -->
-          <div class="form-section">
-            <h2 class="section-title">Sectors & Software</h2>
-            
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">Sectors of Interest</label>
-                <div class="multi-select-container" id="sectorsContainer">
-                  <input 
-                    type="text" 
-                    id="sectorsInput" 
-                    class="multi-select-input" 
-                    placeholder="Type a sector and press Enter (e.g., Technology, Healthcare, Finance...)"
-                    onkeypress="handleKeyPress(event, 'selectedSectors', 'sectorsInput', 'sectorsContainer')"
-                    readonly
-                  />
-                  <div class="selected-items"></div>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Software & Tools</label>
-                <div class="multi-select-container" id="softwareContainer">
-                  <input 
-                    type="text" 
-                    id="softwareInput" 
-                    class="multi-select-input" 
-                    placeholder="Type software/tools and press Enter (e.g., Excel, SAP, QuickBooks...)"
-                    onkeypress="handleKeyPress(event, 'selectedSoftware', 'softwareInput', 'softwareContainer')"
-                    readonly
-                  />
-                  <div class="selected-items"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- CV Upload -->
-          <div class="form-section">
-            <h2 class="section-title">Upload CV</h2>
-            
+          <div class="form-row single">
             <div class="form-group">
               <label class="form-label">CV/Resume (Optional)</label>
               <div class="file-upload-container" id="cvUploadContainer">
@@ -1768,12 +1547,314 @@ function showToast(message, type = 'success') {
               <input name="cv" type="file" id="cvInput" class="file-input" accept=".pdf,.doc,.docx" onchange="handleCVUpload(event)" />
             </div>
           </div>
+        </div>
 
-          <button type="submit" id="submitButton" class="submit-button">
-            Save Profile
-          </button>
-        </form>
-      </div>
+        <!-- ====== DETTAGLI (OPZIONALI) COLLASSATI ====== -->
+        <details>
+          <summary>More details (optional)</summary>
+          <div class="details-body">
+
+            <!-- Personal Information (nascosta) -->
+            <div class="form-section">
+              <h2 class="section-title">Personal Information (full)</h2>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="firstName" class="form-label">First Name *</label>
+                  <input name="firstName" type="text" id="firstName" class="form-input" placeholder="Enter your first name" required readonly />
+                </div>
+                <div class="form-group">
+                  <label for="lastName" class="form-label">Last Name *</label>
+                  <input name="lastName" type="text" id="lastName" class="form-input" placeholder="Enter your last name" required readonly />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="email" class="form-label">Email Address *</label>
+                  <input name="email" type="email" id="email" class="form-input" placeholder="Enter your email" required readonly />
+                </div>
+                <div class="form-group">
+                  <label for="phone" class="form-label">Phone Number *</label>
+                  <input name="phone" type="tel" id="phone" class="form-input" placeholder="Enter your phone number" required readonly />
+                </div>
+              </div>
+
+              <!-- Doppio: quickLocation è visibile, questo hidden garantisce compatibilità -->
+              <input type="hidden" name="location" id="locationHidden" />
+
+              <div class="form-group">
+                <label class="form-label">Date of Birth *</label>
+                <div class="birth-date-group">
+                  <select name="birthDay" id="birthDay" class="form-select" required disabled>
+                    <option value="">Day</option>
+                    <script>
+                      for (let i = 1; i <= 31; i++) {
+                        document.write(`<option value="${i}">${i}</option>`);
+                      }
+                    </script>
+                  </select>
+                  <select name="birthMonth" id="birthMonth" class="form-select" required disabled>
+                    <option value="">Month</option>
+                    <option value="January">January</option>
+                    <option value="February">February</option>
+                    <option value="March">March</option>
+                    <option value="April">April</option>
+                    <option value="May">May</option>
+                    <option value="June">June</option>
+                    <option value="July">July</option>
+                    <option value="August">August</option>
+                    <option value="September">September</option>
+                    <option value="October">October</option>
+                    <option value="November">November</option>
+                    <option value="December">December</option>
+                  </select>
+                  <select name="birthYear" id="birthYear" class="form-select" required disabled>
+                    <option value="">Year</option>
+                    <script>
+                      const currentYear = new Date().getFullYear();
+                      for (let i = currentYear - 16; i >= currentYear - 80; i--) {
+                        document.write(`<option value="${i}">${i}</option>`);
+                      }
+                    </script>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Professional Information (full) -->
+            <div class="form-section">
+              <h2 class="section-title">Professional Information (full)</h2>
+
+              <div class="form-row">
+                <!-- jobRole canonico nascosto: aggiornato da quickJobRole -->
+                <input name="jobRole" id="jobRole" type="hidden" />
+
+                <div class="form-group">
+                  <label for="experience" class="form-label">Experience Level *</label>
+                  <select name="experience" id="experience" class="form-select" required disabled>
+                    <option value="">Select experience</option>
+                    <option value="Entry Level (0-2 years)">Entry Level (0-2 years)</option>
+                    <option value="Mid Level (2-5 years)">Mid Level (2-5 years)</option>
+                    <option value="Senior Level (5-10 years)">Senior Level (5-10 years)</option>
+                    <option value="Expert Level (10+ years)">Expert Level (10+ years)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row single">
+                <div class="form-group">
+                  <label for="education" class="form-label">Education *</label>
+                  <select name="education" id="education" class="form-select" required disabled>
+                    <option value="">Select education level</option>
+                    <option value="High School">High School</option>
+                    <option value="Associate Degree">Associate Degree</option>
+                    <option value="Bachelor's Degree">Bachelor's Degree</option>
+                    <option value="Master's Degree">Master's Degree</option>
+                    <option value="PhD">PhD</option>
+                    <option value="Professional Certification">Professional Certification</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Languages -->
+            <div class="form-section">
+              <h2 class="section-title">Languages</h2>
+
+              <div class="form-row single">
+                <div class="form-group">
+                  <label for="nativeLanguage" class="form-label">Native Language *</label>
+                  <select name="nativeLanguage" id="nativeLanguage" class="form-select" required disabled>
+                    <option value="">Select your native language</option>
+                    <option value="English">English</option>
+                    <option value="Spanish">Spanish</option>
+                    <option value="French">French</option>
+                    <option value="German">German</option>
+                    <option value="Italian">Italian</option>
+                    <option value="Portuguese">Portuguese</option>
+                    <option value="Russian">Russian</option>
+                    <option value="Chinese">Chinese</option>
+                    <option value="Japanese">Japanese</option>
+                    <option value="Korean">Korean</option>
+                    <option value="Arabic">Arabic</option>
+                    <option value="Hindi">Hindi</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Second Language</label>
+                <div class="language-group">
+                  <select name="secondLanguage" id="secondLanguage" class="form-select" disabled>
+                    <option value="">Select second language</option>
+                    <option value="English">English</option>
+                    <option value="Spanish">Spanish</option>
+                    <option value="French">French</option>
+                    <option value="German">German</option>
+                    <option value="Italian">Italian</option>
+                    <option value="Portuguese">Portuguese</option>
+                    <option value="Russian">Russian</option>
+                    <option value="Chinese">Chinese</option>
+                    <option value="Japanese">Japanese</option>
+                    <option value="Korean">Korean</option>
+                    <option value="Arabic">Arabic</option>
+                    <option value="Hindi">Hindi</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  <select name="secondLanguageLevel" id="secondLanguageLevel" class="form-select" disabled>
+                    <option value="">Level</option>
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                    <option value="Native">Native</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Third Language</label>
+                <div class="language-group">
+                  <select name="thirdLanguage" id="thirdLanguage" class="form-select" disabled>
+                    <option value="">Select third language</option>
+                    <option value="English">English</option>
+                    <option value="Spanish">Spanish</option>
+                    <option value="French">French</option>
+                    <option value="German">German</option>
+                    <option value="Italian">Italian</option>
+                    <option value="Portuguese">Portuguese</option>
+                    <option value="Russian">Russian</option>
+                    <option value="Chinese">Chinese</option>
+                    <option value="Japanese">Japanese</option>
+                    <option value="Korean">Korean</option>
+                    <option value="Arabic">Arabic</option>
+                    <option value="Hindi">Hindi</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  <select name="thirdLanguageLevel" id="thirdLanguageLevel" class="form-select" disabled>
+                    <option value="">Level</option>
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                    <option value="Native">Native</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Salary Expectations -->
+            <div class="form-section">
+              <h2 class="section-title">Salary Expectations</h2>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="salaryMin" class="form-label">Minimum Salary (€) *</label>
+                  <select name="salaryMin" id="salaryMin" class="form-select" required disabled>
+                    <option value="">Select minimum</option>
+                    <option value="30000">€30,000</option>
+                    <option value="35000">€35,000</option>
+                    <option value="40000">€40,000</option>
+                    <option value="45000">€45,000</option>
+                    <option value="50000">€50,000</option>
+                    <option value="55000">€55,000</option>
+                    <option value="60000">€60,000</option>
+                    <option value="65000">€65,000</option>
+                    <option value="70000">€70,000</option>
+                    <option value="75000">€75,000</option>
+                    <option value="80000">€80,000</option>
+                    <option value="85000">€85,000</option>
+                    <option value="90000">€90,000</option>
+                    <option value="95000">€95,000</option>
+                    <option value="100000">€100,000</option>
+                    <option value="110000">€110,000</option>
+                    <option value="120000">€120,000</option>
+                    <option value="130000">€130,000</option>
+                    <option value="140000">€140,000</option>
+                    <option value="150000">€150,000+</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="salaryMax" class="form-label">Maximum Salary (€) *</label>
+                  <select name="salaryMax" id="salaryMax" class="form-select" required disabled>
+                    <option value="">Select maximum</option>
+                    <option value="40000">€40,000</option>
+                    <option value="45000">€45,000</option>
+                    <option value="50000">€50,000</option>
+                    <option value="55000">€55,000</option>
+                    <option value="60000">€60,000</option>
+                    <option value="65000">€65,000</option>
+                    <option value="70000">€70,000</option>
+                    <option value="75000">€75,000</option>
+                    <option value="80000">€80,000</option>
+                    <option value="85000">€85,000</option>
+                    <option value="90000">€90,000</option>
+                    <option value="95000">€95,000</option>
+                    <option value="100000">€100,000</option>
+                    <option value="110000">€110,000</option>
+                    <option value="120000">€120,000</option>
+                    <option value="130000">€130,000</option>
+                    <option value="140000">€140,000</option>
+                    <option value="150000">€150,000</option>
+                    <option value="200000">€200,000</option>
+                    <option value="250000">€250,000+</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Work Preferences -->
+            <div class="form-section">
+              <h2 class="section-title">Work Preferences</h2>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="availability" class="form-label">Availability *</label>
+                  <select name="availability" id="availability" class="form-select" required disabled>
+                    <option value="">Select availability</option>
+                    <option value="Immediately">Immediately</option>
+                    <option value="Within 2 weeks">Within 2 weeks</option>
+                    <option value="Within 1 month">Within 1 month</option>
+                    <option value="Within 2 months">Within 2 months</option>
+                    <option value="Within 3 months">Within 3 months</option>
+                    <option value="More than 3 months">More than 3 months</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="remoteWork" class="form-label">Remote Work *</label>
+                  <select name="remoteWork" id="remoteWork" class="form-select" required disabled>
+                    <option value="">Select preference</option>
+                    <option value="Remote only">Remote only</option>
+                    <option value="Hybrid">Hybrid</option>
+                    <option value="On-site only">On-site only</option>
+                    <option value="No preference">No preference</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row single">
+                <div class="form-group">
+                  <label for="relocation" class="form-label">Willing to Relocate *</label>
+                  <select name="relocation" id="relocation" class="form-select" required disabled>
+                    <option value="">Select option</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                    <option value="Depends on opportunity">Depends on opportunity</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Professional Summary canonico (hidden) -->
+            <input type="hidden" name="summary" id="summary" />
+          </div>
+        </details>
+
+        <button type="submit" id="submitButton" class="submit-button">
+          Save Profile
+        </button>
+      </form>
     </div>
   </main>
 
@@ -1788,5 +1869,7 @@ function showToast(message, type = 'success') {
 
 </body>
 </html>
+
+
 
 

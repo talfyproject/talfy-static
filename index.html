@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="it" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinHunt - Ricerca e Selezione Finance</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+        }
+        
+        .logo-gradient {
+            background: linear-gradient(135deg, #0f172a 0%, #1e40af 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .number-counter {
+            font-feature-settings: 'tnum';
+        }
+        
+        .form-focus:focus {
+            border-color: #1e40af;
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800">
+    <!-- Header -->
+    <header class="fixed w-full top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="relative">
+                        <div class="w-12 h-12 logo-gradient rounded-xl flex items-center justify-center transform rotate-12 shadow-lg">
+                            <span class="text-white font-bold text-lg transform -rotate-12">FH</span>
+                        </div>
+                        <div class="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-full shadow-sm"></div>
+                    </div>
+                    <span class="text-2xl font-bold text-gray-800">FinHunt</span>
+                </div>
+                
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="text-gray-600 hover:text-blue-700 transition-colors">Home</a>
+                    <a href="#servizi" class="text-gray-600 hover:text-blue-700 transition-colors">Servizi</a>
+                    <a href="#chi-siamo" class="text-gray-600 hover:text-blue-700 transition-colors">Chi Siamo</a>
+                    <a href="#candidati" class="text-gray-600 hover:text-blue-700 transition-colors">Candidati</a>
+                    <a href="#contatti" class="text-gray-600 hover:text-blue-700 transition-colors">Contatti</a>
+                </div>
+                
+                <button id="menu-toggle" class="md:hidden p-2">
+                    <div class="w-6 h-0.5 bg-gray-600 mb-1"></div>
+                    <div class="w-6 h-0.5 bg-gray-600 mb-1"></div>
+                    <div class="w-6 h-0.5 bg-gray-600"></div>
+                </button>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4">
+                <a href="#home" class="block py-2 text-gray-600 hover:text-blue-700">Home</a>
+                <a href="#servizi" class="block py-2 text-gray-600 hover:text-blue-700">Servizi</a>
+                <a href="#chi-siamo" class="block py-2 text-gray-600 hover:text-blue-700">Chi Siamo</a>
+                <a href="#candidati" class="block py-2 text-gray-600 hover:text-blue-700">Candidati</a>
+                <a href="#contatti" class="block py-2 text-gray-600 hover:text-blue-700">Contatti</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-full gradient-bg flex items-center pt-20">
+        <div class="container mx-auto px-6 py-20">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="text-white">
+                    <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+                        Finance Talent.
+                        <span class="text-yellow-300">Reimagined.</span>
+                    </h1>
+                    <p class="text-xl mb-8 text-purple-100">
+                        Selezioniamo e costruiamo team finanziari capaci di guidare la crescita aziendale. 
+                        Dal CFO al Financial Controller: solo chi genera valore reale, non solo numeri.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#candidati" class="bg-yellow-400 text-blue-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-center">
+                            Invia il tuo CV
+                        </a>
+                        <a href="#servizi" class="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-blue-900 transition-colors text-center">
+                            I Nostri Servizi
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <div class="animate-float">
+                        <svg class="w-full h-96" viewBox="0 0 400 300" fill="none">
+                            <!-- Background circles -->
+                            <circle cx="200" cy="150" r="120" fill="rgba(255,255,255,0.1)" />
+                            <circle cx="200" cy="150" r="80" fill="rgba(255,255,255,0.2)" />
+                            
+                            <!-- Chart bars -->
+                            <rect x="120" y="180" width="20" height="60" fill="#fbbf24" rx="2" />
+                            <rect x="150" y="160" width="20" height="80" fill="#fbbf24" rx="2" />
+                            <rect x="180" y="140" width="20" height="100" fill="#fbbf24" rx="2" />
+                            <rect x="210" y="120" width="20" height="120" fill="#fbbf24" rx="2" />
+                            <rect x="240" y="100" width="20" height="140" fill="#fbbf24" rx="2" />
+                            <rect x="270" y="130" width="20" height="110" fill="#fbbf24" rx="2" />
+                            
+                            <!-- Floating elements -->
+                            <circle cx="100" cy="80" r="8" fill="#fbbf24" opacity="0.8" />
+                            <circle cx="320" cy="100" r="6" fill="white" opacity="0.9" />
+                            <circle cx="80" cy="200" r="4" fill="#fbbf24" opacity="0.7" />
+                            <circle cx="340" cy="220" r="5" fill="white" opacity="0.8" />
+                            
+                            <!-- Finance Keywords -->
+                            <text x="150" y="50" fill="white" font-size="16" font-weight="bold" opacity="0.9">CFO</text>
+                            <text x="280" y="70" fill="#fbbf24" font-size="14" font-weight="bold" opacity="0.8">Controller</text>
+                            <text x="90" y="120" fill="white" font-size="12" font-weight="bold" opacity="0.7">Finance Director</text>
+                            <text x="300" y="180" fill="#fbbf24" font-size="13" font-weight="bold" opacity="0.8">Group Controller</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-blue-700 number-counter" data-target="500">0</div>
+                    <div class="text-gray-600 mt-2">Candidati Selezionati</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-blue-700 number-counter" data-target="150">0</div>
+                    <div class="text-gray-600 mt-2">Aziende Partner</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-blue-700 number-counter" data-target="95">0</div>
+                    <div class="text-gray-600 mt-2">% Successo</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-blue-700 number-counter" data-target="10">0</div>
+                    <div class="text-gray-600 mt-2">Anni Esperienza</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="servizi" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">I Nostri Servizi</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Offriamo soluzioni complete per il recruiting e la consulenza nel settore finance
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="card-hover bg-white p-8 rounded-xl border border-gray-100 shadow-lg cursor-pointer transition-all hover:border-blue-300" onclick="openServiceModal('ricerca')">
+                    <div class="w-16 h-16 gradient-bg rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Ricerca & Selezione</h3>
+                    <p class="text-gray-600 mb-6">
+                        <strong>Precisione nella scelta dei talenti Finance.</strong><br>
+                        Dalla contabilità al controllo di gestione, selezioniamo candidati che non solo conoscono i numeri, ma li sanno interpretare.
+                    </p>
+                    <ul class="text-gray-600 space-y-2">
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Headhunting mirato sul settore Finance</li>
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Valutazione tecnica e motivazionale</li>
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Matching culturale e di performance</li>
+                    </ul>
+                    <div class="mt-6 text-blue-600 font-semibold flex items-center">
+                        Scopri di più <svg class="w-4 h-4 ml-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+                    </div>
+                </div>
+                
+                <div class="card-hover bg-white p-8 rounded-xl border border-gray-100 shadow-lg cursor-pointer transition-all hover:border-blue-300" onclick="openServiceModal('consulenza')">
+                    <div class="w-16 h-16 gradient-bg rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Consulenza Finance</h3>
+                    <p class="text-gray-600 mb-6">
+                        <strong>Supporto operativo e strategico.</strong><br>
+                        Mettiamo a disposizione professionisti senior per rafforzare le funzioni Finance nei momenti chiave di trasformazione aziendale.
+                    </p>
+                    <ul class="text-gray-600 space-y-2">
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Temporary CFO / Controller</li>
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Setup di sistemi di controllo e reporting</li>
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Gestione performance e cash flow</li>
+                    </ul>
+                    <div class="mt-6 text-blue-600 font-semibold flex items-center">
+                        Scopri di più <svg class="w-4 h-4 ml-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+                    </div>
+                </div>
+                
+                <div class="card-hover bg-white p-8 rounded-xl border border-gray-100 shadow-lg cursor-pointer transition-all hover:border-blue-300" onclick="openServiceModal('executive')">
+                    <div class="w-16 h-16 gradient-bg rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Executive Search</h3>
+                    <p class="text-gray-600 mb-6">
+                        <strong>La finanza al vertice.</strong><br>
+                        Progetti su misura per ruoli chiave come CFO, Finance Director e Group Controller.
+                    </p>
+                    <ul class="text-gray-600 space-y-2">
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Analisi riservata del mercato</li>
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Selezione basata su leadership e visione</li>
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Advisory nella definizione della struttura organizzativa</li>
+                    </ul>
+                    <div class="mt-6 text-blue-600 font-semibold flex items-center">
+                        Scopri di più <svg class="w-4 h-4 ml-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="chi-siamo" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-4xl font-bold text-gray-800 mb-6">Chi Siamo</h2>
+                    <p class="text-lg text-gray-600 mb-6">
+                        <strong>FinHunt è una boutique di ricerca specializzata nei profili Finance.</strong><br>
+                        Nasce dall'esperienza di professionisti del settore che hanno vissuto in prima persona le dinamiche dei ruoli finanziari, comprendendo cosa distingue un buon candidato da un vero leader.
+                    </p>
+                    <p class="text-lg text-gray-600 mb-8">
+                        Parliamo la lingua del Finance, conosciamo le sfide di CFO, Controller e CEO e costruiamo connessioni che generano valore duraturo.
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-blue-700" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Esperienza Specializzata</h4>
+                                <p class="text-gray-600">Focus esclusivo sul settore finance</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-blue-700" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Approccio Personalizzato</h4>
+                                <p class="text-gray-600">Ogni ricerca è unica e su misura</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <div class="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-8 text-white">
+                        <h3 class="text-2xl font-bold mb-6">I Nostri Valori</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <span class="text-yellow-300 text-xl mr-3">🎯</span>
+                                <div>
+                                    <h4 class="font-semibold">Finance Expertise</h4>
+                                    <p class="text-blue-100 text-sm">Conoscenza diretta del mercato e dei ruoli</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-yellow-300 text-xl mr-3">🤝</span>
+                                <div>
+                                    <h4 class="font-semibold">Integrity</h4>
+                                    <p class="text-blue-100 text-sm">Processi chiari e rispetto assoluto per candidati e aziende</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-yellow-300 text-xl mr-3">⚡</span>
+                                <div>
+                                    <h4 class="font-semibold">Speed with Accuracy</h4>
+                                    <p class="text-blue-100 text-sm">Risposte rapide, senza compromessi sulla qualità</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-yellow-300 text-xl mr-3">💎</span>
+                                <div>
+                                    <h4 class="font-semibold">Long-term Value</h4>
+                                    <p class="text-blue-100 text-sm">Puntiamo su relazioni durature, non su posizioni chiuse</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Application Form Section -->
+    <section id="candidati" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold text-gray-800 mb-4">Se lavori nel Finance, entra dove il tuo talento è riconosciuto</h2>
+                    <p class="text-xl text-gray-600">
+                        Un network riservato di aziende selezionate e posizioni che non troverai altrove.
+                    </p>
+                    <p class="text-lg text-blue-700 font-semibold mt-4">
+                        🚀 Ogni settimana nuove opportunità riservate ai professionisti Finance.
+                    </p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-2xl p-8 md:p-12">
+                    <form id="application-form" class="space-y-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="nome" class="block text-sm font-semibold text-gray-700 mb-2">Nome *</label>
+                                <input type="text" id="nome" name="nome" required 
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg form-focus transition-all outline-none">
+                            </div>
+                            <div>
+                                <label for="cognome" class="block text-sm font-semibold text-gray-700 mb-2">Cognome *</label>
+                                <input type="text" id="cognome" name="cognome" required 
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg form-focus transition-all outline-none">
+                            </div>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">Email *</label>
+                                <input type="email" id="email" name="email" required 
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg form-focus transition-all outline-none">
+                            </div>
+                            <div>
+                                <label for="telefono" class="block text-sm font-semibold text-gray-700 mb-2">Telefono *</label>
+                                <input type="tel" id="telefono" name="telefono" required
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg form-focus transition-all outline-none">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label for="cv-upload" class="block text-sm font-semibold text-gray-700 mb-2">Carica il tuo CV *</label>
+                            <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-purple-400 transition-colors">
+                                <input type="file" id="cv-upload" name="cv" accept=".pdf,.doc,.docx" required class="hidden">
+                                <div id="upload-area" class="cursor-pointer">
+                                    <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 48 48">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"/>
+                                    </svg>
+                                    <p class="text-gray-600 mb-2">Clicca per caricare il tuo CV</p>
+                                    <p class="text-sm text-gray-500">PDF, DOC, DOCX (max 5MB)</p>
+                                </div>
+                                <div id="file-info" class="hidden">
+                                    <div class="flex items-center justify-center text-green-600">
+                                        <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                        </svg>
+                                        <span id="file-name"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <input type="checkbox" id="privacy" name="privacy" required class="mt-1 mr-3">
+                            <label for="privacy" class="text-sm text-gray-600">
+                                Accetto il trattamento dei dati personali secondo la normativa sulla privacy (GDPR) *
+                            </label>
+                        </div>
+                        
+                        <button type="submit" 
+                                class="w-full gradient-bg text-white py-4 px-8 rounded-lg font-semibold hover:opacity-90 transition-opacity">
+                            Invia Candidatura
+                        </button>
+                    </form>
+                    
+                    <!-- Success Message -->
+                    <div id="success-message" class="hidden mt-8 p-6 bg-green-50 border border-green-200 rounded-lg">
+                        <div class="flex items-center">
+                            <svg class="w-6 h-6 text-green-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <div>
+                                <h3 class="text-lg font-semibold text-green-800">✅ Candidatura inviata</h3>
+                                <p class="text-green-700">Ti contatteremo solo per opportunità in linea con il tuo profilo.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contatti" class="py-20 gradient-bg text-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold mb-4">Contattaci</h2>
+                <p class="text-xl text-purple-100">
+                    Siamo qui per rispondere alle tue domande e discutere le tue esigenze
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-white/20 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Email</h3>
+                    <p class="text-purple-100">info@finhunt.it</p>
+                    <p class="text-purple-100">careers@finhunt.it</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-white/20 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Telefono</h3>
+                    <p class="text-purple-100">+39 02 1234 5678</p>
+                    <p class="text-purple-100">+39 345 678 9012</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-white/20 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Ufficio</h3>
+                    <p class="text-purple-100">Via Milano, 123</p>
+                    <p class="text-purple-100">20121 Milano, Italia</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="relative">
+                            <div class="w-10 h-10 logo-gradient rounded-xl flex items-center justify-center transform rotate-12 shadow-lg">
+                                <span class="text-white font-bold transform -rotate-12">FH</span>
+                            </div>
+                            <div class="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-full shadow-sm"></div>
+                        </div>
+                        <span class="text-xl font-bold">FinHunt</span>
+                    </div>
+                    <p class="text-gray-400">
+                        Il partner di fiducia per la ricerca e selezione di talenti nel settore finance.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Servizi</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" onclick="openServiceModal('ricerca')" class="hover:text-white transition-colors cursor-pointer">Ricerca & Selezione</a></li>
+                        <li><a href="#" onclick="openServiceModal('consulenza')" class="hover:text-white transition-colors cursor-pointer">Consulenza Finance</a></li>
+                        <li><a href="#" onclick="openServiceModal('executive')" class="hover:text-white transition-colors cursor-pointer">Executive Search</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Seguici</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors">
+                            <span class="text-sm font-bold">Li</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 FinHunt. Tutti i diritti riservati. | Privacy Policy | Cookie Policy</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Service Modals -->
+    <div id="service-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-8">
+                <div class="flex justify-between items-start mb-6">
+                    <h2 id="modal-title" class="text-3xl font-bold text-gray-800"></h2>
+                    <button onclick="closeServiceModal()" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
+                </div>
+                <div id="modal-content" class="text-gray-600 space-y-4"></div>
+                <div class="mt-8 flex gap-4">
+                    <a href="#contatti" onclick="closeServiceModal()" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                        Contattaci
+                    </a>
+                    <a href="#candidati" onclick="closeServiceModal()" class="border border-blue-600 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
+                        Invia CV
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Close mobile menu if open
+                    document.getElementById('mobile-menu').classList.add('hidden');
+                }
+            });
+        });
+
+        // Counter animation
+        function animateCounters() {
+            const counters = document.querySelectorAll('.number-counter');
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-target'));
+                const increment = target / 100;
+                let current = 0;
+                
+                const updateCounter = () => {
+                    if (current < target) {
+                        current += increment;
+                        counter.textContent = Math.ceil(current);
+                        setTimeout(updateCounter, 20);
+                    } else {
+                        counter.textContent = target;
+                    }
+                };
+                
+                updateCounter();
+            });
+        }
+
+        // Intersection Observer for counter animation
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        const statsSection = document.querySelector('.number-counter').closest('section');
+        if (statsSection) {
+            observer.observe(statsSection);
+        }
+
+        // File upload handling
+        const fileInput = document.getElementById('cv-upload');
+        const uploadArea = document.getElementById('upload-area');
+        const fileInfo = document.getElementById('file-info');
+        const fileName = document.getElementById('file-name');
+
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                fileName.textContent = file.name;
+                uploadArea.classList.add('hidden');
+                fileInfo.classList.remove('hidden');
+            }
+        });
+
+        // Form submission
+        document.getElementById('application-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const data = {};
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+            
+            // Simulate form submission
+            setTimeout(() => {
+                // Hide form and show success message
+                this.classList.add('hidden');
+                document.getElementById('success-message').classList.remove('hidden');
+                
+                // Scroll to success message
+                document.getElementById('success-message').scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }, 1000);
+        });
+
+        // Header background on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.classList.add('bg-white');
+                header.classList.remove('bg-white/95');
+            } else {
+                header.classList.remove('bg-white');
+                header.classList.add('bg-white/95');
+            }
+        });
+
+        // Service modal functionality
+        const serviceContent = {
+            ricerca: {
+                title: "Ricerca & Selezione",
+                content: `
+                    <h3 class="text-xl font-semibold mb-3">Precisione nella scelta dei talenti Finance</h3>
+                    <p class="mb-4">Dalla contabilità al controllo di gestione, selezioniamo candidati che non solo conoscono i numeri, ma li sanno interpretare per guidare decisioni strategiche.</p>
+                    
+                    <h4 class="font-semibold mb-2">Il nostro processo:</h4>
+                    <ul class="list-disc list-inside space-y-2 mb-4">
+                        <li>Analisi approfondita del ruolo e delle competenze richieste</li>
+                        <li>Ricerca attiva nel nostro network di professionisti Finance</li>
+                        <li>Screening tecnico e valutazione delle soft skills</li>
+                        <li>Assessment comportamentale e motivazionale</li>
+                        <li>Verifica delle referenze professionali</li>
+                        <li>Supporto nell'onboarding del candidato selezionato</li>
+                    </ul>
+                    
+                    <h4 class="font-semibold mb-2">Ruoli che copriamo:</h4>
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <div>• CFO & Finance Director</div>
+                        <div>• Controller & Group Controller</div>
+                        <div>• Financial Analyst</div>
+                        <div>• Credit Manager</div>
+                        <div>• Contabili Senior</div>
+                        <div>• Treasury Specialist</div>
+                    </div>
+                `
+            },
+            consulenza: {
+                title: "Consulenza Finance",
+                content: `
+                    <h3 class="text-xl font-semibold mb-3">Supporto operativo e strategico</h3>
+                    <p class="mb-4">Mettiamo a disposizione professionisti senior per rafforzare le funzioni Finance nei momenti chiave di trasformazione aziendale.</p>
+                    
+                    <h4 class="font-semibold mb-2">I nostri servizi di consulenza:</h4>
+                    <ul class="list-disc list-inside space-y-2 mb-4">
+                        <li><strong>Temporary Management:</strong> CFO e Controller temporanei per coprire assenze o periodi di transizione</li>
+                        <li><strong>Setup sistemi di controllo:</strong> Implementazione di sistemi di controllo di gestione e reporting</li>
+                        <li><strong>Ottimizzazione processi:</strong> Revisione e miglioramento dei processi finance esistenti</li>
+                        <li><strong>Cash Flow Management:</strong> Gestione e ottimizzazione della liquidità aziendale</li>
+                        <li><strong>Budget & Forecasting:</strong> Implementazione di sistemi di pianificazione e controllo</li>
+                        <li><strong>Due Diligence:</strong> Supporto in operazioni di M&A e valutazioni aziendali</li>
+                    </ul>
+                    
+                    <h4 class="font-semibold mb-2">Quando serve la nostra consulenza:</h4>
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <p class="text-sm">Crescita rapida • Ristrutturazione • Implementazione ERP • Preparazione IPO • Acquisizioni • Crisi di liquidità</p>
+                    </div>
+                `
+            },
+            executive: {
+                title: "Executive Search",
+                content: `
+                    <h3 class="text-xl font-semibold mb-3">La finanza al vertice</h3>
+                    <p class="mb-4">Progetti su misura per ruoli chiave come CFO, Finance Director e Group Controller. Ricerca riservata per posizioni di alta direzione finanziaria.</p>
+                    
+                    <h4 class="font-semibold mb-2">Il nostro approccio executive:</h4>
+                    <ul class="list-disc list-inside space-y-2 mb-4">
+                        <li><strong>Analisi strategica:</strong> Comprensione del business e delle sfide future</li>
+                        <li><strong>Profiling avanzato:</strong> Definizione del profilo ideale oltre le competenze tecniche</li>
+                        <li><strong>Ricerca riservata:</strong> Approccio discreto ai migliori talenti del mercato</li>
+                        <li><strong>Assessment executive:</strong> Valutazione di leadership, visione strategica e cultural fit</li>
+                        <li><strong>Advisory organizzativo:</strong> Supporto nella definizione della struttura finance</li>
+                        <li><strong>Onboarding strategico:</strong> Accompagnamento nei primi 100 giorni</li>
+                    </ul>
+                    
+                    <h4 class="font-semibold mb-2">Posizioni executive che gestiamo:</h4>
+                    <div class="grid grid-cols-1 gap-3">
+                        <div class="bg-gradient-to-r from-blue-50 to-blue-100 p-3 rounded-lg">
+                            <strong>Chief Financial Officer (CFO)</strong><br>
+                            <span class="text-sm text-gray-600">Direzione strategica, investor relations, M&A</span>
+                        </div>
+                        <div class="bg-gradient-to-r from-blue-50 to-blue-100 p-3 rounded-lg">
+                            <strong>Finance Director</strong><br>
+                            <span class="text-sm text-gray-600">Gestione team finance, reporting, controllo</span>
+                        </div>
+                        <div class="bg-gradient-to-r from-blue-50 to-blue-100 p-3 rounded-lg">
+                            <strong>Group Controller</strong><br>
+                            <span class="text-sm text-gray-600">Controllo di gestione multi-società, consolidato</span>
+                        </div>
+                    </div>
+                `
+            }
+        };
+
+        function openServiceModal(service) {
+            const modal = document.getElementById('service-modal');
+            const title = document.getElementById('modal-title');
+            const content = document.getElementById('modal-content');
+            
+            title.textContent = serviceContent[service].title;
+            content.innerHTML = serviceContent[service].content;
+            
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeServiceModal() {
+            const modal = document.getElementById('service-modal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('service-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeServiceModal();
+            }
+        });
+    </script>
+
+
+    <script>
+    // Mobile menu toggle
+    document.getElementById('menu-toggle').addEventListener('click', function() {
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                document.getElementById('mobile-menu').classList.add('hidden');
+            }
+        });
+    });
+
+    // Counter animation
+    function animateCounters() {
+        const counters = document.querySelectorAll('.number-counter');
+        counters.forEach(counter => {
+            const target = parseInt(counter.getAttribute('data-target'));
+            let current = 0;
+            const increment = Math.ceil(target / 100);
+
+            function update() {
+                current += increment;
+                if (current > target) current = target;
+                counter.textContent = current;
+                if (current < target) requestAnimationFrame(update);
+            }
+            update();
+        });
+    }
+
+    // Animate counters on scroll
+    const statsSection = document.querySelector('#candidati');
+    let countersAnimated = false;
+    window.addEventListener('scroll', () => {
+        const rect = statsSection.getBoundingClientRect();
+        if (!countersAnimated && rect.top < window.innerHeight) {
+            animateCounters();
+            countersAnimated = true;
+        }
+    });
+
+    // File upload display
+    const uploadArea = document.getElementById('upload-area');
+    const cvInput = document.getElementById('cv-upload');
+    const fileInfo = document.getElementById('file-info');
+    const fileNameSpan = document.getElementById('file-name');
+
+    uploadArea.addEventListener('click', () => cvInput.click());
+    cvInput.addEventListener('change', () => {
+        if (cvInput.files.length > 0) {
+            fileNameSpan.textContent = cvInput.files[0].name;
+            fileInfo.classList.remove('hidden');
+        }
+    });
+
+    // Form submission
+    const form = document.getElementById('application-form');
+    const successMessage = document.getElementById('success-message');
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        // Qui puoi aggiungere invio dati via API o email
+        form.reset();
+        fileInfo.classList.add('hidden');
+        successMessage.classList.remove('hidden');
+        successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+</script>
+</body>
+</html>
